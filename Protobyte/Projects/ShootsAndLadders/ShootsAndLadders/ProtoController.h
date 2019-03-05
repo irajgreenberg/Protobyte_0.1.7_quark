@@ -31,6 +31,8 @@ public:
 	void onResized();
 	void onClosed();
 
+	std::vector<ProtoBlock> blocks;
+	
 };
 
 #endif //__PROTOCONTROLLER_H__
