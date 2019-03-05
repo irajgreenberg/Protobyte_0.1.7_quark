@@ -53,7 +53,7 @@ Thumbs.db
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-x64/
+# x64/  - caused problems with FreeImage.h inclusion in Protobyte
 x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
