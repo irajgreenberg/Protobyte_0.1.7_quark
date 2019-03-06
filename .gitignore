@@ -49,12 +49,12 @@ Thumbs.db
 *.userprefs
 
 # Build results
-[Dd]ebug/
+#[Dd]ebug/   - caused problems with FreeImage.h inclusion in Protobyte
 [Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
+#[Rr]elease/
+#[Rr]eleases/
 # x64/  - caused problems with FreeImage.h inclusion in Protobyte
-x86/
+# x86/ - caused problems with FreeImage.h inclusion in Protobyte
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
 bld/
