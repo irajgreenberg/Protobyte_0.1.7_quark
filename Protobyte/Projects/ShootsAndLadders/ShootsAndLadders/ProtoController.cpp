@@ -13,6 +13,37 @@ void ProtoController::init() {
 	shadowsOn();
 	setShadowSharpness(512, 512);
 
+	// shoots
+	int ptCount{ 190 };
+	std::vector<Vec3> pts;
+	float theta{ 0 }, phi{ 0 };
+	for (int i = 0; i < ptCount; i++) {
+		float r = random(14, 30);
+		r = 100;
+		float x = sin(theta) * (r - i);
+		float y = 0;
+		float z = cos(theta) * (r - i);
+		float tx = x;
+		float ty = cos(phi) * y - sin(phi) * z;
+		float tz = sin(phi) * y + cos(phi) * z;
+		pts.push_back(Vec3f(tx, ty, tz));
+		phi += TWO_PI / (ptCount * random(.15, 1));
+		theta += TWO_PI / ptCount * random(12, 18);
+	}
+	Spline3 path(pts, 5, true, 1.0);
+
+
+	tube = Tube(path, 4, 4, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, Tup2(.5, 1.9), 24), false, "humanSkin02.jpg");
+	tube.setDiffuseMaterial({ 1.0f, 1, 1 });
+	tube.setAmbientMaterial(0.15f);
+	tube.setBumpMap("humanSkin02.jpg", 1.0f);
+	//tube.loadBumpMapTexture("vascular3_normal2.jpg");
+	tube.setTextureScale({ 1, 0.03f });
+	tube.setSpecularMaterial({ 1, 1, 1 });
+	tube.setShininess(5);
+
+
+	// ladders
 	for (int i = 0; i < 60; i++) {
 		rots.push_back({ random(PI), random(PI) , random(PI) });
 		float d = random(2, 20);
@@ -44,6 +75,8 @@ void ProtoController::display() {
 		b.display();
 		pop();
 	}
+
+	tube.display();
 	endArcBall();
 }
 
