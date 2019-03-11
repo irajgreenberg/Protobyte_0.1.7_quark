@@ -602,6 +602,7 @@ namespace ijg {
 	// Rendering display() switches
 #define POINTS ProtoGeom3::POINTS
 #define WIREFRAME ProtoGeom3::WIREFRAME
+#define LINES ProtoGeom3::LINES // not used yet
 #define SURFACE ProtoGeom3::SURFACE
 
 	// make this intuitive
