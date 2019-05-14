@@ -2325,6 +2325,8 @@ void ProtoBaseApp::save(std::string name, int scaleFactor) {
 			//after drawing
 			std::vector<uint8_t> data(width * height * 3);
 			glReadBuffer(GL_BACK);
+			//glReadPixels(0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, &data[0]);
+			//glPixelStorei(GL_PACK_ALIGNMENT, 1);
 			glReadPixels(0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, &data[0]);
 
 			//std::vector<std::uint8_t> data(width*height * 4);

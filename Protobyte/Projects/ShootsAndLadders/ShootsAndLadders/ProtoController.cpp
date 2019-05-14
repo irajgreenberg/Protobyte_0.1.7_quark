@@ -9,8 +9,8 @@ std::vector<Vec3f> rots;
 
 void ProtoController::init() {
 
-	setBackground({ .125f, .125f, .125f, 1.0f });
-	shadowsOn();
+	setBackground({ 1.0 });
+	//shadowsOn();
 	setShadowSharpness(512, 512);
 
 	// shoots
@@ -33,7 +33,8 @@ void ProtoController::init() {
 	Spline3 path(pts, 5, true, 1.0);
 
 
-	tube = Tube(path, 4, 4, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, Tup2(.5, 1.9), 24), false, "humanSkin02.jpg");
+	tube = Tube(path, 4, 9, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, 
+		Tup2(1.25, 3.5), 6), false, "humanSkin02.jpg");
 	tube.setDiffuseMaterial({ 1.0f, 1, 1 });
 	tube.setAmbientMaterial(0.15f);
 	tube.setBumpMap("humanSkin02.jpg", 1.0f);
@@ -64,9 +65,9 @@ void ProtoController::run() {
 void ProtoController::display() {
 	setLight(0, Vec3(sin(radians(getFrameCount()*.25f)) * 2, 0, 600), { 1, 1, 1 });
 	beginArcBall();
-	translate(0, 0, -200);
+	scale(.75f);
 	int i = 0;
-	for (ProtoBlock b : blocks) {
+	/*for (ProtoBlock b : blocks) {
 		push();
 		rotate( rots.at(i).x, {1, 0, 0} );
 		rotate( rots.at(i).y, { 0, 1, 0 } );
@@ -74,7 +75,7 @@ void ProtoController::display() {
 		i++;
 		b.display();
 		pop();
-	}
+	}*/
 
 	tube.display();
 	endArcBall();
@@ -91,6 +92,7 @@ void ProtoController::mouseRightPressed() {
 }
 
 void ProtoController::mouseReleased() {
+	save("Tube_Spiral", 10);
 }
 
 void ProtoController::mouseRightReleased() {
