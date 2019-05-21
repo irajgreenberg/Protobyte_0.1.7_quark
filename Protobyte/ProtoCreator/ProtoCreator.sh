@@ -20,6 +20,11 @@ fi
 mv __Protobyte_Project_Template__ $projName
 cd $projName
 
+# Create empty Output Directory
+# this could eventually be replaced with a Boost lib
+# file handling solution
+mkdir Output
+
 # Create .sln file with project name
 sed "s/__Protobyte_Project_Template__/$projName/g" __Protobyte_Project_Template__.sln > $projName.sln
 rm __Protobyte_Project_Template__.sln

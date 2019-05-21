@@ -1,0 +1,240 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{8CB40350-A2BB-46CA-832C-71DE77E8C01D}</ProjectGuid>
+    <RootNamespace>__Protobyte_Project_Template__</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v142</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\OtherLibs\glad-4.1.compatibility\include;..\..\..\OtherLibs\poly2tri\include;..\..\..\ProtoInclude;..\..\..\OtherLibs\glfw-3.2\include;..\..\..\OtherLibs\glm-0.9.7.6\glm;..\..\..\OtherLibs\FreeImage\Dist\x64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\..\OtherLibs\glad-4.1.compatibility\src;..\..\..\OtherLibs\poly2tri\src;..\..\..\OtherLibs\glfw-3.2\lib-vc2015;..\..\..\OtherLibs\FreeImage\Dist\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glad64.lib;opengl32.lib;glfw3_64.lib;poly2tri64.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\OtherLibs\glad-4.1.compatibility\include;..\..\..\OtherLibs\poly2tri\include;..\..\..\ProtoInclude;..\..\..\OtherLibs\glfw-3.2\include;..\..\..\OtherLibs\glm-0.9.7.6\glm;..\..\..\OtherLibs\FreeImage\Dist\x32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\..\OtherLibs\glad-4.1.compatibility\src;..\..\..\OtherLibs\poly2tri\src;..\..\..\OtherLibs\glfw-3.2\lib-vc2015;..\..\..\OtherLibs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glad32.lib;opengl32.lib;glfw3_32.lib;poly2tri32.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\OtherLibs\glad-4.1.compatibility\include;..\..\..\OtherLibs\poly2tri\include;..\..\..\ProtoInclude;..\..\..\OtherLibs\glfw-3.2\include;..\..\..\OtherLibs\glm-0.9.7.6\glm;..\..\..\OtherLibs\FreeImage\Dist\x64;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\..\OtherLibs\glad-4.1.compatibility\src;..\..\..\OtherLibs\poly2tri\src;..\..\..\OtherLibs\glfw-3.2\lib-vc2015;..\..\..\OtherLibs\FreeImage\Dist\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glad64.lib;opengl32.lib;glfw3_64.lib;poly2tri64.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>..\..\..\OtherLibs\glad-4.1.compatibility\include;..\..\..\OtherLibs\poly2tri\include;..\..\..\ProtoInclude;..\..\..\OtherLibs\glfw-3.2\include;..\..\..\OtherLibs\glm-0.9.7.6\glm;..\..\..\OtherLibs\FreeImage\Dist\x32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>..\..\..\OtherLibs\glad-4.1.compatibility\src;..\..\..\OtherLibs\poly2tri\src;..\..\..\OtherLibs\glfw-3.2\lib-vc2015;..\..\..\OtherLibs\FreeImage\Dist\x32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glad32.lib;opengl32.lib;glfw3_32.lib;poly2tri32.lib;FreeImage.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoBaseApp.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoBlock.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoCephalopod.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoCilia.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoContext.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoCurve3.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoCylinder.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoEllipse.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoException.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoFace3.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoFrenetFrame.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoGeom2.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoGeom3.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoGeomComposite.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoGeosphere.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoGroundPlane.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoJuncusEffusus.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoLight.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoMath.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoPath2.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoPath3.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoPlane.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoPlasm.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoQuaternion.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoRectangle.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoRenderer.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoRootBall.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoShader.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoShape3.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoSphere.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoSpline3.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoTentacle.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoTexture.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoToroid.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoTransformFunction.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoTube.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoUtility.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoVerletBall.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoVerletStick.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoVertex3.cpp" />
+    <ClCompile Include="ProtoController.cpp" />
+    <ClCompile Include="ProtoMain.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoBaseApp.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoBlock.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoBounds.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoCephalopod.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoCilia.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoColor3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoColor4.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoContext.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoCore.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoCurve3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoCylinder.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoDimension2.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoDimension3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoEllipse.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoException.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoFace3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoFrenetFrame.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoGeom2.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoGeom3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoGeomComposite.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoGeomSet.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoGeosphere.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoGroundPlane.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoJuncusEffusus.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoLight.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoMath.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoMatrix2.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoMatrix3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoMatrix4.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoPath2.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoPath3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoPlane.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoPlasm.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoPoint2.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoPoint3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoQuaternion.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoRectangle.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoRenderer.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoRootBall.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoShader.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoShape3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoSphere.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoSpline3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoTentacle.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoTexture.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoToroid.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoTransformFunction.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoTube.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoTuple2.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoTuple3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoTuple4.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoUtility.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoVector2.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoVector3.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoVector4.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoVerletBall.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoVerletStick.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoVertex3.h" />
+    <ClInclude Include="ProtoController.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Resources\shaders\bumpmapping.fs.glsl" />
+    <None Include="..\..\..\Resources\shaders\bumpmapping.vs.glsl" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
