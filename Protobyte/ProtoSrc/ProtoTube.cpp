@@ -41,7 +41,7 @@ ProtoTube::ProtoTube() {
 
 // overloaded cstr 1
 ProtoTube::ProtoTube(const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed) :
-ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.3, .3, .3, 1.0)), path(path), radius(radius), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
+	ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.3, .3, .3, 1.0)), path(path), radius(radius), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
 	//trace( "ProtoTube CSTR 1 : (Spline3 path, radius, crossSectionDetail, isClosed)" );
 	if (radii.size() > 0) radii.clear();
 	if (col4s.size() > 0) col4s.clear();
@@ -60,7 +60,7 @@ ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor
 
 // overloaded cstr 1-b
 ProtoTube::ProtoTube(const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed, const std::string& textureImageURL, const Vec2f& textureScale) :
-ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.3, .3, .3, 1.0), textureImageURL, textureScale), path(path), radius(radius), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
+	ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.3, .3, .3, 1.0), textureImageURL, textureScale), path(path), radius(radius), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
 	//trace( "ProtoTube CSTR 1-b : (Spline3 path, radius, crossSectionDetail, isClosed, textureImageURL)" );
 	if (radii.size() > 0) radii.clear();
 	if (col4s.size() > 0) col4s.clear();
@@ -81,7 +81,7 @@ ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor
  * Constructor 02
  * with TransformFunction object*/
 ProtoTube::ProtoTube(const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed) :
-ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.3, .3, .3, 1.0)), path(path), radius(radius), crossSectionDetail(crossSectionDetail), transFuncObj(transFuncObj), isClosed(isClosed) {
+	ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.3, .3, .3, 1.0)), path(path), radius(radius), crossSectionDetail(crossSectionDetail), transFuncObj(transFuncObj), isClosed(isClosed) {
 
 	//trace("ProtoTube CSTR 2 : (Spline3 path, radius, crossSectionDetail, Transformfunction, isClosed)");
 
@@ -102,7 +102,7 @@ ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor
  * Constructor 02-b
  * with TransformFunction object and texture*/
 ProtoTube::ProtoTube(const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed, const std::string& textureImageURL, const Vec2f& textureScale) :
-ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.3, .3, .3, 1.0), textureImageURL, textureScale), path(path), radius(radius), crossSectionDetail(crossSectionDetail), transFuncObj(transFuncObj), isClosed(isClosed) {
+	ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.3, .3, .3, 1.0), textureImageURL, textureScale), path(path), radius(radius), crossSectionDetail(crossSectionDetail), transFuncObj(transFuncObj), isClosed(isClosed) {
 
 	//trace("ProtoTube CSTR 2 b : (Spline3 path, radius, crossSectionDetail, Transformfunction, isClosed)");
 
@@ -122,7 +122,7 @@ ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor
 // Constructor 03
 
 ProtoTube::ProtoTube(const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed) :
-ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.5, .5, .5, 1.0)), path(path), radii(radii), crossSectionDetail(crossSectionDetail), transFuncObj(transFuncObj), isClosed(isClosed) {
+	ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.5, .5, .5, 1.0)), path(path), radii(radii), crossSectionDetail(crossSectionDetail), transFuncObj(transFuncObj), isClosed(isClosed) {
 
 	if (col4s.size() > 0) col4s.clear();
 
@@ -141,7 +141,7 @@ ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor
  * Constructor 04
  * varied thickness*/
 ProtoTube::ProtoTube(const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed) :
-ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.5, .5, .5, 1.0)), path(path), radii(radii), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
+	ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor4f(.5, .5, .5, 1.0)), path(path), radii(radii), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
 
 	if (col4s.size() > 0) col4s.clear();
 
@@ -160,7 +160,7 @@ ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), ProtoColor
  * Constructor 05
  * varied color*/
 ProtoTube::ProtoTube(const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed) :
-ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), col4s), path(path), radius(radius), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
+	ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), col4s), path(path), radius(radius), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
 
 	if (radii.size() > 0) radii.clear();
 
@@ -179,7 +179,7 @@ ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), col4s), pa
  * Constructor 06
  * varied color and TransformFunction object*/
 ProtoTube::ProtoTube(const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed) :
-ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), col4s), path(path), radius(radius), crossSectionDetail(crossSectionDetail), transFuncObj(transFuncObj), isClosed(isClosed) {
+	ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), col4s), path(path), radius(radius), crossSectionDetail(crossSectionDetail), transFuncObj(transFuncObj), isClosed(isClosed) {
 
 	if (radii.size() > 0) radii.clear();
 
@@ -198,7 +198,7 @@ ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), col4s), pa
  * Constructor 07
  * varied thickness and color */
 ProtoTube::ProtoTube(const std::vector< ProtoColor4f >& col4s, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed) :
-ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), col4s), path(path), radii(radii), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
+	ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), col4s), path(path), radii(radii), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
 
 	// std::cout << "ProtoTube CSTR 7" << std::endl;
 	// no transform function
@@ -211,7 +211,7 @@ ProtoGeom3(Vec3f(0, 0, 0), Vec3f(0, 0, 0), ProtoDimension3f(1, 1, 1), col4s), pa
  * Constructor 08
  * All */
 ProtoTube::ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed) :
-ProtoGeom3(pos, rot, size, col4), path(path), radius(radius), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
+	ProtoGeom3(pos, rot, size, col4), path(path), radius(radius), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
 
 	if (radii.size() > 0) radii.clear();
 	if (col4s.size() > 0) col4s.clear();
@@ -232,7 +232,7 @@ ProtoGeom3(pos, rot, size, col4), path(path), radius(radius), crossSectionDetail
  * Constructor 09
  * varied thickness */
 ProtoTube::ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed) : // varied thickness
-ProtoGeom3(pos, rot, size, col4), path(path), radii(radii), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
+	ProtoGeom3(pos, rot, size, col4), path(path), radii(radii), crossSectionDetail(crossSectionDetail), isClosed(isClosed) {
 
 
 	if (col4s.size() > 0) col4s.clear();
@@ -324,7 +324,7 @@ ProtoTube::ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f&
 /*!
  * Constructor 14 added 12/27/13
  * all with varied color and TransformFunction obj */
-ProtoTube::ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed){
+ProtoTube::ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed) {
 
 	//  std::cout << "ProtoTube CSTR 14" << std::endl;
 	setIsTransformFunction(true);
@@ -409,8 +409,15 @@ void ProtoTube::calcVerts() {
 			step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
 			step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
 
-			randomStep_x = random(transFuncObj.getVectorRange().elem0.x, transFuncObj.getVectorRange().elem1.x);
-			randomStep_y = random(transFuncObj.getVectorRange().elem0.y, transFuncObj.getVectorRange().elem1.y);
+			float rand = random(-3, 3);
+			randomStep_x = rand + (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
+			randomStep_y = rand + (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
+			
+			//if (i % (frenetFrameLength/15) == 0) {
+			//	randomStep_x = random(transFuncObj.getVectorRange().elem0.x, transFuncObj.getVectorRange().elem1.x);
+			///*	randomStep_y = random(transFuncObj.getVectorRange().elem0.y, transFuncObj.getVectorRange().elem1.y);*/
+			//	randomStep_y = randomStep_x;
+			//}
 
 		}
 
@@ -452,10 +459,16 @@ void ProtoTube::calcVerts() {
 					x = cos(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x));
 					y = sin(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y));
 					break;
-					//                    case TransformFunction::SINUSOIDAL_TRANSFORM_RANDOM:
-					//                        x = cos(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.x + randomStep_x);
-					//                        y = sin(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.y + randomStep_y);
-					//                        break;
+				// HERE 5/22/2019 ****** need to fix this
+				case TransformFunction::SINUSOIDAL_RANDOM:
+					step_xyz.x = fabs(sin(phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
+
+					step_xyz.y = fabs(sin(phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));
+
+					x = cos(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.x + randomStep_x + ijg::random(-perturbation.x, perturbation.x));
+					y = sin(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.y + randomStep_y + ijg::random(-perturbation.y, perturbation.y));
+					break;
+
 					//default:
 				};
 
@@ -474,7 +487,7 @@ void ProtoTube::calcVerts() {
 
 
 			float z = ijg::random(-perturbation.z, perturbation.z);
-			theta += TWO_PI / (float(crossSectionDetail)-random(.98, 1.0)); // added -.99 to avoid seams 7/27
+			theta += TWO_PI / (float(crossSectionDetail) - random(.98, 1.0)); // added -.99 to avoid seams 7/27
 
 			if (i == 0 && j == 0) {
 				//trace("vecs.at(0) =", vecs.at(0));
@@ -495,10 +508,10 @@ void ProtoTube::calcVerts() {
 			//trace("Vec3f(px, py, pz) = " , Vec3f(px, py, pz));
 			//verts.at(i * crossSectionDetail + j) = ProtoVertex3(Vec3f(px, py, pz), col4s.at(i));
 
-	
+
 			// set uv coords
-			u = theta2 / (TWO_PI*(1.0f / textureScale.x));
-			v = (float(i * crossSectionDetail + j) / float(crossSectionDetail*frenetFrameLength))*(1.0f / textureScale.y);
+			u = theta2 / (TWO_PI * (1.0f / textureScale.x));
+			v = (float(i * crossSectionDetail + j) / float(crossSectionDetail * frenetFrameLength)) * (1.0f / textureScale.y);
 			//trace("u =", u);
 			//trace(" theta2*180/PI =", theta2 * 180 / PI);
 
@@ -573,14 +586,14 @@ void ProtoTube::calcInds() {
 			int i2 = i * crossSectionDetail + j + 1;
 			int i3 = (i + 1) * crossSectionDetail + j + 1;
 			int i4 = j;
-			int i5 = i*crossSectionDetail;
+			int i5 = i * crossSectionDetail;
 			int i6 = crossSectionDetail + j + 1;
 			int i7 = (i + 1) * crossSectionDetail;
 			int i8 = j + 1;
 
 
 			if (i < frenetFrameLength - 1) {
-				if (j < crossSectionDetail-1) {
+				if (j < crossSectionDetail - 1) {
 
 					// top cap
 					if (i == 0 && isClosed) {
@@ -607,7 +620,7 @@ void ProtoTube::calcInds() {
 			}
 			else if (i == frenetFrameLength - 1 && isClosed) {
 				// close bottom cap
-				if (j < crossSectionDetail-1) {
+				if (j < crossSectionDetail - 1) {
 					inds.push_back(ProtoTuple3<int>(i0, i2, static_cast<int>(verts.size()) - 1));
 				}
 				else {

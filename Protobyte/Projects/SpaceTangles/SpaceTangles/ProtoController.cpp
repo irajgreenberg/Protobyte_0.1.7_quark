@@ -23,11 +23,12 @@ void ProtoController::init() {
 		//phi += TWO_PI / ptCount * random(1.4, 6);
 		theta += TWO_PI / ptCount;
 	}
-	Spline3 path(pts, 6, true, 1.0);
+	Spline3 path(pts, 12, true, 1.0);
 
 
-	tangles = Tube(path, 4, 13, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL,
-		Tup2(.75, 19.5), 12), false, "humanSkin02.jpg");
+	// need to fix this
+	tangles = Tube(path, 4, 18, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL,
+		Tup2(2.75, 39.5), 4), true, "humanSkin02.jpg");
 	tangles.setDiffuseMaterial({ 1.0f, 1, 1 });
 	tangles.setAmbientMaterial(0.05f);
 	tangles.setBumpMap("humanSkin02.jpg", 1.0f);
