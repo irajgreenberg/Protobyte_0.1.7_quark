@@ -31,7 +31,7 @@ public:
 	void onResized();
 	void onClosed();
 
-	Tube tangles;
+	Tube tangles, tangles2, tangles3;
 
 };
 
