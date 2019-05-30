@@ -31,6 +31,7 @@ public:
 	void onResized();
 	void onClosed();
 
+	Spline3 path; 
 	Tube tangles;
 
 };
