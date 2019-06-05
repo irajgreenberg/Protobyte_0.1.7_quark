@@ -31,6 +31,7 @@
 #include "ProtoShader.h"
 #include <vector>
 #include "ProtoFrenetFrame.h"
+#include "ProtoColor4.h"
 
 // for offset into the FBO interleaved buffer
 #define BUFFER_OFFSET(i) ((void*)(i))
@@ -77,6 +78,11 @@ namespace ijg {
 		* stride to move through interleaved primitives(x, y, z, r, g, b, a)
 		*/
 		int stride = 7;
+		
+		/**
+		* std::vector of curve control point primitives (x, y, z, r, g, b, a).
+		*/
+		std::vector<float> controlPtPrims;
 		
 		/**
 		* std::vector of interleaved curve primitives (x, y, z, r, g, b, a).
@@ -177,17 +183,17 @@ namespace ijg {
 		/**
 		 * Draw the curve.
 		 */
-		virtual void display(float strokeWeight = 1) = 0;
+		virtual void display(float strokeWeight = 1, Col4 strokeCol = { 0.0f, 0.0f, 0.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayControlPts() = 0;
+		virtual void displayControlPts(float pointSize = 10, Col4 strokeCol = { 1.0f, 0.0f, 0.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayInterpPts(float pointSize = 2) = 0;
+		virtual void displayInterpPts(float pointSize = 2, Col4 strokeCol = { 0.0f, 0.0f, 1.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the Frenet Frame.
@@ -214,7 +220,7 @@ namespace ijg {
 		void setControlPts(std::vector<Vec3f>& controlPts);
 
 		/**
-		 * get a pointer to the  control points array, with side effects
+		 * get reference to the  control points array, with side effects
 		 */
 		std::vector<Vec3f>& getControlPts();
 

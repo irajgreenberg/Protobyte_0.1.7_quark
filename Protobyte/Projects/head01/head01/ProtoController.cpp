@@ -12,23 +12,24 @@ void ProtoController::init() {
 	std::vector<Vec3> pts;
 	float theta{ 0 }, phi{ 0 };
 	for (int i = 0; i < ptCount; i++) {
-		float r = 200;
+		float r = 100;
 		//r = i + 12 + random(3, 9);
-		float x = sin(theta) * (r + i);
+		float x = sin(theta) * (r);
 		float y = -ptCount*40/2+i*40;
-		float z = cos(theta) * (r + i);
+		float z = cos(theta) * (r);
 		/*float tx = x;
 		float ty = cos(phi) * y - sin(phi) * z;
 		float tz = sin(phi) * y + cos(phi) * z;*/
 		//pts.push_back(Vec3f(x, y, z));
-		pts.push_back(Vec3f(x, y, z));
+		pts.push_back(Vec3f(0, y, 0));
+		//trace(pts.at(i));
 		//phi += TWO_PI / ptCount * random(1.4, 6);
 		theta += TWO_PI / ptCount;
 	}
 	
 		path = Spline3(pts, 1, true, 1.0);
 	// need to fix this
-	head = Tube(path, 4, 18, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL_INVERSE,
+	head = Tube(path, 4, 18, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL,
 		Tup2(9.75, 19.5), 31), true, "humanSkin02.jpg");
 	head.setDiffuseMaterial({ 1.0f, 1, 1 });
 	head.setAmbientMaterial(0.05f);
@@ -60,7 +61,7 @@ void ProtoController::display() {
 
 	push();
 
-	//head.display();
+	head.display(WIREFRAME, 1.5);
 	//head.display(POINTS, 4);
 	//tangles3.display(WIREFRAME, 1.5);
 	pop();

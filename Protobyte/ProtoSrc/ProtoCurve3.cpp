@@ -94,7 +94,7 @@ int ProtoCurve3::getInterpDetail(){
 }
 
 /**
- * Get a pointer to the control points array.
+ * Get reference to the control points array.
  * with side effects
  */
 std::vector<Vec3f>& ProtoCurve3::getControlPts() {

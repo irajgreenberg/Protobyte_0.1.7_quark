@@ -59,19 +59,19 @@ namespace ijg {
          * Draw the curve.
 
          */
-		void display(float strokeWeight = 1);
+		void display(float strokeWeight = 1, Col4 strokeCol = { 0.0f, 0.0f, 0.0f, 1.0f });
 
         /**
          * Draw the control points.
          * 
          */
-        void displayControlPts();
+        void displayControlPts(float pointSize = 10, Col4 strokeCol = { 1.0f, 0.0f, 0.0f, 1.0f });
 
         /**
          * Draw the interpolated points.
          * 
          */
-        void displayInterpPts(float pointSize = 2);
+        void displayInterpPts(float pointSize = 2, Col4 strokeCol = { 0.0f, 0.0f, 1.0f, 1.0f });
 
         /**
          * Draw the Frenet Frames.

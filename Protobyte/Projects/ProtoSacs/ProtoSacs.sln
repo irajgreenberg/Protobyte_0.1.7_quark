@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.452
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ProtoSacs", "ProtoSacs\ProtoSacs.vcxproj", "{487D6CFD-82E1-4E05-8A6F-7EA595908D14}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{487D6CFD-82E1-4E05-8A6F-7EA595908D14}.Debug|x64.ActiveCfg = Debug|x64
+		{487D6CFD-82E1-4E05-8A6F-7EA595908D14}.Debug|x64.Build.0 = Debug|x64
+		{487D6CFD-82E1-4E05-8A6F-7EA595908D14}.Debug|x86.ActiveCfg = Debug|Win32
+		{487D6CFD-82E1-4E05-8A6F-7EA595908D14}.Debug|x86.Build.0 = Debug|Win32
+		{487D6CFD-82E1-4E05-8A6F-7EA595908D14}.Release|x64.ActiveCfg = Release|x64
+		{487D6CFD-82E1-4E05-8A6F-7EA595908D14}.Release|x64.Build.0 = Release|x64
+		{487D6CFD-82E1-4E05-8A6F-7EA595908D14}.Release|x86.ActiveCfg = Release|Win32
+		{487D6CFD-82E1-4E05-8A6F-7EA595908D14}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B5D70FAF-6D9E-48D9-9E4D-16BFE08C06E0}
+	EndGlobalSection
+EndGlobal

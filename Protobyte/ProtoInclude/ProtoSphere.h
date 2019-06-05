@@ -29,7 +29,11 @@
 
 namespace ijg {
 
-    class ProtoSphere : public ProtoGeom3 {
+	// forward declare & create namespace safe shortname
+	class ProtoSphere;
+	typedef ProtoSphere Sphere;
+	
+	class ProtoSphere : public ProtoGeom3 {
     public:
         ProtoSphere();
         ProtoSphere(const Vec3f& pos, const Vec3f& rot, const Dim3f size,

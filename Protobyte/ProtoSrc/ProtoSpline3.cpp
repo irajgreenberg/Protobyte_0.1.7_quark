@@ -63,6 +63,18 @@ void ProtoSpline3::init() {
 	//for (int i = 0; i < controlPts.size(); ++i){
 	//	trace("controlPts. =", controlPts.at(i));
 	//}
+
+	controlPtPrims.clear();
+	// create convenient interleaved primitives array of curve control points for shader based curve detail rendering
+	for (auto i : controlPts) {
+		controlPtPrims.push_back(i.x);
+		controlPtPrims.push_back(i.y);
+		controlPtPrims.push_back(i.z);
+		controlPtPrims.push_back(0.0f); //r
+		controlPtPrims.push_back(0.0f); //g
+		controlPtPrims.push_back(0.0f); //b
+		controlPtPrims.push_back(1.0f); //a
+	}
     
     
     Vec3f v0, v1, v2, v3;
@@ -129,10 +141,10 @@ void ProtoSpline3::init() {
 		curveVertsPrims.push_back(i.x);
 		curveVertsPrims.push_back(i.y);
 		curveVertsPrims.push_back(i.z);
-		curveVertsPrims.push_back(.5); //r
-		curveVertsPrims.push_back(.5); //g
-		curveVertsPrims.push_back(.5); //b
-		curveVertsPrims.push_back(.35); //a
+		curveVertsPrims.push_back(.3); //r
+		curveVertsPrims.push_back(.6); //g
+		curveVertsPrims.push_back(.2); //b
+		curveVertsPrims.push_back(.85); //a
 	}
 
 	//for (int i = 0; i < verts.size(); i++) {
@@ -173,14 +185,13 @@ void ProtoSpline3::setTerminalSmooth(bool isTerminalSmooth) {
  * Draw the curve.
  *
  */
-void ProtoSpline3::display(float strokeWeight) {
-	//trace("curveVertsPrims.size() =", curveVertsPrims.size());
-	//for (int i = 0; i < pathPrims.size(); i += stride){
-	//	pathPrims.at(i + 3) = strokeColor.r;
-	//	pathPrims.at(i + 4) = strokeColor.g;
-	//	pathPrims.at(i + 5) = strokeColor.b;
-	//	pathPrims.at(i + 6) = strokeColor.a;
-	//}
+void ProtoSpline3::display(float strokeWeight, Col4 strokeCol) {
+	for (int i = 0; i < curveVertsPrims.size(); i += stride) {
+		curveVertsPrims.at(i + 3) = strokeCol.getR();
+		curveVertsPrims.at(i + 4) = strokeCol.getG();
+		curveVertsPrims.at(i + 5) = strokeCol.getB();
+		curveVertsPrims.at(i + 6) = strokeCol.getA();
+	}
 
 	//enable2DRendering();
 	glBindVertexArray(vaoVertsID);
@@ -224,25 +235,59 @@ void ProtoSpline3::display(float strokeWeight) {
  * Draw the control points.
  *
  */
-void ProtoSpline3::displayControlPts() {
-    glDisable(GL_CULL_FACE);
-    glDisable(GL_LIGHTING);
-    glPointSize(20);
-    glColor3f(.5, .5, 1.0);
-    // draw points
-    glBegin(GL_POINTS);
-    for (int i = 0; i < 1/*controlPts.size()*/; i++) {
-        glVertex3f(controlPts.at(i).x, controlPts.at(i).y, controlPts.at(i).z);
-    }
-    glEnd();
+void ProtoSpline3::displayControlPts(float pointSize, Col4 strokeCol) {
+    //glDisable(GL_CULL_FACE);
+    //glDisable(GL_LIGHTING);
+    //glPointSize(pointSize);
+    //glColor3f(strokeCol.getR(), strokeCol.getG(), strokeCol.getB());
+    //// draw points
+    //glBegin(GL_POINTS);
+    //for (int i = 0; i < controlPts.size(); i++) {
+    //    glVertex3f(controlPts.at(i).x, controlPts.at(i).y, controlPts.at(i).z);
+    //}
+    //glEnd();
+
+	for (int i = 0; i < controlPtPrims.size(); i += stride) {
+		controlPtPrims.at(i + 3) = strokeCol.getR();
+		controlPtPrims.at(i + 4) = strokeCol.getG();
+		controlPtPrims.at(i + 5) = strokeCol.getB();
+		controlPtPrims.at(i + 6) = strokeCol.getA();
+	}
+	glBindVertexArray(vaoVertsID);
+	// NOTE::this may not be most efficient - eventually refactor
+	glBindBuffer(GL_ARRAY_BUFFER, vboVertsID); // Bind the buffer (vertex array data)
+	int vertsDataSize = sizeof(GLfloat) * controlPtPrims.size();
+	glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &controlPtPrims[0]); // upload the data
+
+	glPointSize(pointSize);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); // do I need this anymore?
+
+	// turn off lighting
+	Vec4f ltRenderingFactors(0.0, 0.0, 0.0, 1.0);
+	glUniform4fv(lightRenderingFactors_U, 1, &ltRenderingFactors.x);
+
+	glDrawArrays(GL_POINTS, 0, curveVertsPrims.size() / stride);
+
+	//turn on lighting
+	ltRenderingFactors = Vec4f(1.0, 1.0, 1.0, 1.0);
+	glUniform4fv(lightRenderingFactors_U, 1, &ltRenderingFactors.x);
+
+	// Disable VAO
+	glBindVertexArray(0);
 }
 
 /**
  * Draw the interpolated points.
  *
  */
-void ProtoSpline3::displayInterpPts(float pointSize) {
-  
+void ProtoSpline3::displayInterpPts(float pointSize, Col4 strokeCol) {
+	for (int i = 0; i < curveVertsPrims.size(); i += stride) {
+		curveVertsPrims.at(i + 3) = strokeCol.getR();
+		curveVertsPrims.at(i + 4) = strokeCol.getG();
+		curveVertsPrims.at(i + 5) = strokeCol.getB();
+		curveVertsPrims.at(i + 6) = strokeCol.getA();
+	}
 	glBindVertexArray(vaoVertsID);
 	// NOTE::this may not be most efficient - eventually refactor
 	glBindBuffer(GL_ARRAY_BUFFER, vboVertsID); // Bind the buffer (vertex array data)

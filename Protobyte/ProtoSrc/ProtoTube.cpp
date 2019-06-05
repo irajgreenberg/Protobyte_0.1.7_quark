@@ -373,6 +373,9 @@ void ProtoTube::calcVerts() {
 	//}
 	//trace("ff.at(0) =", ff.at(0));
 	std::vector<Vec3f> vecs = path.getVerts();
+	//for (int i = 0; i < vecs.size(); i++) {
+	//	trace( "vecs = ", vecs.at(i));
+	//}
 	frenetFrameLength = static_cast<int>(ff.size());
 	//std::cout << ff.size() << std::endl;
 
@@ -418,15 +421,15 @@ void ProtoTube::calcVerts() {
 		// only calculate if necessary
 		if (getIsTransformFunction()) {
 			// get delta of radiii between contiguous vertices
-			
+
 			// check if SINUSOIDAL_RANDOM
-			if (transFuncObj.getFunctionType() == ProtoTransformFunction::SINUSOIDAL_RANDOM && i < frenetFrameLength-1) {
-				step_xyz.x = (tempVectorRange.at(i).elem0 - tempVectorRange.at(i+1).elem0) / frenetFrameLength;
+			if (transFuncObj.getFunctionType() == ProtoTransformFunction::SINUSOIDAL_RANDOM && i < frenetFrameLength - 1) {
+				step_xyz.x = (tempVectorRange.at(i).elem0 - tempVectorRange.at(i + 1).elem0) / frenetFrameLength;
 				step_xyz.y = (tempVectorRange.at(i).elem1 - tempVectorRange.at(i + 1).elem1) / frenetFrameLength;
 			}
 			else {
-				//step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
-				//step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
+				step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
+				step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
 
 			}
 
@@ -447,30 +450,31 @@ void ProtoTube::calcVerts() {
 				case ProtoTransformFunction::LINEAR:
 					//step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
 					//step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
-					x = cos(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.x + step_xyz.x * i + random(-perturbation.x, perturbation.x));
-					y = sin(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.y + step_xyz.y * i + random(-perturbation.y, perturbation.y));
+					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x * i + random(-perturbation.x, perturbation.x)));
+					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y * i + random(-perturbation.y, perturbation.y)));
 					break;
 				case ProtoTransformFunction::LINEAR_INVERSE:
 					//step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
 					//step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
-					x = cos(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem1.x - step_xyz.x * i + random(-perturbation.x, perturbation.x));
-					y = sin(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem1.y - step_xyz.y * i + random(-perturbation.y, perturbation.y));
+					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem1.x - step_xyz.x * i + random(-perturbation.x, perturbation.x)));
+					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem1.y - step_xyz.y * i + random(-perturbation.y, perturbation.y)));
 					break;
 				case ProtoTransformFunction::SINUSOIDAL:
 					//step = fabs(sin(phi) * (transFuncObj.getScalerRange().elem1 - transFuncObj.getScalerRange().elem0));
 					step_xyz.x = fabs(sin(phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
 					step_xyz.y = fabs(sin(phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));
 					//std::cout << "phi = " << phi << std::endl;
-					x = cos(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x));
-					y = sin(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y));
+					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x)));
+					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y)));
+					//trace("x = ", x, "y = ", y);
 					break;
 				case ProtoTransformFunction::SINUSOIDAL_INVERSE:
 					//step = fabs(sin(phi) * (transFuncObj.getScalerRange().elem1 - transFuncObj.getScalerRange().elem0));
 					step_xyz.x = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
 					step_xyz.y = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));
 					//std::cout << "phi = " << phi << std::endl;
-					x = cos(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x));
-					y = sin(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y));
+					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x)));
+					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y)));
 					break;
 					// HERE 5/22/2019 ****** need to fix this
 
@@ -479,15 +483,15 @@ void ProtoTube::calcVerts() {
 
 
 				case TransformFunction::SINUSOIDAL_RANDOM:
-			/*		step_xyz.x = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
-					step_xyz.y = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));*/
-					
+					/*		step_xyz.x = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
+							step_xyz.y = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));*/
+
 					step_xyz.x = fabs(sin(HALF_PI - phi) * (tempVectorRange.at(i).elem0));
 					step_xyz.y = step_xyz.x;
 					//fabs(sin(HALF_PI - phi)* (tempVectorRange.at(i).elem1));
 
-					x = cos(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x));
-					y = sin(theta) * radii.at(i) * (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y));
+					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x)));
+					y = sin(theta) * +(radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y)));
 					break;
 
 					//default:
@@ -520,14 +524,13 @@ void ProtoTube::calcVerts() {
 			float px = vecs.at(i + 1).x + x * ff.at(i).getN().x + y * ff.at(i).getB().x;
 			float py = vecs.at(i + 1).y + x * ff.at(i).getN().y + y * ff.at(i).getB().y;
 			float pz = vecs.at(i + 1).z + x * ff.at(i).getN().z + y * ff.at(i).getB().z;
-			// std::cout <<"ff[i].getB() = " << ff[i].getB() << std::endl;
-
-			//             std::cout << "vecs.at(i + 1) = " << vecs.at(i + 1) << std::endl;
-			//             std::cout << " ff.at(i).getN() = " <<  ff.at(i).getN() << std::endl;
-			//             std::cout << "ff.at(i).getB() = " << ff.at(i).getB() << std::endl;
-			//             std::cout << "Vec3f(px, py, pz).at(" << i << ") = " << Vec3f(px, py, pz) << std::endl;
-			//trace("Vec3f(px, py, pz) = " , Vec3f(px, py, pz));
-			//verts.at(i * crossSectionDetail + j) = ProtoVertex3(Vec3f(px, py, pz), col4s.at(i));
+			//std::cout <<"ff[i].getB() = " << ff[i].getB() << std::endl;
+			 //std::cout << "vecs.at(i + 1) = " << vecs.at(i + 1) << std::endl;
+			//std::cout << " ff.at(i).getN() = " <<  ff.at(i).getN() << std::endl;
+		   //std::cout << "ff.at(i).getB() = " << ff.at(i).getB() << std::endl;
+		   //std::cout << "Vec3f(px, py, pz).at(" << i << ") = " << Vec3f(px, py, pz) << std::endl;
+		   //trace("Vec3f(px, py, pz) = " , Vec3f(px, py, pz));
+		   //verts.at(i * crossSectionDetail + j) = ProtoVertex3(Vec3f(px, py, pz), col4s.at(i));
 
 
 			// set uv coords
