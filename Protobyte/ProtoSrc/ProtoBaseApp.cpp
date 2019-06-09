@@ -1131,7 +1131,7 @@ void ProtoBaseApp::bumpTexture(const ProtoTexture& bumpTexture) {
 
 
 //PRIMITIVES
-void ProtoBaseApp::rect(float x, float y, float w, float h, Registration reg) {
+void ProtoBaseApp::rect(float x, float y, float z, float w, float h, Registration reg) {
 
 	float _x = 0, _y = 0;
 
@@ -1164,28 +1164,28 @@ void ProtoBaseApp::rect(float x, float y, float w, float h, Registration reg) {
 
 	rectPrims[0] = _x;
 	rectPrims[1] = _y;
-	//rectPrims[2] = 0;
+	rectPrims[2] = z;
 	rectPrims[3] = fillColor.r;
 	rectPrims[4] = fillColor.g;
 	rectPrims[5] = fillColor.b;
 	rectPrims[6] = fillColor.a;
 	rectPrims[7] = _x;
 	rectPrims[8] = _y - h;
-	//rectPrims[9] = 0;
+	rectPrims[9] = z;
 	rectPrims[10] = fillColor.r;
 	rectPrims[11] = fillColor.g;
 	rectPrims[12] = fillColor.b;
 	rectPrims[13] = fillColor.a;
 	rectPrims[14] = _x + w;
 	rectPrims[15] = _y - h;
-	//rectPrims[16] = 0;
+	rectPrims[16] = z;
 	rectPrims[17] = fillColor.r;
 	rectPrims[18] = fillColor.g;
 	rectPrims[19] = fillColor.b;
 	rectPrims[20] = fillColor.a;
 	rectPrims[21] = _x + w;
 	rectPrims[22] = _y;
-	//rectPrims[23] = 0;
+	rectPrims[23] = z;
 	rectPrims[24] = fillColor.r;
 	rectPrims[25] = fillColor.g;
 	rectPrims[26] = fillColor.b;
@@ -1206,7 +1206,7 @@ void ProtoBaseApp::rect(float x, float y, float w, float h, Registration reg) {
 		glBindVertexArray(vaoRectID);
 		// NOTE::this may not be most efficient - eventually refactor
 		glBindBuffer(GL_ARRAY_BUFFER, vboRectID); // Bind the buffer (vertex array data)
-		int vertsDataSize = sizeof(GLfloat)* rectPrimCount;
+		int vertsDataSize = sizeof(GLfloat) * rectPrimCount;
 		glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &rectPrims[0]); // upload the data
 
@@ -1228,7 +1228,7 @@ void ProtoBaseApp::rect(float x, float y, float w, float h, Registration reg) {
 		glBindVertexArray(vaoRectID);
 		// NOTE::this may not be most efficient - eventually refactor
 		glBindBuffer(GL_ARRAY_BUFFER, vboRectID); // Bind the buffer (vertex array data)
-		int vertsDataSize = sizeof(GLfloat)* rectPrimCount;
+		int vertsDataSize = sizeof(GLfloat) * rectPrimCount;
 		glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &rectPrims[0]); // upload the data
 
@@ -1240,6 +1240,11 @@ void ProtoBaseApp::rect(float x, float y, float w, float h, Registration reg) {
 		// Disable VAO
 		glBindVertexArray(0);
 	}
+}
+
+
+void ProtoBaseApp::rect(float x, float y, float w, float h, Registration reg) {
+	rect(x, y, 0, w, h, reg);
 
 }
 
@@ -1384,8 +1389,7 @@ void ProtoBaseApp::quad(const Vec2& pt0, const Vec2& pt1, const Vec2& pt2, const
 	quad(pt0.x, pt0.y, pt1.x, pt1.y, pt2.x, pt2.y, pt3.x, pt3.y, reg);
 }
 
-
-void ProtoBaseApp::ellipse(float x, float y, float w, float h, Registration reg) {
+void ProtoBaseApp::ellipse(float x, float y, float z, float w, float h, Registration reg) {
 	if (ellipsePrims.size() > 0) {
 		ellipsePrims.clear();
 	}
@@ -1429,9 +1433,9 @@ void ProtoBaseApp::ellipse(float x, float y, float w, float h, Registration reg)
 	int stride = 7;
 	float theta = 0.0;
 	for (int i = 0; i < ellipseDetail; i++) {
-		ellipsePrims.push_back(_x + cos(theta)*w / 2.0);
-		ellipsePrims.push_back(_y + sin(theta)*h / 2.0);
-		ellipsePrims.push_back(0);
+		ellipsePrims.push_back(_x + cos(theta) * w / 2.0);
+		ellipsePrims.push_back(_y + sin(theta) * h / 2.0);
+		ellipsePrims.push_back(z);
 		ellipsePrims.push_back(fillColor.r);
 		ellipsePrims.push_back(fillColor.g);
 		ellipsePrims.push_back(fillColor.b);
@@ -1451,7 +1455,7 @@ void ProtoBaseApp::ellipse(float x, float y, float w, float h, Registration reg)
 		glBindVertexArray(vaoEllipseID);
 		// NOTE::this may not be most efficient - eventually refactor
 		glBindBuffer(GL_ARRAY_BUFFER, vboEllipseID); // Bind the buffer (vertex array data)
-		int vertsDataSize = sizeof(GLfloat)* ellipsePrims.size();
+		int vertsDataSize = sizeof(GLfloat) * ellipsePrims.size();
 		glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &ellipsePrims[0]); // upload the data
 
@@ -1473,7 +1477,7 @@ void ProtoBaseApp::ellipse(float x, float y, float w, float h, Registration reg)
 		glBindVertexArray(vaoEllipseID);
 		// NOTE::this may not be most efficient - eventually refactor
 		glBindBuffer(GL_ARRAY_BUFFER, vboEllipseID); // Bind the buffer (vertex array data)
-		int vertsDataSize = sizeof(GLfloat)* ellipsePrims.size();
+		int vertsDataSize = sizeof(GLfloat) * ellipsePrims.size();
 		glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &ellipsePrims[0]); // upload the data
 
@@ -1485,6 +1489,11 @@ void ProtoBaseApp::ellipse(float x, float y, float w, float h, Registration reg)
 		// Disable VAO
 		glBindVertexArray(0);
 	}
+}
+
+
+void ProtoBaseApp::ellipse(float x, float y, float w, float h, Registration reg) {
+	ellipse(x, y, 0, w, h, reg);
 }
 void ProtoBaseApp::ellipse(float r, Registration reg) {
 	ellipse(0, 0, r, r, reg);
@@ -2027,7 +2036,7 @@ void ProtoBaseApp::line(float x1, float y1, float z1, float x2, float y2, float 
 	endShape();
 }
 
-void ProtoBaseApp::point(float x, float y) {
+void ProtoBaseApp::point(float x, float y, float z) {
 	glDisable(GL_DITHER);
 	glDisable(GL_POINT_SMOOTH);
 	glDisable(GL_LINE_SMOOTH);
@@ -2039,10 +2048,10 @@ void ProtoBaseApp::point(float x, float y) {
 	glDisable(GL_MULTISAMPLE_ARB);
 	noStroke();
 	if (lineWidth < 2) {
-		rect(x, y, 1, 1);
+		rect(x, y, z, 1, 1);
 	}
 	else {
-		ellipse(x, y, lineWidth, lineWidth);
+		ellipse(x, y, z, lineWidth, lineWidth);
 	}
 	stroke(strokeColor);
 	glEnable(GL_DITHER);
@@ -2055,6 +2064,10 @@ void ProtoBaseApp::point(float x, float y) {
 #define GL_MULTISAMPLE_ARB 0x809D
 	glEnable(GL_MULTISAMPLE_ARB);
 
+}
+
+void ProtoBaseApp::point(float x, float y) {
+	point(x, y, 0);
 }
 
 

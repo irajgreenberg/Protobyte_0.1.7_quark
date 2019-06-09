@@ -6,7 +6,7 @@ Ira Greenberg 2016
 #include "ProtoController.h"
 
 void ProtoController::init() {
-	int ptCount{ 40 };
+	int ptCount{ 4 };
 	setShadowsOn(1);
 	float tendrilLen{ 100.0f };
 	float segLen{ tendrilLen / ptCount };
@@ -39,7 +39,7 @@ void ProtoController::init() {
 		pts.push_back(Vec3f(x*.5f, y * .5f, z * .5f));
 		u += TWO_PI / ptCount;
 	}
-	path = Spline3(pts, 3, true, 1.0);
+	path = Spline3(pts, 2, true, 1.0);
 
 
 	//// need to fix this
@@ -67,9 +67,9 @@ void ProtoController::display() {
 	background({ 1, 1, 1, 1 });
 	beginArcBall();
 	stroke(200, 100, 0);
-	path.display(4, { 1.0f, .7f, 0 });
+	path.display(1, { 1.0f, .7f, 0 });
 	path.displayControlPts();
-	path.displayInterpPts(6);
+	//path.displayInterpPts(6);
 	tendril.display(WIREFRAME, 1.0f);
 	endArcBall();
 }

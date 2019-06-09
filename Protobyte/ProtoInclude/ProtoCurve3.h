@@ -58,16 +58,16 @@ namespace ijg {
 		 * std::vector of control points.
 		 */
 		std::vector<Vec3f> controlPts;
-
+			
 		/**
-		 * The number of interpolated points along the curve.
+		 * The number of interpolated points to add along the curve.
 		 */
-		int interpDetail;
+		int interpolatedPtsCount;
 
 		/**
 		 * std::vector of interpolated points along curve.
 		 */
-		std::vector<Vec3f> interpPts;
+		std::vector<Vec3f> interpolatedPts;
 
 		/**
 		 * std::vector of all curve vertices.
@@ -161,9 +161,7 @@ namespace ijg {
 
 		ProtoCurve3();
 
-		ProtoCurve3(const std::vector<Vec3f>& controlPts, int interpDetail, bool isCurveClosed);
-
-
+		ProtoCurve3(const std::vector<Vec3f>& controlPts, int interpolatedPtCount, bool isCurveClosed = 0);
 
 		// copy Constructor - Use default: no explicit heap allocation
 		//ProtoCurve3(ProtoCurve3& curve3d_src);
@@ -183,17 +181,20 @@ namespace ijg {
 		/**
 		 * Draw the curve.
 		 */
-		virtual void display(float strokeWeight = 1, Col4 strokeCol = { 0.0f, 0.0f, 0.0f, 1.0f }) = 0;
+		virtual void display(float strokeWeight = 1, 
+			Col4 strokeCol = { 0.0f, 0.0f, 0.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayControlPts(float pointSize = 10, Col4 strokeCol = { 1.0f, 0.0f, 0.0f, 1.0f }) = 0;
+		virtual void displayControlPts(float pointSize = 10, 
+			Col4 strokeCol = { 1.0f, 0.0f, 0.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayInterpPts(float pointSize = 2, Col4 strokeCol = { 0.0f, 0.0f, 1.0f, 1.0f }) = 0;
+		virtual void displayInterpolatedPts(float pointSize = 2, Col4 
+			strokeCol = { 0.0f, 0.0f, 1.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the Frenet Frame.
@@ -210,8 +211,7 @@ namespace ijg {
 		/**
 		 * Returns length of the points std::vector (pts between control points).
 		 */
-		int getInterpDetail();
-
+		int getInterpolatedPtsCount();
 
 
 		/**
@@ -311,9 +311,19 @@ namespace ijg {
 		 */
 		const std::vector<ProtoFrenetFrame>& getFrenetFrames() const;
 
-
-
 	};
+
+	/**
+	* Inline getter/setter implementations
+	*/
+	inline void ProtoCurve3::setIsCurveClosed(bool isCurveClosed) {
+		this->isCurveClosed = isCurveClosed;
+	}
+
+	inline bool ProtoCurve3::getIsCurveClosed() const {
+		return isCurveClosed;
+	}
+
 
 }
 

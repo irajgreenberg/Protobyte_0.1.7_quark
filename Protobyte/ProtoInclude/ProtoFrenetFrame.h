@@ -1,4 +1,10 @@
 /*!  \brief  ProtoFrenetFrame.h: Frenet frame class for parallel transport correction
+Moving frame implmentation that calculates localized curve orientation
+using (x - x-1) for f' and (x+1 - x-1) for f'' calucations.
+T = f'' / ||f''|| 
+N = f' x T / ||f' x T||
+B = T x N / ||T x N||
+
  ProtoFrenetFrame.h
  Protobyte Library v02
  
@@ -25,33 +31,98 @@
 #ifndef PROTO_FRENET_FRAME_H
 #define PROTO_FRENET_FRAME_H
 
-// brings in GL header
-#include <GLFW/glfw3.h>
-
 #include "ProtoVector3.h"
+#include "ProtoColor4.h"
+#include "ProtoVector4.h"
+#include "ProtoShader.h"
 #include <iostream>
 
 
 namespace ijg {
 
+	class ProtoFrenetFrame;
+	typedef ProtoFrenetFrame FrenetFrame;
+
+
     class ProtoFrenetFrame {
     private:
-        Vec3f p, T, N, B;
+        Vec3f p{}, T{}, N{}, B{};
+		Vec3f v0{}, v1{}, v2{};
+		std::vector<Vec3f> TNB{ {},{},{} };
+
+		// Vars and functions for rendering using shader
+		
+		/**
+		* initialize shader handles and uniforms for rendering
+		*/
+		void initBuffers();
+
+		/**
+		* stride to move through interleaved primitives(x, y, z, r, g, b, a)
+		*/
+		int stride = 7;
+
+		/**
+		* std::vector of interleaved curve primitives (x, y, z, r, g, b, a).
+		*/
+		std::vector<float> TPrims;
+		std::vector<float> NPrims;
+		std::vector<float> BPrims;
+
+		/**
+		 * Handle to verts VAO
+		*/
+		GLuint vaoVertsID;
+
+		/**
+		* Handle to verts VBO
+		*/
+		GLuint vboVertsID;
+
+		/**
+		* Handle to shader to disable/enable lighting for curve path/curve vertices rendering
+		*/
+		GLuint lightRenderingFactors_U;
         
     public:
         friend std::ostream& operator<<(std::ostream& out, const ProtoFrenetFrame& frame);
         ProtoFrenetFrame();
         ProtoFrenetFrame(const Vec3f& p, const Vec3f& T, const Vec3f& B, const Vec3f& N);
         ProtoFrenetFrame(const Vec3f TBN[3]);
+
+		// new and improved approach
+		ProtoFrenetFrame(Vec3f v0, Vec3f v1, Vec3f v2);
         
         void init();
+
         Vec3f getT() const;
         Vec3f getN() const;
         Vec3f getB() const;
+		std::vector<Vec3f> getTNB() const;
         
-        void display(float len = 10);
-        
+		void display(float length = 10, float strokeWeight = 2, 
+			Col4f TCol = {1.0f, 0.5f, 0.0f}, 
+			Col4f NCol = {0.0f, 0.0f, 1.0f},
+			Col4f BCol = {0.0f, 1.0f, 0.0f}
+		);
     };
+
+	// INlinne getter/setter implementations
+	inline Vec3f FrenetFrame::getT() const {
+		return T;
+	}
+
+	inline Vec3f FrenetFrame::getN() const {
+		return N;
+	}
+	
+	inline Vec3f FrenetFrame::getB() const {
+		return B;
+	}
+
+	inline std::vector<Vec3f> FrenetFrame::getTNB() const {
+		return TNB;
+	}
 }
 
 #endif // PROTO_FRENET_FRAME_H

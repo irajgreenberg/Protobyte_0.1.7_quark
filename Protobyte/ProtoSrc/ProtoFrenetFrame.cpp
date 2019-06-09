@@ -39,7 +39,6 @@ namespace ijg {
 using namespace ijg;
 
 ProtoFrenetFrame::ProtoFrenetFrame() {
-
 }
 
 ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f& p, const Vec3f& T, const Vec3f& B, const Vec3f& N) :
@@ -52,43 +51,93 @@ ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f TBN[3]) {
     N = TBN[2];
 }
 
-Vec3f ProtoFrenetFrame::getT() const {
-    return T;
+ProtoFrenetFrame::ProtoFrenetFrame(Vec3f v0, Vec3f v1, Vec3f v2) :
+	v0{ v0 }, v1{ v1 }, v2{ v2 } {
+	init();
 }
 
-Vec3f ProtoFrenetFrame::getN() const {
-    return N;
+void ProtoFrenetFrame::init() {
+	// calulate frame and define vector TNB
+	
+	// Used for 1st deriviatve 
+	Vec3f vel = v1 - v0;
+	vel.normalize();
+
+	// Used for 2nd deriviatve to calculate Tangent vector
+	TNB.at(0) = v2 - v0;
+	TNB.at(0).normalize();
+
+	// (v' x v'')cross product to calculate Binormal vector
+	TNB.at(2) = TNB.at(0).cross(vel);
+	TNB.at(2).normalize();
+
+	// (T x B)cross product to calculate Normal vector
+	TNB.at(1) = TNB.at(2).cross(TNB.at(0));
+	TNB.at(1).normalize();
+
+	// Required for displaying Frenet Frame
+	TPrims.push_back(TNB.at(0).x);
+	TPrims.push_back(TNB.at(0).y);
+	TPrims.push_back(TNB.at(0).z);
+	TPrims.push_back(0.0f);
+	TPrims.push_back(0.0f);
+	TPrims.push_back(0.0f);
+	TPrims.push_back(0.0f);
+
+	NPrims.push_back(TNB.at(1).x);
+	NPrims.push_back(TNB.at(1).y);
+	NPrims.push_back(TNB.at(1).z);
+	NPrims.push_back(0.0f);
+	NPrims.push_back(0.0f);
+	NPrims.push_back(0.0f);
+	NPrims.push_back(0.0f);
+	
+	BPrims.push_back(TNB.at(2).x);
+	BPrims.push_back(TNB.at(2).y);
+	BPrims.push_back(TNB.at(2).z);
+	BPrims.push_back(0.0f);
+	BPrims.push_back(0.0f);
+	BPrims.push_back(0.0f);
+	BPrims.push_back(0.0f);
 }
 
-Vec3f ProtoFrenetFrame::getB() const {
-    return B;
-}
 
-void ProtoFrenetFrame::display(float len) {
-    //     std::cout << "T = " << T.length() << std::endl;
-    //     std::cout << "B = " << B.length() << std::endl;
-    //     std::cout << "N = " << N.length()<< std::endl;
-
-    glBegin(GL_LINES);
-
-    // T = RED
-    glColor3f(1, 0, 0);
-    glVertex3f(p.x, p.y, p.z);
-    glVertex3f(p.x + T.x*len, p.y + T.y*len, p.z + T.z * len);
-
-    // B = BLUE
-    glColor3f(0, 0, 1);
-    glVertex3f(p.x, p.y, p.z);
-    glVertex3f(p.x + B.x*len, p.y + B.y*len, p.z + B.z * len);
+void ProtoFrenetFrame::display(float length, float strokeWeight, Col4f TCol, Col4f NCol, Col4f BCol) {
+	
+	for (int i = 0; i < stride; i++) {
+		if (i < 3) {
+			TPrims.at(i) *= length;
+			NPrims.at(i) *= length;
+			BPrims.at(i) *= length;
+		}
+		else {
+			TPrims.at(i) = TCol[i - 3];
+			NPrims.at(i) = NCol[i - 3];
+			BPrims.at(i) = BCol[i - 3];
+		}
+	}
 
 
-    // N = GREEN
-    glColor3f(0, 1, 0);
-    glVertex3f(p.x, p.y, p.z);
-    glVertex3f(p.x + N.x*len, p.y + N.y*len, p.z + N.z * len);
+	glBindVertexArray(vaoVertsID);
+	// NOTE::this may not be most efficient - eventually refactor
+	glBindBuffer(GL_ARRAY_BUFFER, vboVertsID); // Bind the buffer (vertex array data)
+	int vertsDataSize = sizeof(GLfloat) * TPrims.size();
+	glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &TPrims[0]); // upload the data
 
+	glPointSize(strokeWeight);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); // do I need this anymore?
 
+	// turn off lighting
+	Vec4f ltRenderingFactors(0.0, 0.0, 0.0, 1.0);
+	glUniform4fv(lightRenderingFactors_U, 1, &ltRenderingFactors.x);
 
+	glDrawArrays(GL_LINES, 0, TPrims.size() / stride);
 
-    glEnd();
+	//turn on lighting
+	ltRenderingFactors = Vec4f(1.0, 1.0, 1.0, 1.0);
+	glUniform4fv(lightRenderingFactors_U, 1, &ltRenderingFactors.x);
+
+	// Disable VAO
+	glBindVertexArray(0);
 }

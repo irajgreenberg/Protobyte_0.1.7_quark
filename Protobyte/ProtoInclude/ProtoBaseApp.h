@@ -379,10 +379,12 @@ namespace ijg {
 
 		// primitive funcs
 		void rect(float x, float y, float w, float h, Registration reg = CORNER);
+		void rect(float x, float y, float z, float w, float h, Registration reg = CORNER);
 		void rect(const Vec2& pt0, const Vec2& pt1, Registration reg = CORNER);
 		void rect(float radius1, float radius2, Registration reg = CENTER);
 		void quad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, Registration reg = CENTER);
 		void quad(const Vec2& pt0, const Vec2& pt1, const Vec2& pt2, const Vec2& pt3, Registration reg = CENTER);
+		void ellipse(float x, float y, float z, float w, float h, Registration reg = CENTER); 
 		void ellipse(float x, float y, float w, float h, Registration reg = CENTER);
 		void ellipse(float r0, float r1, Registration reg = CENTER);
 		void ellipse(float r, Registration reg = CENTER);
@@ -416,7 +418,7 @@ namespace ijg {
 		void line(float x1, float y1, float z1, float x2, float y2, float z2);
 
 		void point(float x, float y);
-		//void point(float x, float y, float z); // not implemented
+		void point(float x, float y, float z); 
 
 		// Catmull-Rom spline curve
 		void curveVertex(const Vec2f& vec);

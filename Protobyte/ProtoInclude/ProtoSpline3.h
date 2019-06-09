@@ -1,4 +1,5 @@
 /*!  \brief  ProtoSpline3.h: Catmull-Rom spline class implementation
+ Credit: https://en.wikipedia.org/wiki/Centripetal_Catmull%E2%80%93Rom_spline
  ProtoSpline3.h
  Protobyte Library v02
  
@@ -38,84 +39,92 @@ namespace ijg {
     class ProtoSpline3;
     typedef ProtoSpline3 Spline3;
     
-
     class ProtoSpline3 : public ProtoCurve3 {
     public:
 
-        ProtoSpline3();
+		/**
+		 * Utility for controlling spline alpha setting
+		 * 0.0-1.0 (Centripetal, Uniform Chordal)
+		 */
+		enum SplineType {
+			UNIFORM,
+			CENTRIPETAL,
+			CHORDAL
+		};
+		
+		ProtoSpline3();
 
-        ProtoSpline3(const std::vector<Vec3f>& controlPts, int interpDetail, bool isCurveClosed, float smoothness);
-        
-
-        /**
-         * Set flag for Curve at Terminals to be continuous
-         *          * 
-         * @param isTerminalSmooth
-         *            boolean value
-         */
-        void setTerminalSmooth(bool isTerminalSmooth);
+		ProtoSpline3(const std::vector<Vec3f>& controlPts, int interpolatedPtCount, 
+			bool isCurveClosed, SplineType type = CENTRIPETAL);
 
         /**
          * Draw the curve.
-
          */
-		void display(float strokeWeight = 1, Col4 strokeCol = { 0.0f, 0.0f, 0.0f, 1.0f });
+		void display(float strokeWeight = 1, 
+			Col4 strokeCol = { 0.0f, 0.0f, 0.0f, 1.0f });
 
         /**
          * Draw the control points.
-         * 
          */
-        void displayControlPts(float pointSize = 10, Col4 strokeCol = { 1.0f, 0.0f, 0.0f, 1.0f });
+        void displayControlPts(float pointSize = 10, 
+			Col4 strokeCol = { 1.0f, 0.0f, 0.0f, 1.0f });
 
         /**
          * Draw the interpolated points.
-         * 
          */
-        void displayInterpPts(float pointSize = 2, Col4 strokeCol = { 0.0f, 0.0f, 1.0f, 1.0f });
+        void displayInterpolatedPts(float pointSize = 2,
+			Col4 strokeCol = { 0.0f, 0.0f, 1.0f, 1.0f });
 
         /**
          * Draw the Frenet Frames.
-         *
          */
         void displayFrenetFrames(float len = 20);
 
-        /**
-         * Set the smoothenss value.
-         * 
-         */
-        void setSmoothness(float smoothness);
+		/**
+		* Draw cross-section extruded along the spline path.
+		* Default cross-section is an ellipse
+		*/
+		void drawCrossSections(); // temp
 
-        /**
-         * get the smoothenss value.
-         * 
-         */
-        float getSmoothness(float smoothness) const;
+		/**
+		* sets flag for terminals included
+		*
+		*/
+		void setAreTerminalPtsIncluded(bool areTerminalPtsIncluded);
 
-        /**
-         * sets flag for curve closed
-         * 
-         */
-        void setCurveClosed(bool isCurveClosed);
+		/**
+		* gets flag for curve closed
+		*
+		*/
+		bool getAreTerminalPtsIncluded() const;
 
-        /**
-         * Draw cross-section extruded along the spline path.
-         * Default cross-section is an ellipse
-         */
-        void drawCrossSections(); // temp
-        
-        
 
     private:
 
-        /**
-         * Controls spline curve curvature.
-         */
-        float smoothness;
+		SplineType type;
+		
+		/**
+		* Controls Uniform, Centripetal or Chordal
+		* Spline implementation.
+		* Deafult type: Uniform.
+		*/
+		float splineAlpha{ 0.0f };
+		
+		/**
+		* Curve flags to control curve terminals.
+		* Deafult: Terminal Points included.
+		*/
+		bool areTerminalPtsIncluded;
 
         /**
          * allocate memory and initialize stuff.
          */
         void init();
+
+		/**
+		* allocate memory and initialize stuff.
+		*/
+		float getT(float t, Vec3f p0, Vec3f p1);
 
         /**
          * Frenet frame is used to calcuate extrusions
@@ -124,7 +133,26 @@ namespace ijg {
          */
         void parallelTransport();
 
+		/**
+		 * Frenet frames used for curve 
+		 * orientation and need for parallel
+		 * transport algorithm
+		 */
+		std::vector <FrenetFrame> frames;
+
+		void calculateFrenetFrames();
     };
+
+	/**
+	* Inline getter/setter implementations
+	*/
+	inline void ProtoSpline3::setAreTerminalPtsIncluded(bool areTerminalPtsIncluded) {
+		this->areTerminalPtsIncluded = areTerminalPtsIncluded;
+	}
+
+	inline bool ProtoSpline3::getAreTerminalPtsIncluded() const {
+		return areTerminalPtsIncluded;
+	}
 
 }
 

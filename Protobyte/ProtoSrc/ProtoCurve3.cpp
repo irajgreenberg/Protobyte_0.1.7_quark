@@ -30,8 +30,8 @@ using namespace ijg;
 
 ProtoCurve3::ProtoCurve3() {}
 
-ProtoCurve3::ProtoCurve3(const std::vector<Vec3f>& controlPts, int interpDetail, bool isCurveClosed) :
-controlPts(controlPts), interpDetail(interpDetail), isCurveClosed(isCurveClosed){
+ProtoCurve3::ProtoCurve3(const std::vector<Vec3f>& controlPts, int interpolatedPtsCount, bool isCurveClosed) :
+controlPts(controlPts), interpolatedPtsCount(interpolatedPtsCount), isCurveClosed(isCurveClosed){
 	initBuffers();
 }
 
@@ -89,8 +89,8 @@ int ProtoCurve3::getControlPtsLength() {
 /**
  * Gets point count between control points.
  */
-int ProtoCurve3::getInterpDetail(){
-	return interpDetail;
+int ProtoCurve3::getInterpolatedPtsCount(){
+	return interpolatedPtsCount;
 }
 
 /**
@@ -211,24 +211,24 @@ void ProtoCurve3::setVertRad(double vertRad) {
 }
 
 
-/**
- * Get flag value telling if curve is closed
- *
- * @return bool value
- */
-bool ProtoCurve3::getIsCurveClosed() const  {
-	return isCurveClosed;
-}
-
-/**
- * Set flag for Curve to be closed
- *
- * @param isCurveClosed
- *            bool value
- */
-void ProtoCurve3::setIsCurveClosed(bool isCurveClosed) {
-	this->isCurveClosed = isCurveClosed;
-}
+///**
+// * Get flag value telling if curve is closed
+// *
+// * @return bool value
+// */
+//bool ProtoCurve3::getIsCurveClosed() const  {
+//	return isCurveClosed;
+//}
+//
+///**
+// * Set flag for Curve to be closed
+// *
+// * @param isCurveClosed
+// *            bool value
+// */
+//void ProtoCurve3::setIsCurveClosed(bool isCurveClosed) {
+//	this->isCurveClosed = isCurveClosed;
+//}
 
 /**
  * Get flag value telling if curve at Terminals is continuous
