@@ -1,10 +1,10 @@
 /*!  \brief  ProtoFrenetFrame.cpp: Frenet frame class for parallel transport correction
  ProtoFrenetFrame.cpp
  Protobyte Library v02
- 
+
  Created by Ira on 7/23/13.
  Copyright (c) 2013 Ira Greenberg. All rights reserved.
- 
+
  Library Usage:
  This work is licensed under the Creative Commons
  Attribution-NonCommercial-ShareAlike 3.0 Unported License.
@@ -13,9 +13,9 @@
  or send a letter to Creative Commons,
  444 Castro Street, Suite 900,
  Mountain View, California, 94041, USA.
- 
+
  This notice must be retained any source distribution.
- 
+
  \ingroup common
  This class is templated to allow for varied single collection types
  This class is part of the group common (update)
@@ -30,10 +30,10 @@
 
 namespace ijg {
 
-    std::ostream& operator<<(std::ostream& out, const ProtoFrenetFrame& frame) {
-        std::cout << "T = " << frame.getT() <<", B = " << frame.getB()<<", N = " << frame.getN();
-        return out;
-    }
+	std::ostream& operator<<(std::ostream& out, const ProtoFrenetFrame& frame) {
+		std::cout << "T = " << frame.getT() << ", B = " << frame.getB() << ", N = " << frame.getN();
+		return out;
+	}
 }
 
 using namespace ijg;
@@ -41,27 +41,32 @@ using namespace ijg;
 ProtoFrenetFrame::ProtoFrenetFrame() {
 }
 
-ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f& p, const Vec3f& T, const Vec3f& B, const Vec3f& N) :
-p(p), T(T), B(B), N(N) {
+ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f& p, const Vec3f& T, const Vec3f& N, const Vec3f& B) :
+	p(p), T(T), N(N), B(B) {
+	this->TNB[0] = T;
+	this->TNB[1] = N;
+	this->TNB[2] = B;
 }
 
-ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f TBN[3]) {
-    T = TBN[0];
-    B = TBN[1];
-    N = TBN[2];
+ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f TNB[3]) {
+	this->TNB[0] = T = TNB[0];
+	this->TNB[1] = N = TNB[1];
+	this->TNB[2] = B = TNB[2];
 }
 
 ProtoFrenetFrame::ProtoFrenetFrame(Vec3f v0, Vec3f v1, Vec3f v2) :
-	v0{ v0 }, v1{ v1 }, v2{ v2 } {
+	v0(v0), v1(v1), v2(v2) {
 	init();
 }
 
 void ProtoFrenetFrame::init() {
 	// calulate frame and define vector TNB
-	
+
 	// Used for 1st deriviatve 
 	Vec3f vel = v1 - v0;
 	vel.normalize();
+
+	TNB.resize(3);
 
 	// Used for 2nd deriviatve to calculate Tangent vector
 	TNB.at(0) = v2 - v0;
@@ -71,72 +76,98 @@ void ProtoFrenetFrame::init() {
 	TNB.at(2) = TNB.at(0).cross(vel);
 	TNB.at(2).normalize();
 
+
 	// (T x B)cross product to calculate Normal vector
 	TNB.at(1) = TNB.at(2).cross(TNB.at(0));
 	TNB.at(1).normalize();
 
-	// Required for displaying Frenet Frame
-	TPrims.push_back(TNB.at(0).x);
-	TPrims.push_back(TNB.at(0).y);
-	TPrims.push_back(TNB.at(0).z);
-	TPrims.push_back(0.0f);
-	TPrims.push_back(0.0f);
-	TPrims.push_back(0.0f);
-	TPrims.push_back(0.0f);
+	frenetPrims.clear();
 
-	NPrims.push_back(TNB.at(1).x);
-	NPrims.push_back(TNB.at(1).y);
-	NPrims.push_back(TNB.at(1).z);
-	NPrims.push_back(0.0f);
-	NPrims.push_back(0.0f);
-	NPrims.push_back(0.0f);
-	NPrims.push_back(0.0f);
-	
-	BPrims.push_back(TNB.at(2).x);
-	BPrims.push_back(TNB.at(2).y);
-	BPrims.push_back(TNB.at(2).z);
-	BPrims.push_back(0.0f);
-	BPrims.push_back(0.0f);
-	BPrims.push_back(0.0f);
-	BPrims.push_back(0.0f);
-}
-
-
-void ProtoFrenetFrame::display(float length, float strokeWeight, Col4f TCol, Col4f NCol, Col4f BCol) {
-	
-	for (int i = 0; i < stride; i++) {
-		if (i < 3) {
-			TPrims.at(i) *= length;
-			NPrims.at(i) *= length;
-			BPrims.at(i) *= length;
-		}
-		else {
-			TPrims.at(i) = TCol[i - 3];
-			NPrims.at(i) = NCol[i - 3];
-			BPrims.at(i) = BCol[i - 3];
-		}
+	// 3 axes to draw in each frame, with 2 points each axis(terminials)
+	// Also need to include 4 color complenents
+	for (int i = 0; i < 3 * 2 * stride; i++) {
+		frenetPrims.push_back(0.0f);
 	}
 
+	initBuffers();
+}
 
-	glBindVertexArray(vaoVertsID);
+void ProtoFrenetFrame::initBuffers() {
+	// prepare shader handles to verts data
+	// 1. Create and bind VAO
+	glGenVertexArrays(1, &vaoFrameID); // Create VAO
+	glBindVertexArray(vaoFrameID); // Bind VAO (making it active)
+
+	// 2. Create and bind VBO
+	// a. Vertex attributes vboID;
+	glGenBuffers(1, &vboFrameID); // Create the buffer ID
+	glBindBuffer(GL_ARRAY_BUFFER, vboFrameID); // Bind the buffer (vertex array data)
+	int vertsDataSize = 0;// sizeof (GLfloat)* pathPrims.size();
+	glBufferData(GL_ARRAY_BUFFER, 0, NULL, GL_DYNAMIC_DRAW);// allocate space
+	//glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &pathPrims[0]); // upload the data
+
+	// fill state is true - need to create this
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	glEnableVertexAttribArray(0); // vertices
+	glEnableVertexAttribArray(2); // color
+
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), BUFFER_OFFSET(0)); // pos
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), BUFFER_OFFSET(12)); // col
+
+	// Disable buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+
+	// used to disable/enable lighting in shader
+	// passed to shader in display functions
+	lightRenderingFactors_U = glGetUniformLocation(ProtoShader::getID_2(), "lightRenderingFactors");
+}
+
+void ProtoFrenetFrame::display(float length, float strokeWeight, Col4f TCol, Col4f NCol, Col4f BCol) {
+
+	//populate Frenet Frame prims
+	Col4f cols[] = { TCol, NCol, BCol };
+	for (int i = 0; i < 3; i++) {
+		frenetPrims.at(14 * i) = (v1.x);
+		frenetPrims.at(14 * i + 1) = (v1.y);
+		frenetPrims.at(14 * i + 2) = (v1.z);
+		frenetPrims.at(14 * i + 3) = (cols[i].r);
+		frenetPrims.at(14 * i + 4) = (cols[i].g);
+		frenetPrims.at(14 * i + 5) = (cols[i].b);
+		frenetPrims.at(14 * i + 6) = (cols[i].a);
+
+		frenetPrims.at(14 * i + 7) = (v1.x + TNB.at(i).x * length);
+		frenetPrims.at(14 * i + 8) = (v1.y + TNB.at(i).y * length);
+		frenetPrims.at(14 * i + 9) = (v1.z + TNB.at(i).z * length);
+		frenetPrims.at(14 * i + 10) = (cols[i].r);
+		frenetPrims.at(14 * i + 11) = (cols[i].g);
+		frenetPrims.at(14 * i + 12) = (cols[i].b);
+		frenetPrims.at(14 * i + 13) = (cols[i].a);
+	}
+
+	//enable2DRendering();
+	glBindVertexArray(vaoFrameID);
 	// NOTE::this may not be most efficient - eventually refactor
-	glBindBuffer(GL_ARRAY_BUFFER, vboVertsID); // Bind the buffer (vertex array data)
-	int vertsDataSize = sizeof(GLfloat) * TPrims.size();
+	glBindBuffer(GL_ARRAY_BUFFER, vboFrameID); // Bind the buffer (vertex array data)
+	int vertsDataSize = sizeof(GLfloat) * frenetPrims.size();
 	glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
-	glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &TPrims[0]); // upload the data
-
-	glPointSize(strokeWeight);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT); // do I need this anymore?
-
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &frenetPrims[0]); // upload the data
+	glLineWidth(strokeWeight);
 	// turn off lighting
 	Vec4f ltRenderingFactors(0.0, 0.0, 0.0, 1.0);
 	glUniform4fv(lightRenderingFactors_U, 1, &ltRenderingFactors.x);
 
-	glDrawArrays(GL_LINES, 0, TPrims.size() / stride);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	glDrawArrays(GL_LINES, 0, frenetPrims.size() / stride);
 
 	//turn on lighting
 	ltRenderingFactors = Vec4f(1.0, 1.0, 1.0, 1.0);
 	glUniform4fv(lightRenderingFactors_U, 1, &ltRenderingFactors.x);
+
+
+
+	//disable2DRendering();
 
 	// Disable VAO
 	glBindVertexArray(0);

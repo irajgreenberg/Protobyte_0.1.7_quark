@@ -35,8 +35,11 @@ B = T x N / ||T x N||
 #include "ProtoColor4.h"
 #include "ProtoVector4.h"
 #include "ProtoShader.h"
+#include "ProtoContext.h"
 #include <iostream>
 
+ // for offset into the FBO interleaved buffer (ugly I know!)
+#define BUFFER_OFFSET(i) ((void*)(i))
 
 namespace ijg {
 
@@ -48,7 +51,7 @@ namespace ijg {
     private:
         Vec3f p{}, T{}, N{}, B{};
 		Vec3f v0{}, v1{}, v2{};
-		std::vector<Vec3f> TNB{ {},{},{} };
+		std::vector<Vec3f> TNB;
 
 		// Vars and functions for rendering using shader
 		
@@ -68,16 +71,17 @@ namespace ijg {
 		std::vector<float> TPrims;
 		std::vector<float> NPrims;
 		std::vector<float> BPrims;
+		std::vector<float> frenetPrims;
 
 		/**
 		 * Handle to verts VAO
 		*/
-		GLuint vaoVertsID;
+		GLuint vaoFrameID;
 
 		/**
 		* Handle to verts VBO
 		*/
-		GLuint vboVertsID;
+		GLuint vboFrameID;
 
 		/**
 		* Handle to shader to disable/enable lighting for curve path/curve vertices rendering
@@ -87,8 +91,8 @@ namespace ijg {
     public:
         friend std::ostream& operator<<(std::ostream& out, const ProtoFrenetFrame& frame);
         ProtoFrenetFrame();
-        ProtoFrenetFrame(const Vec3f& p, const Vec3f& T, const Vec3f& B, const Vec3f& N);
-        ProtoFrenetFrame(const Vec3f TBN[3]);
+        ProtoFrenetFrame(const Vec3f& p, const Vec3f& T, const Vec3f& N, const Vec3f& B);
+        ProtoFrenetFrame(const Vec3f TNB[3]);
 
 		// new and improved approach
 		ProtoFrenetFrame(Vec3f v0, Vec3f v1, Vec3f v2);
@@ -100,10 +104,10 @@ namespace ijg {
         Vec3f getB() const;
 		std::vector<Vec3f> getTNB() const;
         
-		void display(float length = 10, float strokeWeight = 2, 
-			Col4f TCol = {1.0f, 0.5f, 0.0f}, 
-			Col4f NCol = {0.0f, 0.0f, 1.0f},
-			Col4f BCol = {0.0f, 1.0f, 0.0f}
+		void display(float length = 25, float strokeWeight = 4, 
+			Col4f TCol = {1.0f, 0.0f, 0.0f, 1.0f}, 
+			Col4f NCol = {0.0f, 0.0f, 1.0f, 1.0f },
+			Col4f BCol = {0.0f, 1.0f, 0.0f, 1.0f }
 		);
     };
 

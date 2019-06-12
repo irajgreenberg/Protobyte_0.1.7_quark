@@ -32,6 +32,10 @@ ProtoCurve3::ProtoCurve3() {}
 
 ProtoCurve3::ProtoCurve3(const std::vector<Vec3f>& controlPts, int interpolatedPtsCount, bool isCurveClosed) :
 controlPts(controlPts), interpolatedPtsCount(interpolatedPtsCount), isCurveClosed(isCurveClosed){
+	//for resetting curve state
+	originalControlPts = controlPts;
+	
+	// for renderig with shaders
 	initBuffers();
 }
 
@@ -249,13 +253,5 @@ void ProtoCurve3::setIsTerminalSmooth(bool isTerminalSmooth) {
 	this->isTerminalSmooth = isTerminalSmooth;
 }
 
-/**
- * get Frenet Frames
- *
- * @return Frenet Frame
- */
-const std::vector<ProtoFrenetFrame>& ProtoCurve3::getFrenetFrames() const
-{
-	return frenetFrames;
-}
+
 

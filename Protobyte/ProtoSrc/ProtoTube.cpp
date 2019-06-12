@@ -368,9 +368,12 @@ void ProtoTube::calcVerts() {
 
 	// NOTE: ff and vecs are not the same size
 	ff = path.getFrenetFrames();
-	//for (int i = 0; i < ff.size(); i++) {
-	//	trace("ff.at(",i,")", ff.at(i));
-	//}
+//	trace("ff.size()", ff.size());
+	for (int i = 0; i < ff.size(); i++) {
+		//trace("ff.at(",i,")[0]", ff.at(i).getTNB()[0]);
+		//trace("ff.at(", i, ")[1]", ff.at(i).getTNB()[1]);
+		//trace("ff.at(", i, ")[2]", ff.at(i).getTNB()[2]);
+	}
 	//trace("ff.at(0) =", ff.at(0));
 	std::vector<Vec3f> vecs = path.getVerts();
 	//for (int i = 0; i < vecs.size(); i++) {
@@ -521,13 +524,19 @@ void ProtoTube::calcVerts() {
 				//trace("vecs.at(vecs.size()-2) =", vecs.at(vecs.size() - 2));
 			}
 			// transform to Frenet frame of reference
-			float px = vecs.at(i + 1).x + x * ff.at(i).getN().x + y * ff.at(i).getB().x;
-			float py = vecs.at(i + 1).y + x * ff.at(i).getN().y + y * ff.at(i).getB().y;
-			float pz = vecs.at(i + 1).z + x * ff.at(i).getN().z + y * ff.at(i).getB().z;
-			//std::cout <<"ff[i].getB() = " << ff[i].getB() << std::endl;
-			 //std::cout << "vecs.at(i + 1) = " << vecs.at(i + 1) << std::endl;
-			//std::cout << " ff.at(i).getN() = " <<  ff.at(i).getN() << std::endl;
-		   //std::cout << "ff.at(i).getB() = " << ff.at(i).getB() << std::endl;
+			//float px = vecs.at(i + 1).x + x * ff.at(i).getN().x + y * ff.at(i).getB().x;
+			//float py = vecs.at(i + 1).y + x * ff.at(i).getN().y + y * ff.at(i).getB().y;
+			//float pz = vecs.at(i + 1).z + x * ff.at(i).getN().z + y * ff.at(i).getB().z;
+
+			float px = vecs.at(i + 1).x + x * ff.at(i).getTNB()[1].x + y * ff.at(i).getTNB()[2].x;
+			float py = vecs.at(i + 1).y + x * ff.at(i).getTNB()[1].y + y * ff.at(i).getTNB()[2].y;
+			float pz = vecs.at(i + 1).z + x * ff.at(i).getTNB()[1].z + y * ff.at(i).getTNB()[2].z;
+
+
+			/*std::cout <<"ff[i].getB() = " << ff[i].getB() << std::endl;
+			 std::cout << "vecs.at(i + 1) = " << vecs.at(i + 1) << std::endl;
+			std::cout << " ff.at(i).getN() = " <<  ff.at(i).getN() << std::endl;
+		   std::cout << "ff.at(i).getB() = " << ff.at(i).getB() << std::endl;*/
 		   //std::cout << "Vec3f(px, py, pz).at(" << i << ") = " << Vec3f(px, py, pz) << std::endl;
 		   //trace("Vec3f(px, py, pz) = " , Vec3f(px, py, pz));
 		   //verts.at(i * crossSectionDetail + j) = ProtoVertex3(Vec3f(px, py, pz), col4s.at(i));
@@ -579,7 +588,6 @@ void ProtoTube::calcVerts() {
 
 
 	// std::cout << "crossSectionDetail = " << crossSectionDetail << std::endl;
-
 	for (int i = 0; i < frenetFrameLength; i++) {
 		float cx = 0, cy = 0, cz = 0;
 		for (int j = 0; j < crossSectionDetail; j++) {

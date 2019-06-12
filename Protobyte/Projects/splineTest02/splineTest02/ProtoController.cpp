@@ -63,22 +63,24 @@ void ProtoController::init() {
 	for (int i{ 0 }; i < ptCount; ++i) {
 		float x = cos(theta) * circleRadius;
 		float y = sin(theta) * circleRadius;
-		float z = i * i*0;
+		float z = -ptCount*40/2 + i * 40;
 		vecs.push_back({x, y, z});
 		theta += TWO_PI / ptCount;
 	}
 	
-	//// Closed loop test 2
-	//for (int i = 0; i < ptCount; ++i) {
-	//	vecs.push_back({ random(-400, 400),
-	//		random(-300, 300),
-	//		random(.300, 300) });
-	//}
-	s = Spline3(vecs, 5, 1, ProtoSpline3::UNIFORM);
-	s2 = Spline3(vecs, 5, 1, ProtoSpline3::CENTRIPETAL);
-	s3 = Spline3(vecs, 5, 1, ProtoSpline3::CHORDAL);
+	// Closed loop test 2
+	/*for (int i = 0; i < ptCount; ++i) {
+		vecs.push_back({ random(-400, 400),
+			random(-300, 300),
+			random(-400, 400) });
+	}*/
+	s = Spline3(vecs, 5, 0, ProtoSpline3::UNIFORM);
+	s.setAreTerminalPtsIncluded(0);
+	//trace("s.getAreTerminalPtsIncluded() =",s.getAreTerminalPtsIncluded());
+	//s2 = Spline3(vecs, 5, 1, ProtoSpline3::CENTRIPETAL);
+	//s3 = Spline3(vecs, 5, 1, ProtoSpline3::CHORDAL);
 	//s.set
-	tendril = Tube(s, 4, 4, ProtoTransformFunction(ProtoTransformFunction::LINEAR, Tup2(20, 20), 1), true, "corroded_red.jpg");
+	tendril = Tube(s, 4, 18, ProtoTransformFunction(ProtoTransformFunction::LINEAR, Tup2(20, 20), 1), true, "corroded_red.jpg");
 	tendril.setDiffuseMaterial({ 1.0f, 1, 1 });
 	tendril.setAmbientMaterial(0.05f);
 	tendril.setBumpMap("corroded_red.jpg", 1.0f);
@@ -138,11 +140,12 @@ void ProtoController::display() {
 		i++;
 	}
 	endArcBall();*/
-	scale(.85);
+	scale(.55);
 	beginArcBall(); 
 	s.display(2);
+	s.displayControlPts();
 	s.displayInterpolatedPts(6);
-	//s.displayFrenetFrames();
+	s.displayFrenetFrames();
 
 	//translate(100, 0, 0);
 	//s2.display(2);

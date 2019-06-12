@@ -25,7 +25,7 @@
 #ifndef ProtoCurve3_h
 #define ProtoCurve3_h
 
-//#include <SFML/OpenGL.hpp>
+ //#include <SFML/OpenGL.hpp>
 #include "ProtoDimension3.h"
 #include "ProtoVector4.h"
 #include "ProtoShader.h"
@@ -45,20 +45,26 @@ namespace ijg {
 
 	class ProtoCurve3 {
 	private:
-	
+
 		/**
 		* initialize shader handles and uniforms for rendering
 		*/
 		void initBuffers();
-	
-	
+
+
 	protected:
 
 		/**
 		 * std::vector of control points.
 		 */
 		std::vector<Vec3f> controlPts;
-			
+
+		/**
+		 * copy of original std::vector of control points.
+		 * for resetting spline state
+		 */
+		std::vector<Vec3f> originalControlPts;
+
 		/**
 		 * The number of interpolated points to add along the curve.
 		 */
@@ -78,12 +84,12 @@ namespace ijg {
 		* stride to move through interleaved primitives(x, y, z, r, g, b, a)
 		*/
 		int stride = 7;
-		
+
 		/**
 		* std::vector of curve control point primitives (x, y, z, r, g, b, a).
 		*/
 		std::vector<float> controlPtPrims;
-		
+
 		/**
 		* std::vector of interleaved curve primitives (x, y, z, r, g, b, a).
 		*/
@@ -181,25 +187,34 @@ namespace ijg {
 		/**
 		 * Draw the curve.
 		 */
-		virtual void display(float strokeWeight = 1, 
+		virtual void display(float strokeWeight = 1,
 			Col4 strokeCol = { 0.0f, 0.0f, 0.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayControlPts(float pointSize = 10, 
+		virtual void displayControlPts(float pointSize = 10,
 			Col4 strokeCol = { 1.0f, 0.0f, 0.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayInterpolatedPts(float pointSize = 2, Col4 
+		virtual void displayInterpolatedPts(float pointSize = 2, Col4
 			strokeCol = { 0.0f, 0.0f, 1.0f, 1.0f }) = 0;
+
+		/**
+		 * Create Frenet Frames using v-1, v, v+1.
+		*/
+		virtual void initFrenetFrames() = 0;
 
 		/**
 		 * Draw the Frenet Frame.
 		 */
-		virtual void displayFrenetFrames(float len = 20) = 0;
+		virtual  void displayFrenetFrames(float length = 25,
+			float strokeWeight = 4,
+			Col4f TCol = { 1.0f, 0.0f, 0.0f, 1.0f },
+			Col4f NCol = { 0.0f, 0.0f, 1.0f, 1.0f },
+			Col4f BCol = { 0.0f, 1.0f, 0.0f, 1.0f }) = 0;
 
 		//virtual void createProtoFrenetFrame();
 
@@ -316,12 +331,18 @@ namespace ijg {
 	/**
 	* Inline getter/setter implementations
 	*/
+
 	inline void ProtoCurve3::setIsCurveClosed(bool isCurveClosed) {
 		this->isCurveClosed = isCurveClosed;
 	}
 
 	inline bool ProtoCurve3::getIsCurveClosed() const {
 		return isCurveClosed;
+	}
+
+	inline const std::vector<ProtoFrenetFrame>& ProtoCurve3::getFrenetFrames() const
+	{
+		return frenetFrames;
 	}
 
 

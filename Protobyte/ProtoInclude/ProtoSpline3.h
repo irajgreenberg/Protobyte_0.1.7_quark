@@ -78,7 +78,10 @@ namespace ijg {
         /**
          * Draw the Frenet Frames.
          */
-        void displayFrenetFrames(float len = 20);
+        void displayFrenetFrames(float length = 25, float strokeWeight = 4,
+			Col4f TCol = { 1.0f, 0.0f, 0.0f, 1.0f },
+			Col4f NCol = { 0.0f, 0.0f, 1.0f, 1.0f },
+			Col4f BCol = { 0.0f, 1.0f, 0.0f, 1.0f });
 
 		/**
 		* Draw cross-section extruded along the spline path.
@@ -90,7 +93,7 @@ namespace ijg {
 		* sets flag for terminals included
 		*
 		*/
-		void setAreTerminalPtsIncluded(bool areTerminalPtsIncluded);
+		void setAreTerminalPtsIncluded(bool areTerminalPtsIncluded=1);
 
 		/**
 		* gets flag for curve closed
@@ -101,6 +104,7 @@ namespace ijg {
 
     private:
 
+		
 		SplineType type;
 		
 		/**
@@ -114,12 +118,17 @@ namespace ijg {
 		* Curve flags to control curve terminals.
 		* Deafult: Terminal Points included.
 		*/
-		bool areTerminalPtsIncluded;
+		bool areTerminalPtsIncluded{ 1 };
 
         /**
          * allocate memory and initialize stuff.
          */
         void init();
+
+		/**
+		 * Calculate Frenet Frames along spline.
+		 */
+		void initFrenetFrames();
 
 		/**
 		* allocate memory and initialize stuff.
@@ -133,14 +142,6 @@ namespace ijg {
          */
         void parallelTransport();
 
-		/**
-		 * Frenet frames used for curve 
-		 * orientation and need for parallel
-		 * transport algorithm
-		 */
-		std::vector <FrenetFrame> frames;
-
-		void calculateFrenetFrames();
     };
 
 	/**
@@ -148,6 +149,8 @@ namespace ijg {
 	*/
 	inline void ProtoSpline3::setAreTerminalPtsIncluded(bool areTerminalPtsIncluded) {
 		this->areTerminalPtsIncluded = areTerminalPtsIncluded;
+		//reset state
+		init();
 	}
 
 	inline bool ProtoSpline3::getAreTerminalPtsIncluded() const {
