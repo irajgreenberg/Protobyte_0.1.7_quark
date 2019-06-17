@@ -41,22 +41,35 @@ using namespace ijg;
 ProtoFrenetFrame::ProtoFrenetFrame() {
 }
 
-ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f& p, const Vec3f& T, const Vec3f& N, const Vec3f& B) :
-	p(p), T(T), N(N), B(B) {
+ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f& v1, const Vec3f& T, const Vec3f& N, const Vec3f& B) : v1(v1) {
 	this->TNB[0] = T;
 	this->TNB[1] = N;
 	this->TNB[2] = B;
+
+	initBuffers();
 }
 
-ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f TNB[3]) {
-	this->TNB[0] = T = TNB[0];
-	this->TNB[1] = N = TNB[1];
-	this->TNB[2] = B = TNB[2];
-}
+//ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f& v1, const Vec3f& T, const Vec3f& N, const Vec3f& B): {
+//	this->TNB[0] = TNB[0];
+//	this->TNB[1] = TNB[1];
+//	this->TNB[2] = TNB[2];
+//	this->v1 = v1;
+//
+//	initBuffers();
+//}
+
+//ProtoFrenetFrame::ProtoFrenetFrame(const Vec3f& T, const Vec3f& N, const Vec3f& B) {
+//	this->TNB[0] = T;
+//	this->TNB[1] = N;
+//	this->TNB[2] = B;
+//}
+
 
 ProtoFrenetFrame::ProtoFrenetFrame(Vec3f v0, Vec3f v1, Vec3f v2) :
 	v0(v0), v1(v1), v2(v2) {
 	init();
+
+	initBuffers();
 }
 
 void ProtoFrenetFrame::init() {
@@ -80,8 +93,11 @@ void ProtoFrenetFrame::init() {
 	// (T x B)cross product to calculate Normal vector
 	TNB.at(1) = TNB.at(2).cross(TNB.at(0));
 	TNB.at(1).normalize();
+}
 
-	frenetPrims.clear();
+void ProtoFrenetFrame::initBuffers() {
+	// clear junk out of FrentFrameprimitives
+	if (frenetPrims.size()>0) frenetPrims.clear();
 
 	// 3 axes to draw in each frame, with 2 points each axis(terminials)
 	// Also need to include 4 color complenents
@@ -89,10 +105,6 @@ void ProtoFrenetFrame::init() {
 		frenetPrims.push_back(0.0f);
 	}
 
-	initBuffers();
-}
-
-void ProtoFrenetFrame::initBuffers() {
 	// prepare shader handles to verts data
 	// 1. Create and bind VAO
 	glGenVertexArrays(1, &vaoFrameID); // Create VAO
@@ -129,6 +141,7 @@ void ProtoFrenetFrame::display(float length, float strokeWeight, Col4f TCol, Col
 	//populate Frenet Frame prims
 	Col4f cols[] = { TCol, NCol, BCol };
 	for (int i = 0; i < 3; i++) {
+		// draw frenet frame axis from each knot
 		frenetPrims.at(14 * i) = (v1.x);
 		frenetPrims.at(14 * i + 1) = (v1.y);
 		frenetPrims.at(14 * i + 2) = (v1.z);
@@ -164,8 +177,6 @@ void ProtoFrenetFrame::display(float length, float strokeWeight, Col4f TCol, Col
 	//turn on lighting
 	ltRenderingFactors = Vec4f(1.0, 1.0, 1.0, 1.0);
 	glUniform4fv(lightRenderingFactors_U, 1, &ltRenderingFactors.x);
-
-
 
 	//disable2DRendering();
 

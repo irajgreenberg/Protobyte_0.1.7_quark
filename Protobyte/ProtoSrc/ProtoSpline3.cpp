@@ -54,11 +54,12 @@ ProtoSpline3::ProtoSpline3(const std::vector<Vec3f>& controlPts, int interpolate
 void ProtoSpline3::init() {
 	// ensure starting state ok
 	controlPts = originalControlPts;
-	
+
 	// clear vectors
 	if (verts.size() > 0) verts.clear();
 	if (controlPtPrims.size() > 0) controlPtPrims.clear();
 	if (frenetFrames.size() > 0) frenetFrames.clear();
+	if (pathTangents.size() > 0) pathTangents.clear();
 	if (curveVertsPrims.size() > 0) curveVertsPrims.clear();
 
 	switch (type) {
@@ -81,19 +82,18 @@ void ProtoSpline3::init() {
 		std::vector<Vec3f>::iterator it;
 		it = controlPts.begin();
 		it = controlPts.insert(it, controlPts.at(controlPts.size() - 1));
+		//it = controlPts.insert(it, controlPts.at(0));
 		it = controlPts.end();
 		it = controlPts.insert(it, controlPts.at(0));
+		//it = controlPts.insert(it, controlPts.at(controlPts.size() - 1));
 		// draw smooth closed curve
 		if (isCurveClosed) {
-		//	controlPts.push_back(controlPts.at(2));
-		//	controlPts.push_back(controlPts.at(3));
+			//	controlPts.push_back(controlPts.at(2));
+			//	controlPts.push_back(controlPts.at(3));
 		}
 	}
 	else {
 	}
-
-
-	
 
 	//Convenient interleaved primitives array of original curve control points.
 	for (auto i : controlPts) {
@@ -137,9 +137,12 @@ void ProtoSpline3::init() {
 	// add last interpolated point on control point
 	verts.push_back(controlPts.at(controlPts.size() - 2));
 
+	// calculate local path tangent vectors
+	// in parent class
+	initPathTangents();
+
 	// create frenet frames for each curve knot
 	//if (frenetFrames.size() > 1) frenetFrames.clear();
-
 	initFrenetFrames();
 
 	// don't need these any longer
@@ -161,12 +164,18 @@ void ProtoSpline3::init() {
 	}
 }
 
+
 void ProtoSpline3::initFrenetFrames() {
 	for (int i = 1; i < verts.size() - 1; i++) {
 		frenetFrames.push_back(FrenetFrame(verts.at(i - 1), verts.at(i), verts.at(i + 1)));
 	}
 	//trace("verts.size =", verts.size());
 	//trace("renetFrames.size =", frenetFrames.size());
+	/*for (int i = 0; i < frenetFrames.size(); i++) {
+		trace("frenetFrames.at(", i ,").getTNB()[0] =", frenetFrames.at(i).getTNB()[0]);
+		trace("frenetFrames.at(", i, ").getTNB()[1] =", frenetFrames.at(i).getTNB()[1]);
+		trace("frenetFrames.at(", i, ").getTNB()[2] =", frenetFrames.at(i).getTNB()[2]);
+	}*/
 }
 
 
@@ -239,7 +248,7 @@ void ProtoSpline3::displayControlPts(float pointSize, Col4 strokeCol) {
 			controlPtPrims.at(i + 5) = 0.25f;
 			controlPtPrims.at(i + 6) = 1.0f;
 		}
-		else if (i == controlPtPrims.size()-7) {
+		else if (i == controlPtPrims.size() - 7) {
 			controlPtPrims.at(i + 3) = 1.0f;
 			controlPtPrims.at(i + 4) = 0.5f;
 			controlPtPrims.at(i + 5) = 0.0f;
@@ -313,13 +322,11 @@ void ProtoSpline3::displayInterpolatedPts(float pointSize, Col4 strokeCol) {
 
 /**
  * Draw the Frenet Frames.
- *
+ * params:  float length, float strokeWeight, Col4f TCol, Col4f NCol, Col4f BCol
  */
- // float length, float strokeWeight, Col4f TCol, Col4f NCol, Col4f BCol
-void ProtoSpline3::displayFrenetFrames(float length, float strokeWeight, Col4f TCol, Col4f NCol, Col4f BCol) {
-	//	trace("frenetFrames.size() =", frenetFrames.size());
-	//	trace("verts.size() =", verts.size());
-	for (int i = 0; i < frenetFrames.size()-5; i++) {
+void ProtoSpline3::displayFrenetFrames(float length, float strokeWeight,
+	Col4f TCol, Col4f NCol, Col4f BCol) {
+	for (int i = 0; i < frenetFrames.size(); i++) {
 		frenetFrames.at(i).display(length, strokeWeight, TCol, NCol, BCol);
 	}
 }
@@ -368,135 +375,173 @@ void ProtoSpline3::displayFrenetFrames(float length, float strokeWeight, Col4f T
 //}
 
 
+
+//void ProtoSpline3::parallelTransport() {
+//	trace("parallel transport call");
+//
+//	Vec3f v0 = verts.at(0);
+//	Vec3f v1 = verts.at(1);
+//	Vec3f v2 = verts.at(2);
+//
+//	Vec3f cp1 = verts.at(i);
+//	Vec3f cp2 = verts.at(i + 1);
+//	Vec3f biNorm = cp1.cross(cp2);
+//	biNorm.normalize();
+//
+//	// initial normalized normal
+//	Vec3f norm = biNorm.cross(pathTangents.at(0));
+//	initNorm.normalize();
+//
+//	Vec3f nextNorm{ 0.0f, 0.0f, 0.0f };
+//	for (int i = 0; i < pathTangents.size() - 1; i++) {
+//		Vec3f tan0 = pathTangents.at(i);
+//		Vec3f tan1 = pathTangents.at(i + 1);
+//		//Vec3f biNorm = pathTangents.at(i).cross(pathTangents.at(i + 1))
+//		Vec3f cp1 = verts.at(i);
+//		Vec3f cp2 = verts.at(i + 1);
+//		Vec3f biNorm = cp1.cross(cp2);
+//		
+//		//Vec3f biNorm = tan0.cross(tan1);
+//		if (biNorm.mag() == 0) {
+//			trace("in problem condition");
+//			nextNorm = norm;
+//		}
+//		else {
+//			biNorm.normalize();
+//			float theta = acos(tan0.dot(tan1));
+//			ProtoMatrix3f m;
+//			nextNorm = m.getRotate(theta, biNorm, norm);
+//			nextNorm.normalize();
+//		}
+//		frenetFrames.at(i).setT(tan0);
+//		frenetFrames.at(i).setN(nextNorm);
+//		frenetFrames.at(i).setB(biNorm);
+//
+//		// move along path
+//		norm = nextNorm;
+//
+//		//trace("verts.size =", verts.size());
+//		//trace("renetFrames.size =", frenetFrames.size());
+//		//for (int i = 0; i < frenetFrames.size(); i++) {
+//		//	trace("frenetFrames.at(", i, ").getTNB()[0] =", frenetFrames.at(i).getTNB()[0]);
+//		//	trace("frenetFrames.at(", i, ").getTNB()[1] =", frenetFrames.at(i).getTNB()[1]);
+//		//	trace("frenetFrames.at(", i, ").getTNB()[2] =", frenetFrames.at(i).getTNB()[2]);
+//		//}
+//	}
+//
+//	////frenetFrames.clear(); 
+//	//Vec3f nextNorm{ 0.0f, 0.0f, 0.0f };
+//	//Vec3f biNorm{ 0.0f, 0.0f, 0.0f };
+//	//for (int i = 0; i < pathTangents.size()-1; i++) {
+//	//	//for (int i = 1; i < 5; i++) {
+//
+//	//	Vec3f biNorm = pathTangents.at(i).cross(pathTangents.at(i+1));
+//	//	if (biNorm.mag() == 0) {
+//	//		nextNorm = norm;
+//	//	}
+//	//	else {
+//	//		biNorm.normalize();
+//	//		float theta = acos(pathTangents.at(i).dot(pathTangents.at(i+1)));
+//	//		ProtoMatrix3f m;
+//	//		nextNorm = m.getRotate(theta, biNorm, norm);
+//	//	}
+//
+//	//	//fill Frenet frames with parallel tranported frames
+//	//	//Vec3f TNB[3] = { pathTangents.at(i - 1), nextNorm, biNorm };
+//	//	frenetFrames.at(i + 1).setT(pathTangents.at(i));
+//	//	frenetFrames.at(i + 1).setN(nextNorm);
+//	//	frenetFrames.at(i + 1).setB(biNorm);
+//	//	//trace();
+//	//	//// move along path
+//	//	norm = nextNorm;
+//	//}
+//}
+
 void ProtoSpline3::parallelTransport() {
-	//// double up first and last verts
-	////verts.insert(verts.begin(), verts.at(0));
-	////verts.push_back(verts.at(verts.size() - 1));
-
-	////frenetFrames.push_back(FrenetFrame(verts.at(0), Vec3f(1,0,0), Vec3f(0,-1,0), Vec3f(0,0,-1))); // add first vert
-	//// std::cout << "in createFrenetFrame():  verts.size() = " << verts.size() << std::endl;
-	//std::vector<Vec3f> tans;
-	//float theta = 0.0;
-	//Vec3f cp0, cp1, cp2;
-	//Vec3f tan, biNorm, norm, nextBiNorm, nextNorm;
+	std::vector<Vec3f> tans;
+	float theta = 0.0;
+	Vec3f cp0, cp1, cp2;
+	Vec3f tan, biNorm, norm, nextBiNorm, nextNorm;
 
 
-	//for (int i = 0; i < verts.size(); i++) {
-	//	// special case if at first point
-	//	if (i == 0) {
-	//		//cp0 = verts[verts.size() - 1];
-	//		cp0 = verts.at(i);
-	//		cp1 = verts.at(i);
-	//		cp2 = verts.at(i + 1);
+	for (int i = 1; i < verts.size()-1; i++) {
+		//if (i == 0) {
+		//	//cp0 = verts[verts.size() - 1];
+		//	cp0 = verts.at(i);
+		//	cp1 = verts.at(i);
+		//	cp2 = verts.at(i + 1);
 
-	//	}
-	//	// special case if at last point
-	//	else if (i == verts.size() - 1) {
-	//		cp0 = verts.at(i - 1);
-	//		cp1 = verts.at(i);
-	//		cp2 = verts.at(i); // 0, circled back here? changed to i
+		//}
+		//else if (i == verts.size() - 1) {
+		//	cp0 = verts.at(i - 1);
+		//	cp1 = verts.at(i);
+		//	cp2 = verts.at(i); // 0, circled back here? changed to i
 
-	//	}
-	//	else {
-	//		cp0 = verts.at(i - 1);
-	//		cp1 = verts.at(i);
-	//		cp2 = verts.at(i + 1);
+		//}
+		//else {
+			cp0 = verts.at(i - 1);
+			cp1 = verts.at(i);
+			cp2 = verts.at(i + 1);
+		//}
+		// fill tangents
+		tan = cp2 - cp0;
+		tan.normalize();
+		tans.push_back(tan);
 
-	//		//std::cout << "i = = " << i << std::endl;
-	//		//            std::cout << "cp0 " << cp0 << std::endl;
+		// collect initial frame
+		if (i == 1) {
+			// fix biNorm for parralel vectors
+			biNorm = cp1.cross(cp2);
 
-	//		//            std::cout << "cp1 " << cp1 << std::endl;
-	//		//            std::cout << "cp2 " << cp2 << std::endl;
-	//		//            std::cout << "cross(cp1, cp2) " << cross(cp1, cp2) << std::endl;
-	//		//std::cout << "cp2 " << cp2 << std::endl;
-	//	}
-	//	// fill tangents
-	//	tan = cp2 - cp0;
-	//	tan.normalize();
-	//	tans.push_back(tan);
+			// uh-oh parallel vecs
+			// ! HACK ! avoids problems with orthonormal tubes.
+			if (biNorm.mag() == 0) {
 
-	//	// collect initial frame
-	//	if (i == 1) {
-	//		// fix biNorm for parralel vectors
-	//		biNorm = cp1.cross(cp2);
+				if (cp1.x != 0 && cp2.x != 0) {
+					biNorm = Vec3f(0, 1, 0);
+				}
+				if (cp1.y != 0 && cp2.y != 0) {
+					biNorm = Vec3f(0, 0, -1);
+				}
+				if (cp1.z != 0 && cp2.z != 0) {
+					biNorm = Vec3f(1, 0, 0);
+				}
 
-	//		// uh-oh parallel vecs
-	//		// ! HACK ! avoids problems with orthonormal tubes.
-	//		if (biNorm.mag() == 0) {
+			}
 
-	//			if (cp1.x != 0 && cp2.x != 0) {
-	//				biNorm = Vec3f(0, 1, 0);
-	//			}
-	//			if (cp1.y != 0 && cp2.y != 0) {
-	//				biNorm = Vec3f(0, 0, -1);
-	//			}
-	//			if (cp1.z != 0 && cp2.z != 0) {
-	//				biNorm = Vec3f(1, 0, 0);
-	//			}
+			biNorm.normalize();
+			norm = biNorm.cross(tan);
+			norm.normalize();
+		}
+	}
+	// rotate frame
 
-	//		}
-	//		//std::cout << "biNorm pre = " << biNorm << std::endl;
-	//		//std::cout << "biNorm.mag() = " << biNorm.mag() << std::endl;
-	//		biNorm.normalize();
-	//		//            biNorm.x = 1;
-	//		//            biNorm.y = 0;
-	//		//            biNorm.z = 0;
-	//		//            std::cout << "cp1 " << cp1 << std::endl;
-	//		//            std::cout << "cp2 " << cp2 << std::endl;
-	//		//            std::cout << "biNorm post = " << biNorm << std::endl;
+	//  std::cout << "tans.size() = " << tans.size() << std::endl;
+	for (int i = 0; i < tans.size() - 1; i++) {
+		if (biNorm.mag() == 0) {
+			nextNorm = norm;
+			//frenetFrames.push_back(FrenetFrame(verts.at(i), Vec3f(1,1,1), Vec3f(1,1,1), Vec3f(1,1,1)));
+			// std::cout << "norm = " << norm << std::endl;
+		}
+		else {
+			theta = acos(tans.at(i).dot(tans.at(i + 1)));
+			Vec3f axis = tans.at(i);
+			axis = axis.cross(tans.at(i + 1));
+			axis.normalize();
 
-	//		norm = biNorm.cross(tan);
-	//		norm.normalize();
-	//	}
-	//}
-	//// rotate frame
+			ProtoMatrix3f m;
+			nextNorm = m.getRotate(theta, axis, norm);
 
-	////  std::cout << "tans.size() = " << tans.size() << std::endl;
-	//for (int i = 0; i < tans.size() - 1; i++) {
+			nextBiNorm = tans.at(i + 1);
+			nextBiNorm = nextBiNorm.cross(nextNorm);
+		}
 
+		frenetFrames.at(i).setT(tans.at(i));
+		frenetFrames.at(i).setN(norm);
+		frenetFrames.at(i).setB(biNorm);
 
-	//	if (biNorm.mag() == 0) {
-	//		nextNorm = norm;
-	//		//frenetFrames.push_back(FrenetFrame(verts.at(i), Vec3f(1,1,1), Vec3f(1,1,1), Vec3f(1,1,1)));
-	//		// std::cout << "norm = " << norm << std::endl;
-	//	}
-	//	else {
-	//		theta = acos(tans.at(i).dot(tans.at(i + 1)));
-	//		Vec3f axis = tans.at(i);
-	//		//std::cout << "tans.at(i + 1) = " << tans.at(i + 1) << std::endl;
-	//		//std::cout << i << std::endl;
-	//		axis = axis.cross(tans.at(i + 1));
-	//		//std::cout << "axis = " << axis << std::endl;
-	//		axis.normalize();
-
-
-
-	//		ProtoMatrix3f m;
-	//		nextNorm = m.getRotate(theta, axis, norm);
-	//		//std::cout << "axis = " << axis << std::endl;
-
-	//		nextBiNorm = tans.at(i + 1);
-	//		nextBiNorm = nextBiNorm.cross(nextNorm);
-
-
-
-	//		// std::cout << "nextNorm = " << nextNorm << std::endl;
-	//		// std::cout << "norm = " << norm << std::endl;
-
-	//	}
-
-	//	//biNorm.normalize();
-	//	//norm.normalize();
-	//	//        std::cout <<i<<std::endl;
-	//	//        std::cout << "tans.at(i) = " << tans.at(i) << std::endl;
-	//	//        std::cout << "biNorm = " << biNorm << std::endl;
-	//	//        std::cout << "norm = " << norm << std::endl;
-	//	frenetFrames.push_back(ProtoFrenetFrame(verts.at(i), tans.at(i), biNorm, norm));
-	//	norm = nextNorm;
-	//	biNorm = nextBiNorm;
-
-	//	//std::cout << "verts = " << verts.at(i) << std::endl;
-	//}
-	//std::cout << "in createFrenetFrame():  frenetFrames.size() = " << frenetFrames.size() << std::endl;
+		norm = nextNorm;
+		biNorm = nextBiNorm;
+	}
 
 }

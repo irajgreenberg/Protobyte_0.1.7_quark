@@ -44,7 +44,7 @@ public:
 	//int controlPtCount = 36;
 	//std::vector<Vec3f> pts;
 	//std::vector<Vec3f> newPts;
-	int ptCount = 6;
+	int ptCount = 12;
 	std::vector<Vec3f> vecs;
 	Spline3 s, s2, s3;
 	Tube tendril;

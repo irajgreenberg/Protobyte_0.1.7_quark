@@ -149,6 +149,20 @@ std::vector<Vec3f>& ProtoCurve3::getVertices(){
 }
 
 /**
+ * Used for parallel tranport
+ */
+void  ProtoCurve3::initPathTangents() {
+	trace("initPathTangents call");
+	for (int i = 1; i < verts.size() - 1; i++) {
+		pathTangents.push_back(verts.at(i + 1) - verts.at(i - 1));
+	}
+
+	for (int i = 0; i < pathTangents.size(); i++) {
+		pathTangents.at(i).normalize();
+	}
+}
+
+/**
  * Get ProtoCurve3 object dimensions.
  *
  * @return ProtoDimension3 object

@@ -161,6 +161,22 @@ namespace ijg {
 		*/
 		GLuint lightRenderingFactors_U;
 
+		/**
+		* Tangent vectors: Used for Parallel Transport
+		* frame calculation.
+		* Equation for local curve tangents:
+		*    (v' + 1) - (v'- 1)
+		* -----------------------------
+		* || (v' + 1) - (v'- 1) ||
+		*/
+		std::vector<Vec3f> pathTangents;
+
+		/**
+		* Calculate local path tangents for parallel
+		* transport frames.
+		*/
+		void initPathTangents();
+
 
 	public:
 		// constructors

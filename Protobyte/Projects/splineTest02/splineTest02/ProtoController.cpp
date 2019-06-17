@@ -58,22 +58,23 @@ void ProtoController::init() {
 	Col4f c;
 	c[0] = .3f;
 	// Closed loop test 1
-	float circleRadius{ 200.0f };
-	float theta{ 0.0f };
-	for (int i{ 0 }; i < ptCount; ++i) {
-		float x = cos(theta) * circleRadius;
-		float y = sin(theta) * circleRadius;
-		float z = -ptCount*40/2 + i * 40;
-		vecs.push_back({x, y, z});
-		theta += TWO_PI / ptCount;
-	}
+	//float circleRadius{ 200.0f };
+	//float theta{ 0.0f };
+	//for (int i{ 0 }; i < ptCount; ++i) {
+	//	float x = cos(theta) * circleRadius;
+	//	float y = sin(theta) * circleRadius;
+	//	float z = x-y;
+	//	vecs.push_back({x, y, z});
+	//	theta += TWO_PI / (ptCount/4);
+	//}
 	
 	// Closed loop test 2
-	/*for (int i = 0; i < ptCount; ++i) {
+	for (int i = 0; i < ptCount; ++i) {
 		vecs.push_back({ random(-400, 400),
 			random(-300, 300),
 			random(-400, 400) });
-	}*/
+	}
+
 	s = Spline3(vecs, 5, 0, ProtoSpline3::UNIFORM);
 	s.setAreTerminalPtsIncluded(0);
 	//trace("s.getAreTerminalPtsIncluded() =",s.getAreTerminalPtsIncluded());
@@ -107,6 +108,11 @@ void ProtoController::init() {
 	/*for (Vec3f v : newPts) {
 		trace("v = ", v);
 	}*/
+	//for (int i = 0; i < s.getFrenetFrames().size(); ++i) {
+	//	trace(s.getFrenetFrames().at(i).getT());
+	//	trace(s.getFrenetFrames().at(i).getN());
+	//	trace(s.getFrenetFrames().at(i).getB());
+	//}
 }
 
 void ProtoController::run() {
