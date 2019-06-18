@@ -112,6 +112,10 @@ void ProtoPlasm::initGLFW(){
 	switch (monitors){
 	case 1:
 		glfwSetWindowPos(window, (mode->width - appWidth) / 2, (mode->height - appHeight) / 2);
+//#if defined(_WIN32) || defined(_WIN64)
+//		HWND hWnd = GetConsoleWindow();
+//		MoveWindow(hWnd, 100, 100, 300, 400, TRUE);
+//#endif
 		break;
 	case 2:
 		glfwSetWindowPos(window, (mode->width - appWidth) / 2, (mode->height - appHeight) / 2);

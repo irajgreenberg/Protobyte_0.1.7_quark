@@ -38,6 +38,11 @@ This class is part of the group common (update)
 #define GLFW_INCLUDE_GLCOREARB
 #endif
 
+// was thinking of moving console per window setup, like GLFW rendering window
+//#if defined(_WIN32) || defined(_WIN64)
+//#include <windows.h>
+//#endif
+
 //// bring in GLU (shouldn't need)
 //#define GLFW_INCLUDE_GLU
 
@@ -45,6 +50,7 @@ This class is part of the group common (update)
 
 #include <iostream>
 #include "ProtoBaseApp.h"
+
 
 namespace ijg {
     

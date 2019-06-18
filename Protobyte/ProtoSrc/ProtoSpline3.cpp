@@ -169,8 +169,8 @@ void ProtoSpline3::initFrenetFrames() {
 	for (int i = 1; i < verts.size() - 1; i++) {
 		frenetFrames.push_back(FrenetFrame(verts.at(i - 1), verts.at(i), verts.at(i + 1)));
 	}
-	//trace("verts.size =", verts.size());
-	//trace("renetFrames.size =", frenetFrames.size());
+	trace("verts.size =", verts.size());
+	trace("renetFrames.size =", frenetFrames.size());
 	/*for (int i = 0; i < frenetFrames.size(); i++) {
 		trace("frenetFrames.at(", i ,").getTNB()[0] =", frenetFrames.at(i).getTNB()[0]);
 		trace("frenetFrames.at(", i, ").getTNB()[1] =", frenetFrames.at(i).getTNB()[1]);

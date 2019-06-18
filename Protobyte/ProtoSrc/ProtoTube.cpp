@@ -362,36 +362,19 @@ void ProtoTube::calcVerts() {
 
 
 	//trace("path.getVerts().at(0) =", path.getVerts().at(0));
-	//trace("path.getVerts().at(1) =", path.getVerts().at(1));
-	//trace("path.getVerts().at(path.getVerts().size()-1) =", path.getVerts().at(path.getVerts().size() - 1));
-	//trace("path.getVerts().at(path.getVerts().size()-2) =", path.getVerts().at(path.getVerts().size() - 2));
 
 	// NOTE: ff and vecs are not the same size
 	ff = path.getFrenetFrames();
-//	trace("ff.size()", ff.size());
-	for (int i = 0; i < ff.size(); i++) {
-		//trace("ff.at(",i,")[0]", ff.at(i).getTNB()[0]);
-		//trace("ff.at(", i, ")[1]", ff.at(i).getTNB()[1]);
-		//trace("ff.at(", i, ")[2]", ff.at(i).getTNB()[2]);
-	}
-	//trace("ff.at(0) =", ff.at(0));
 	std::vector<Vec3f> vecs = path.getVerts();
-	//for (int i = 0; i < vecs.size(); i++) {
-	//	trace( "vecs = ", vecs.at(i));
-	//}
 	frenetFrameLength = static_cast<int>(ff.size());
-	//std::cout << ff.size() << std::endl;
-
+	
 	// prepare verts vector
 	verts.clear();
 	//verts.resize(frenetFrameLength * crossSectionDetail + 2);
 
 	// top and bottom vec to enable tube caps
 	Vec3f topCapVec, bottomCapVec;
-	// std::cout << "frenetFrameLength = " << frenetFrameLength << std::endl;
-	//trace("vecs.size() =", vecs.size());
-	//trace("frenetFrameLength =", frenetFrameLength);
-
+	
 	//float step = 0;
 	Vec3f step_xyz, randomStep_xyz;
 	float randomStep_x = 0.0;
@@ -638,7 +621,6 @@ void ProtoTube::calcInds() {
 				}
 				//// close tube seam
 				else {
-
 					// top cap
 					if (i == 0 && isClosed) {
 						inds.push_back(ProtoTuple3<int>(i5, i0, static_cast<int>(verts.size()) - 2));
