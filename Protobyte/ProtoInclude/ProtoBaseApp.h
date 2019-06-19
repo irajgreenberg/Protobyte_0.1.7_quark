@@ -43,8 +43,8 @@
 #include "ProtoPath2.h"
 #include "ProtoRectangle.h"
 #include "ProtoException.h"
-#include "ProtoJuncusEffusus.h"
-#include "ProtoCephalopod.h"
+//#include "ProtoJuncusEffusus.h"
+//#include "ProtoCephalopod.h"
 
 // preproc dir for relative resource loading
 // from http://stackoverflow.com/questions/143174/how-do-i-get-the-directory-that-a-program-is-running-from

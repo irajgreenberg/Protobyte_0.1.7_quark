@@ -33,9 +33,11 @@
     <ClCompile Include="..\..\..\ProtoSrc\ProtoBlock.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
+    <!--
     <ClCompile Include="..\..\..\ProtoSrc\ProtoCephalopod.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
+  -->
     <ClCompile Include="..\..\..\ProtoSrc\ProtoCilia.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
@@ -75,9 +77,11 @@
     <ClCompile Include="..\..\..\ProtoSrc\ProtoGroundPlane.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
+    <!--
     <ClCompile Include="..\..\..\ProtoSrc\ProtoJuncusEffusus.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
+  -->
     <ClCompile Include="..\..\..\ProtoSrc\ProtoLight.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
@@ -105,9 +109,11 @@
     <ClCompile Include="..\..\..\ProtoSrc\ProtoRenderer.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
+    <!--
     <ClCompile Include="..\..\..\ProtoSrc\ProtoRootBall.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
+  -->
     <ClCompile Include="..\..\..\ProtoSrc\ProtoShader.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
@@ -120,9 +126,11 @@
     <ClCompile Include="..\..\..\ProtoSrc\ProtoSpline3.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
+    <!--
     <ClCompile Include="..\..\..\ProtoSrc\ProtoTentacle.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
+  -->
     <ClCompile Include="..\..\..\ProtoSrc\ProtoTexture.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
@@ -161,9 +169,11 @@
     <ClInclude Include="..\..\..\ProtoInclude\ProtoBounds.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
+    <!--
     <ClInclude Include="..\..\..\ProtoInclude\ProtoCephalopod.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
+  -->
     <ClInclude Include="..\..\..\ProtoInclude\ProtoCilia.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
@@ -221,9 +231,11 @@
     <ClInclude Include="..\..\..\ProtoInclude\ProtoGroundPlane.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
+    <!--
     <ClInclude Include="..\..\..\ProtoInclude\ProtoJuncusEffusus.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
+  -->
     <ClInclude Include="..\..\..\ProtoInclude\ProtoLight.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
@@ -266,9 +278,11 @@
     <ClInclude Include="..\..\..\ProtoInclude\ProtoRenderer.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
+    <!--
     <ClInclude Include="..\..\..\ProtoInclude\ProtoRootBall.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
+  -->
     <ClInclude Include="..\..\..\ProtoInclude\ProtoShader.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
@@ -281,9 +295,11 @@
     <ClInclude Include="..\..\..\ProtoInclude\ProtoSpline3.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
+    <!--
     <ClInclude Include="..\..\..\ProtoInclude\ProtoTentacle.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
+  -->
     <ClInclude Include="..\..\..\ProtoInclude\ProtoTexture.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
