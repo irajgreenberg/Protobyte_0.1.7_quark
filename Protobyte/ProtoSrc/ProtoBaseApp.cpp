@@ -1085,11 +1085,15 @@ void ProtoBaseApp::stroke(float gray, float a) {
 }
 void ProtoBaseApp::stroke(float r, float g, float b) {
 
-	isStroke = true; strokeColor = Col4f(r, g, b, 1);
+	isStroke = true; 
+	strokeColor = Col4f(r, g, b, 1);
 }
 void ProtoBaseApp::stroke(float r, float g, float b, float a) {
 	isStroke = true;
 	strokeColor = Col4f(r, g, b, a);
+
+	/*ctx->setLightRenderingFactors({ 0.0, 0.0, 0.0, 1.0 });
+	glUniform4fv(ctx->getLightRenderingFactors_U(), 1, &ctx->getLightRenderingFactors().x);*/
 }
 void ProtoBaseApp::noStroke() {
 	isStroke = false;
@@ -1675,6 +1679,7 @@ void ProtoBaseApp::star(int sides, const Vec2& radiusAndRatio) {
 
 // PATH
 void ProtoBaseApp::beginPath(PathRenderMode pathRenderMode) {
+	trace("beginPath hit");
 	this->pathRenderMode = pathRenderMode;
 	isPathRecording = true;
 	pathVerticesAll.size() > 0 ? pathVerticesAll.clear() : 0;
@@ -1703,7 +1708,9 @@ void ProtoBaseApp::vertex(float x, float y) {
 }
 void ProtoBaseApp::vertex(float x, float y, float z) {
 	if (isPathRecording) {
-		pathVerticesAll.push_back(std::tuple<Vec3f, char, Col4f, Col4f, float>(Vec3f(x, y, z), 'v', fillColor, strokeColor, lineWidth));
+		//trace("strokeColor=", strokeColor);
+		pathVerticesAll.push_back(
+			std::tuple<Vec3f, char, Col4f, Col4f, float>(Vec3f(x, y, z), 'v', fillColor, strokeColor, lineWidth));
 		//pathStrokeWeights.push_back(lineWidth);
 	}
 	else {
@@ -1891,16 +1898,28 @@ void ProtoBaseApp::endPath(bool isClosed) {
 				}
 			}
 			else {
-
+			
+			/*auto v = pathVerticesAll.at(i);
+			v0 = std::get<0>(v);
+			c1 = std::get<3>(v);
+			c2 = std::get<3>(v); */
+			
+			
 				// detected linear vertex
 				auto v = pathVerticesAll.at(i);
+				//trace(std::get<3>(v));
 				// for tessellation
 				//polyline.push_back(new p2t::Point((float)std::get<0>(v).x, (float)std::get<0>(v).y));
 
-				/*pathPrimsFill.push_back(PathPrims(std::get<0>(v).x, std::get<0>(v).y, std::get<0>(v).z,
-					std::get<2>(v).r, std::get<2>(v).g, std::get<2>(v).b, std::get<2>(v).a));*/
+				pathPrimsFill.push_back(PathPrims(std::get<0>(v).x, std::get<0>(v).y, std::get<0>(v).z,
+					std::get<2>(v).r, std::get<2>(v).g, std::get<2>(v).b, std::get<2>(v).a));
+				//trace(std::get<2>(v).r, std::get<2>(v).g, std::get<2>(v).b);
+
 				pathPrimsStroke.push_back(PathPrims(std::get<0>(v).x, std::get<0>(v).y, std::get<0>(v).z,
 					std::get<3>(v).r, std::get<3>(v).g, std::get<3>(v).b, std::get<3>(v).a));
+				//trace(std::get<3>(v).r, std::get<3>(v).g, std::get<3>(v).b, std::get<3>(v).a);
+				/*pathPrimsStroke.push_back(PathPrims(std::get<0>(v).x, std::get<0>(v).y, std::get<0>(v).z,
+					1.0, .5f, 0, std::get<2>(v).a));*/
 			}
 		}
 	}
