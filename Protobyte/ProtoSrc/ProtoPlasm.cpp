@@ -89,9 +89,13 @@ void ProtoPlasm::initGLFW(){
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 
-	// set anti-aliasing
-	// not sure if this works in Windows
-	glfwWindowHint(GLFW_SAMPLES, 2);
+	// set number of multi-samples for anti-aliasing
+	// the more samples,the worse performance
+	// PRotobyte has a bias toward high quality over
+	// performance, which may be overrided with
+	// setMultiSamples(int samples) - still needs to be implemented
+	glfwWindowHint(GLFW_SAMPLES, 8);
+
 
 	// genereate sized GLFW window with title
 	window = glfwCreateWindow(appWidth, appHeight, appTitle.c_str(), nullptr, nullptr);
@@ -185,9 +189,9 @@ void ProtoPlasm::initGLFW(){
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
 	//
-	glEnable(GL_BLEND);
-	//glBlendFunc(GL_DST_COLOR,GL_ZERO);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	////glBlendFunc(GL_DST_COLOR,GL_ZERO);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glBlendFunc(GL_DST_COLOR,GL_ZERO);
 	//glBlendFunc (GL_ONE, GL_ONE);
 
@@ -196,8 +200,9 @@ void ProtoPlasm::initGLFW(){
 
 	// for best antialiasing
 	// http://bankslab.berkeley.edu/members/chris/AntiAliasing/AntiAliasingInOpenGL.html
-	glEnable(GL_LINE_SMOOTH);
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	//glEnable(GL_LINE_SMOOTH);
+	//glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	//glEnable(GL_POLYGON_SMOOTH);
 	//glEnable(GL_POINT_SMOOTH);
 	//glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
 	glEnable(GL_BLEND);
@@ -210,6 +215,9 @@ void ProtoPlasm::initGLFW(){
 	glDepthFunc(GL_LEQUAL);
 	//glDepthFunc(GL_LESS);
 	//glDepthRange(0.0f, 1.0f);
+
+	// For MSAA (anti-aliasing)
+	glEnable(GL_MULTISAMPLE);
 
 	int w = 0, h = 0;
 	glfwGetFramebufferSize(window, &w, &h);

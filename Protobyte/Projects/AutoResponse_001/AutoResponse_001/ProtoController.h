@@ -31,7 +31,7 @@ public:
 	void onResized();
 	void onClosed();
 
-	int pts = 300;
+	int pts = 2000;
 	std::vector<Vec3f> vecs;
 
 };

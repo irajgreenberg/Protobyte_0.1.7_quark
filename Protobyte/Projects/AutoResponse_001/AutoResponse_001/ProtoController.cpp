@@ -6,76 +6,34 @@ Ira Greenberg 2016
 #include "ProtoController.h"
 
 void ProtoController::init() {
-	background(0.0);
-	strokeWeight(5);
-	//noStroke();
-	fill( 1.0f, 0.0f, 0.0f, 1.0f );
-	//noFill();
-	stroke({ 1.0f, 0.5f, 0.0f, 1.0f });
+	noFill();
+	strokeWeight(.25f);
+	stroke({ 0.0, 1.0 });
 
-	float theta = 0.0;
 	for (int i = 0; i < pts; i++) {
-		if (i % 2 == 0) {
-			vecs.push_back(Vec3(cos(theta) * 100, sin(theta) * 100, 0));
-			theta += TWO_PI / pts;
-		}
-		else {
-			const static int PTS = 14;
-			vecs.push_back(Vec3(cos(theta) * 200, sin(theta) * 200, 0));
-			theta += TWO_PI / pts;
-		}
-
-		// y-rot
-		//c-s
-		//s+c
-		float _z = cos(PI / 3) * vecs.at(i).z - sin(PI / 3) * vecs.at(i).x;
-		float _y = vecs[i].y;
-		float _x = sin(PI / 3) * vecs.at(i).z + cos(PI / 3) * vecs.at(i).x;
-		vecs.push_back(Vec3(_x, _y, _z));
-
-
+		vecs.push_back(Vec3(
+			random(-getWidth(), getWidth()),
+			random(-getHeight(), getHeight()),
+			0));
 	}
-
-
-	//beginPath();
-	//for (int i = 0; i < pts; i++) {
-	//	vertex(vecs.at(i));
-	//	//	curveVertex(vecs.at(i).x, vecs.at(i).y, -pts*80/2+ i*80);
-	//}
-	//endPath();
 }
 
 void ProtoController::run() {
 }
 
 void ProtoController::display() {
-	//stroke({ 1.0f, 0.5f, 0.0f, 1.0f });
-	fill({ 1.0f, 0.5f, 0.0f, 1.0f });
-	strokeWeight(5);
-	//noStroke();
-	//fill(1.0, 0.0f, 0.0f);
-	//noFill();
-	stroke({ 1.0f, 0.5f, 1.0f, 1.0f });
+	background(1.0);
+
 	beginArcBall();
 	{
-		//beginPath();
-		for (int i = 0; i < pts; i++) {
-			point(vecs.at(i).x, vecs.at(i).y);
-			//	curveVertex(vecs.at(i).x, vecs.at(i).y, -pts*80/2+ i*80);
-		}
-		//endPath();
-		noFill();
-		strokeWeight(.5f);
-		translate( 0, -200 );
 		beginPath();
-		for (int i = 0; i < pts; i++) {
-			//vertex(vecs.at(i));
-		 curveVertex(vecs.at(i).x, vecs.at(i).y, -pts*80/2+ i*80);
+		for (auto v : vecs) {
+			curveVertex(v.x, v.y, -600);
 		}
 		endPath(true);
 	}
 	endArcBall();
-	
+
 }
 
 // Key and Mouse Events
@@ -89,7 +47,7 @@ void ProtoController::mouseRightPressed() {
 }
 
 void ProtoController::mouseReleased() {
-	save("MyTest", 8);
+	save("Augmented Drawing 01", 8);
 }
 
 void ProtoController::mouseRightReleased() {
