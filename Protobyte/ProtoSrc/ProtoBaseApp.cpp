@@ -644,9 +644,9 @@ Tup2i ProtoBaseApp::getShadowSharpness() const {
 void ProtoBaseApp::_run(const Vec2f& mousePos, const Vec4i& windowCoords/*, int mouseBtn, int key*/) {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// reset state
-	fillColor = Col4f(1, 1, 1, 1); // white fill
-	strokeColor = Col4f(0, 0, 0, 1); // black stroke
+	// NOTE:: reset state - why did I have these calls uncommented?
+	//fillColor = Col4f(1, 1, 1, 1); // white fill
+	//strokeColor = Col4f(0, 0, 0, 1); // black stroke
 
 	mouseX = mousePos.x;
 	mouseY = mousePos.y;
@@ -1679,7 +1679,7 @@ void ProtoBaseApp::star(int sides, const Vec2& radiusAndRatio) {
 
 // PATH
 void ProtoBaseApp::beginPath(PathRenderMode pathRenderMode) {
-	trace("beginPath hit");
+	//trace("beginPath hit");
 	this->pathRenderMode = pathRenderMode;
 	isPathRecording = true;
 	pathVerticesAll.size() > 0 ? pathVerticesAll.clear() : 0;
@@ -1709,6 +1709,7 @@ void ProtoBaseApp::vertex(float x, float y) {
 void ProtoBaseApp::vertex(float x, float y, float z) {
 	if (isPathRecording) {
 		//trace("strokeColor=", strokeColor);
+		//trace("fillColor=", fillColor);
 		pathVerticesAll.push_back(
 			std::tuple<Vec3f, char, Col4f, Col4f, float>(Vec3f(x, y, z), 'v', fillColor, strokeColor, lineWidth));
 		//pathStrokeWeights.push_back(lineWidth);
@@ -1755,6 +1756,12 @@ void ProtoBaseApp::curveBias(float curveBias) {
 
 void ProtoBaseApp::endPath(bool isClosed) {
 	isPathRecording = false;
+
+	auto test = pathVerticesAll.at(0);
+	std::get<0>(test);
+
+	//trace("pathVerticesAll.at(2)=", std::get<2>(test));
+	//trace("pathVerticesAll.at(3)=", std::get<3>(test));
 
 	// eventually parameterize these
 	//int interpDetail = 3;
@@ -1882,10 +1889,6 @@ void ProtoBaseApp::endPath(bool isClosed) {
 
 					Vec3f v = a0*v1 + a1*m0 + a2*m1 + a3*v2;
 
-
-
-
-
 					//trace("c1.r + deltaR*t =", c1.r + deltaR*t);
 					strokeWeight(wt1 + deltaWeight*t);
 					Col4f sc(c1.r + deltaR*t, c1.g + deltaG*t, c1.b + deltaB*t, c1.a + deltaA*t);
@@ -1896,8 +1899,9 @@ void ProtoBaseApp::endPath(bool isClosed) {
 					/*pathPrimsFill.push_back(PathPrims(v.x, v.y, v.z, fillColor.r, fillColor.b, fillColor.g, fillColor.a));*/
 					pathPrimsStroke.push_back(PathPrims(v.x, v.y, v.z, sc.r, sc.g, sc.b, sc.a));
 				}
-			}
-			else {
+			
+			// linear plot
+			}  else {
 			
 			/*auto v = pathVerticesAll.at(i);
 			v0 = std::get<0>(v);
@@ -1907,6 +1911,9 @@ void ProtoBaseApp::endPath(bool isClosed) {
 			
 				// detected linear vertex
 				auto v = pathVerticesAll.at(i);
+				//trace("pathVerticesAll.at(2)=", std::get<2>(v));
+				//trace("pathVerticesAll.at(3)=", std::get<3>(v));
+				
 				//trace(std::get<3>(v));
 				// for tessellation
 				//polyline.push_back(new p2t::Point((float)std::get<0>(v).x, (float)std::get<0>(v).y));
@@ -1914,7 +1921,7 @@ void ProtoBaseApp::endPath(bool isClosed) {
 				pathPrimsFill.push_back(PathPrims(std::get<0>(v).x, std::get<0>(v).y, std::get<0>(v).z,
 					std::get<2>(v).r, std::get<2>(v).g, std::get<2>(v).b, std::get<2>(v).a));
 				//trace(std::get<2>(v).r, std::get<2>(v).g, std::get<2>(v).b);
-
+				//trace("std::get<2>(v)=", std::get<2>(v));
 				pathPrimsStroke.push_back(PathPrims(std::get<0>(v).x, std::get<0>(v).y, std::get<0>(v).z,
 					std::get<3>(v).r, std::get<3>(v).g, std::get<3>(v).b, std::get<3>(v).a));
 				//trace(std::get<3>(v).r, std::get<3>(v).g, std::get<3>(v).b, std::get<3>(v).a);
@@ -1981,7 +1988,6 @@ void ProtoBaseApp::endPath(bool isClosed) {
 
 		}
 		if (isStroke) {
-
 			// using struct prims for coding tersity
 			int vertsDataSize = sizeof(PathPrims)* pathPrimsStroke.size();
 			glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
@@ -1997,6 +2003,7 @@ void ProtoBaseApp::endPath(bool isClosed) {
 			// open path
 			else {
 				//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+				trace("here", "here", "here");
 				glDrawArrays(GL_LINE_STRIP, 0, pathPrimsStroke.size());
 			}
 		}
@@ -2644,6 +2651,10 @@ void ProtoBaseApp::translate(float tx, float ty, float tz) {
 
 void ProtoBaseApp::translate(const Vec3f& tXYZ) {
 	ctx->translate(tXYZ);
+}
+
+void ProtoBaseApp::translate(const Vec2f& tXY) {
+	translate(tXY.x, tXY.y);
 }
 
 void ProtoBaseApp::rotate(float angle, float axisX, float axisY, float axisZ) {

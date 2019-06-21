@@ -257,7 +257,8 @@ namespace ijg {
 		void lightsOff();
 
 		//// create traditional interface for GPU controlled transforms
-		void translate(float tx, float ty, float tz);
+		void translate(float tx, float ty, float tz = 0.0f);
+		void translate(const Vec2f& tXY);
 		void translate(const Vec3f& tXYZ);
 		void rotate(float angle, float axisX, float axisY, float axisZ);
 		void rotate(float angle, const Vec3f& rXYZ);

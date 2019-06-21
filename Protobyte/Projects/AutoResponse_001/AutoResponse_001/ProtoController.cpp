@@ -9,9 +9,9 @@ void ProtoController::init() {
 	background(0.0);
 	strokeWeight(5);
 	//noStroke();
-	//fill(1.0, 0.0f, 0.0f);
-	noFill();
-	stroke({ 1.0f, 0.5f, 0.0f, 0.0f });
+	fill( 1.0f, 0.0f, 0.0f, 1.0f );
+	//noFill();
+	stroke({ 1.0f, 0.5f, 0.0f, 1.0f });
 
 	float theta = 0.0;
 	for (int i = 0; i < pts; i++) {
@@ -37,28 +37,45 @@ void ProtoController::init() {
 	}
 
 
-	beginPath();
-	for (int i = 0; i < pts; i++) {
-		vertex(vecs.at(i));
-		//	curveVertex(vecs.at(i).x, vecs.at(i).y, -pts*80/2+ i*80);
-	}
-	endPath();
+	//beginPath();
+	//for (int i = 0; i < pts; i++) {
+	//	vertex(vecs.at(i));
+	//	//	curveVertex(vecs.at(i).x, vecs.at(i).y, -pts*80/2+ i*80);
+	//}
+	//endPath();
 }
 
 void ProtoController::run() {
 }
 
 void ProtoController::display() {
+	//stroke({ 1.0f, 0.5f, 0.0f, 1.0f });
+	fill({ 1.0f, 0.5f, 0.0f, 1.0f });
+	strokeWeight(5);
+	//noStroke();
+	//fill(1.0, 0.0f, 0.0f);
+	//noFill();
+	stroke({ 1.0f, 0.5f, 1.0f, 1.0f });
 	beginArcBall();
 	{
 		//beginPath();
-		//for (int i = 0; i < pts; i++) {
-		//	vertex(vecs.at(i));
-		////	curveVertex(vecs.at(i).x, vecs.at(i).y, -pts*80/2+ i*80);
-		//}
+		for (int i = 0; i < pts; i++) {
+			point(vecs.at(i).x, vecs.at(i).y);
+			//	curveVertex(vecs.at(i).x, vecs.at(i).y, -pts*80/2+ i*80);
+		}
 		//endPath();
+		noFill();
+		strokeWeight(.5f);
+		translate( 0, -200 );
+		beginPath();
+		for (int i = 0; i < pts; i++) {
+			//vertex(vecs.at(i));
+		 curveVertex(vecs.at(i).x, vecs.at(i).y, -pts*80/2+ i*80);
+		}
+		endPath(true);
 	}
 	endArcBall();
+	
 }
 
 // Key and Mouse Events
@@ -72,6 +89,7 @@ void ProtoController::mouseRightPressed() {
 }
 
 void ProtoController::mouseReleased() {
+	save("MyTest", 8);
 }
 
 void ProtoController::mouseRightReleased() {
