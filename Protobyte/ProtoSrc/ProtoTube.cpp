@@ -360,7 +360,6 @@ ProtoTube::~ProtoTube() {
 
 void ProtoTube::calcVerts() {
 
-
 	//trace("path.getVerts().at(0) =", path.getVerts().at(0));
 
 	// NOTE: ff and vecs are not the same size
