@@ -128,7 +128,6 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\ProtoSrc\ProtoBaseApp.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoBlock.cpp" />
-    <ClCompile Include="..\..\..\ProtoSrc\ProtoCephalopod.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoCilia.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoContext.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoCurve3.cpp" />
@@ -142,7 +141,6 @@
     <ClCompile Include="..\..\..\ProtoSrc\ProtoGeomComposite.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoGeosphere.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoGroundPlane.cpp" />
-    <ClCompile Include="..\..\..\ProtoSrc\ProtoJuncusEffusus.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoLight.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoMath.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoPath2.cpp" />
@@ -152,12 +150,10 @@
     <ClCompile Include="..\..\..\ProtoSrc\ProtoQuaternion.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoRectangle.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoRenderer.cpp" />
-    <ClCompile Include="..\..\..\ProtoSrc\ProtoRootBall.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoShader.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoShape3.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoSphere.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoSpline3.cpp" />
-    <ClCompile Include="..\..\..\ProtoSrc\ProtoTentacle.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoTexture.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoToroid.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoTransformFunction.cpp" />
