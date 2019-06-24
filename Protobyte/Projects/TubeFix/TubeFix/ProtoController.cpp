@@ -11,10 +11,12 @@ void ProtoController::init() {
 	float r{ 100.0f };
 	for (int i = 0; i < pts; i++) {
 		vs.push_back({ cos(theta) * r, sin(theta) * r, float(-200 + 400 / pts * i) });
+
+		//vs.push_back({ cos(theta) * r, sin(theta) * r, 0 });
 		theta += TWO_PI / pts;
 	}
 	s1 = Spline(vs, 6, false);
-	t1 = Tube(s1, 74, 18, false, "lime.jpg");
+	t1 = Tube(s1, 74, 12, false, "lime.jpg");
 }
 
 void ProtoController::run() {
@@ -22,7 +24,7 @@ void ProtoController::run() {
 
 void ProtoController::display() {
 	arcBallBegin();
-	//t1.display(WIREFRAME);
+	t1.display(WIREFRAME);
 	t1.display();
 	arcBallEnd();
 }

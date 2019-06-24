@@ -31,7 +31,7 @@ public:
 	void onResized();
 	void onClosed();
 
-	int pts{ 18 };
+	int pts{ 5 };
 	Spline s1;
 	Tube t1;
 
