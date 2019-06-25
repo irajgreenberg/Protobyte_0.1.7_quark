@@ -31,6 +31,10 @@ public:
 	void onResized();
 	void onClosed();
 
+	int pts{ 60 };
+	std::vector<Vec3> vecs;
+	Spline3 s;
+	Tube t;
 };
 
 #endif //__PROTOCONTROLLER_H__
