@@ -358,231 +358,293 @@ ProtoTube::~ProtoTube() {
 }
 
 
-void ProtoTube::calcVerts() {
 
-	//trace("path.getVerts().at(0) =", path.getVerts().at(0));
+// vecs.size() is 2 longer than ff.size()
+void ProtoTube::calcVerts() {
 
 	// NOTE: ff and vecs are not the same size
 	ff = path.getFrenetFrames();
 	std::vector<Vec3f> vecs = path.getVerts();
 	frenetFrameLength = static_cast<int>(ff.size());
-	
+
 	// prepare verts vector
 	verts.clear();
 
-	// top and bottom vec to enable tube caps
-	Vec3f topCapVec, bottomCapVec;
-	
-	//float step = 0;
-	Vec3f step_xyz, randomStep_xyz;
-	float randomStep_x = 0.0;
-	float randomStep_y = 0.0;
-	float x = 0.0;
-	float y = 0.0;
-	float u = 0.0;
-	float v = 0.0;
-	float phi = 0.0;
-
-	//one additional convenience position vector for VerletProtoSpline
-	std::vector<Vec3f> vProtoSplineVecs;
-
-	// for SINUSOIDAL_RANDOM, pre calculate random contiguous radii based on passed min and max radii args.
-	// local var:
-	std::vector<ProtoTuple2<float>> tempVectorRange;
-	for (int i = 0; i < frenetFrameLength; i++) {
-		float x = random(transFuncObj.getVectorRange().elem1.x, transFuncObj.getVectorRange().elem0.x);
-		float y = random(transFuncObj.getVectorRange().elem1.y, transFuncObj.getVectorRange().elem0.y);
-		tempVectorRange.push_back(ProtoTuple2<float>(x, y));
-		//trace(tempVectorRange.at(i));
-	}
-
-	for (int i = 0; i < frenetFrameLength; i++) {
+	//for (int i = 0; i < frenetFrameLength; i++) {
+	for (int i = 0; i < vecs.size()-1; i++) {
 
 		// calculate cross-section vertices
-		float theta = 0;
-		float theta2 = 0;
+		float theta{ 0.0f };
+		float theta2{ 0.0f };
 
-		// only calculate if necessary
-		if (getIsTransformFunction()) {
-			// get delta of radiii between contiguous vertices
-
-			// check if SINUSOIDAL_RANDOM
-			if (transFuncObj.getFunctionType() == ProtoTransformFunction::SINUSOIDAL_RANDOM && i < frenetFrameLength - 1) {
-				step_xyz.x = (tempVectorRange.at(i).elem0 - tempVectorRange.at(i + 1).elem0) / frenetFrameLength;
-				step_xyz.y = (tempVectorRange.at(i).elem1 - tempVectorRange.at(i + 1).elem1) / frenetFrameLength;
-			}
-			else {
-				step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
-				step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
-
-			}
-
-		}
+		float x{ 0.0f };
+		float y{ 0.0f };
+		float u{ 0.0f };
+		float v{ 0.0f };
 
 
-		vProtoSplineVecs.push_back(vecs.at(i));
-
-		// calculating double end points for seam UV coords (0  ->  1)
 		for (int j = 0; j < crossSectionDetail; j++) {
+			float px{ 0.0f };
+			float py{ 0.0f };
+			float pz{ 0.0f };
+			x = cos(theta) * radii.at(i);
+			y = sin(theta) * radii.at(i);
 
-			// customize tube based on transform function
-			if (getIsTransformFunction()) {
+			theta += TWO_PI / (float(crossSectionDetail));
 
-				switch (transFuncObj.getFunctionType()) {
-				case ProtoTransformFunction::LINEAR:
-					//step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
-					//step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
-					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x * i + random(-perturbation.x, perturbation.x)));
-					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y * i + random(-perturbation.y, perturbation.y)));
-					break;
-				case ProtoTransformFunction::LINEAR_INVERSE:
-					//step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
-					//step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
-					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem1.x - step_xyz.x * i + random(-perturbation.x, perturbation.x)));
-					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem1.y - step_xyz.y * i + random(-perturbation.y, perturbation.y)));
-					break;
-				case ProtoTransformFunction::SINUSOIDAL:
-					//step = fabs(sin(phi) * (transFuncObj.getScalerRange().elem1 - transFuncObj.getScalerRange().elem0));
-					step_xyz.x = fabs(sin(phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
-					step_xyz.y = fabs(sin(phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));
-					//std::cout << "phi = " << phi << std::endl;
-					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x)));
-					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y)));
-					//trace("x = ", x, "y = ", y);
-					break;
-				case ProtoTransformFunction::SINUSOIDAL_INVERSE:
-					//step = fabs(sin(phi) * (transFuncObj.getScalerRange().elem1 - transFuncObj.getScalerRange().elem0));
-					step_xyz.x = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
-					step_xyz.y = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));
-					//std::cout << "phi = " << phi << std::endl;
-					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x)));
-					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y)));
-					break;
-					// HERE 5/22/2019 ****** need to fix this
-
-					//step_xyz.x = (tempVectorRange.at(i).elem0 - tempVectorRange.at(i + 1).elem0) / frenetFrameLength;
-					//step_xyz.y = (tempVectorRange.at(i).elem1 - tempVectorRange.at(i + 1).elem1) / frenetFrameLength;
-
-
-				case TransformFunction::SINUSOIDAL_RANDOM:
-					/*		step_xyz.x = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
-							step_xyz.y = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));*/
-
-					step_xyz.x = fabs(sin(HALF_PI - phi) * (tempVectorRange.at(i).elem0));
-					step_xyz.y = step_xyz.x;
-					//fabs(sin(HALF_PI - phi)* (tempVectorRange.at(i).elem1));
-
-					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x)));
-					y = sin(theta) * +(radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y)));
-					break;
-
-					//default:
-				};
-
-				// no transform function
+			if (i > 0) {
+				px = vecs.at(i).x + x * ff.at(i-1).getTNB()[1].x + y * ff.at(i-1).getTNB()[2].x;
+				py = vecs.at(i).y + x * ff.at(i-1).getTNB()[1].y + y * ff.at(i-1).getTNB()[2].y;
+				pz = vecs.at(i).z + x * ff.at(i-1).getTNB()[1].z + y * ff.at(i-1).getTNB()[2].z;
 			}
 			else {
-				x = cos(theta) * (radii.at(i) + ijg::random(-perturbation.x, perturbation.x));
-				y = sin(theta) * (radii.at(i) + ijg::random(-perturbation.y, perturbation.y));
+				px = vecs.at(i).x ;
+				py = vecs.at(i).y ;
+				pz = vecs.at(i).z ;
 			}
 
-			// calculate cross section shape
-			// TO DO: add param for ribbon asymmetry (radius per axis)
-			//float x = cos(theta) * radii.at(i) * step*i; //*10;
-			//float y = sin(theta) * radii.at(i) * step*i;
-			// std::cout << "radii.at(" << i << ") = " << radii.at(i) << std::endl;
-
-
-			float z = ijg::random(-perturbation.z, perturbation.z);
-			theta += TWO_PI / (float(crossSectionDetail) - random(.98, 1.0)); // added -.99 to avoid seams 7/27
-
-			if (i == 0 && j == 0) {
-				//trace("vecs.at(0) =", vecs.at(0));
-				//trace("vecs.at(1) =", vecs.at(1));
-				//trace("vecs.at(vecs.size()-1) =", vecs.at(vecs.size() - 1));
-				//trace("vecs.at(vecs.size()-2) =", vecs.at(vecs.size() - 2));
-			}
-			// transform to Frenet frame of reference
-			//float px = vecs.at(i + 1).x + x * ff.at(i).getN().x + y * ff.at(i).getB().x;
-			//float py = vecs.at(i + 1).y + x * ff.at(i).getN().y + y * ff.at(i).getB().y;
-			//float pz = vecs.at(i + 1).z + x * ff.at(i).getN().z + y * ff.at(i).getB().z;
-
-			float px = vecs.at(i + 1).x + x * ff.at(i).getTNB()[1].x + y * ff.at(i).getTNB()[2].x;
-			float py = vecs.at(i + 1).y + x * ff.at(i).getTNB()[1].y + y * ff.at(i).getTNB()[2].y;
-			float pz = vecs.at(i + 1).z + x * ff.at(i).getTNB()[1].z + y * ff.at(i).getTNB()[2].z;
-
-
-			/*std::cout <<"ff[i].getB() = " << ff[i].getB() << std::endl;
-			 std::cout << "vecs.at(i + 1) = " << vecs.at(i + 1) << std::endl;
-			std::cout << " ff.at(i).getN() = " <<  ff.at(i).getN() << std::endl;
-		   std::cout << "ff.at(i).getB() = " << ff.at(i).getB() << std::endl;*/
-		   //std::cout << "Vec3f(px, py, pz).at(" << i << ") = " << Vec3f(px, py, pz) << std::endl;
-		   //trace("Vec3f(px, py, pz) = " , Vec3f(px, py, pz));
-		   //verts.at(i * crossSectionDetail + j) = ProtoVertex3(Vec3f(px, py, pz), col4s.at(i));
 
 
 			// set uv coords
 			u = theta2 / (TWO_PI * (1.0f / textureScale.x));
 			v = (float(i * crossSectionDetail + j) / float(crossSectionDetail * frenetFrameLength)) * (1.0f / textureScale.y);
-			//trace("u =", u);
-			//trace(" theta2*180/PI =", theta2 * 180 / PI);
 
 			verts.push_back(ProtoVertex3(Vec3f(px, py, pz), col4s.at(i), ProtoTuple2f(u, v)));
-			//trace("v = ", (i * float(crossSectionDetail) + j) / float(crossSectionDetail*frenetFrameLength) );
+
 			theta2 += TWO_PI / (crossSectionDetail);
-
-			//verts.at(i * crossSectionDetail + j) = ProtoVertex3(Vec3f(px, py, pz), col4s.at(i), ProtoTuple2f(px/size.w, py/size.h));
-			//std::cout << "Vec3f(px, py, pz).at(" << i << ") = " << Vec3f(px, py, pz) << std::endl;
-
-			//std::cout << "perturbation = " << perturbation << std::endl;
-
-
-			// get centroid of top and bottom cross-section for caps
-			if (i == 0)
-				topCapVec += Vec3f(px, py, pz);
-			else if (i == ff.size() - 1)
-				bottomCapVec += Vec3f(px, py, pz);
 		}
 
-		// only calculate if necessary
-		if (getIsTransformFunction()) {
-			phi += PI / frenetFrameLength * transFuncObj.getPeriodCount();
-		}
-	}
-
-	// finish getting top and bottom cap centroid vecs.
-	topCapVec /= crossSectionDetail;
-	bottomCapVec /= crossSectionDetail;
-
-	// add cap centroids to verts.
-	//verts.push_back(ProtoVertex3(topCapVec, col4s.at(0)));
-	//verts.push_back(ProtoVertex3(bottomCapVec, col4s.at(frenetFrameLength - 1)));
-
-
-
-	// calculate all cross-section centroids - used by transforamtions such as breath()
-	std::vector<Vec3f> centerPts(frenetFrameLength);
-	crossSectionCentroids.resize(frenetFrameLength);
-
-
-	// std::cout << "crossSectionDetail = " << crossSectionDetail << std::endl;
-	for (int i = 0; i < frenetFrameLength; i++) {
-		float cx = 0, cy = 0, cz = 0;
-		for (int j = 0; j < crossSectionDetail; j++) {
-			cx += verts.at(i * crossSectionDetail + j).pos.x;
-			cy += verts.at(i * crossSectionDetail + j).pos.y;
-			cz += verts.at(i * crossSectionDetail + j).pos.z;
-			//            std::cout << "cx = " << cx << std::endl;
-			//            std::cout << "cy = " << cy << std::endl;
-			//            std::cout << "cz = " << cz << std::endl;
-		}
-		cx /= crossSectionDetail;
-		cy /= crossSectionDetail;
-		cz /= crossSectionDetail;
-		crossSectionCentroids.at(i) = Vec3f(cx, cy, cz);
 
 	}
 }
+
+
+
+//void ProtoTube::calcVerts() {
+//
+//	//trace("path.getVerts().at(0) =", path.getVerts().at(0));
+//
+//	// NOTE: ff and vecs are not the same size
+//	ff = path.getFrenetFrames();
+//	std::vector<Vec3f> vecs = path.getVerts();
+//	frenetFrameLength = static_cast<int>(ff.size());
+//	
+//	// prepare verts vector
+//	verts.clear();
+//
+//	// top and bottom vec to enable tube caps
+//	Vec3f topCapVec, bottomCapVec;
+//	
+//	//float step = 0;
+//	Vec3f step_xyz, randomStep_xyz;
+//	float randomStep_x = 0.0;
+//	float randomStep_y = 0.0;
+//	float x = 0.0;
+//	float y = 0.0;
+//	float u = 0.0;
+//	float v = 0.0;
+//	float phi = 0.0;
+//
+//	//one additional convenience position vector for VerletProtoSpline
+//	std::vector<Vec3f> vProtoSplineVecs;
+//
+//	// for SINUSOIDAL_RANDOM, pre calculate random contiguous radii based on passed min and max radii args.
+//	// local var:
+//	std::vector<ProtoTuple2<float>> tempVectorRange;
+//	for (int i = 0; i < frenetFrameLength; i++) {
+//		float x = random(transFuncObj.getVectorRange().elem1.x, transFuncObj.getVectorRange().elem0.x);
+//		float y = random(transFuncObj.getVectorRange().elem1.y, transFuncObj.getVectorRange().elem0.y);
+//		tempVectorRange.push_back(ProtoTuple2<float>(x, y));
+//		//trace(tempVectorRange.at(i));
+//	}
+//
+//	for (int i = 0; i < frenetFrameLength; i++) {
+//
+//		// calculate cross-section vertices
+//		float theta = 0;
+//		float theta2 = 0;
+//
+//		// only calculate if necessary
+//		if (getIsTransformFunction()) {
+//			// get delta of radiii between contiguous vertices
+//
+//			// check if SINUSOIDAL_RANDOM
+//			if (transFuncObj.getFunctionType() == ProtoTransformFunction::SINUSOIDAL_RANDOM && i < frenetFrameLength - 1) {
+//				step_xyz.x = (tempVectorRange.at(i).elem0 - tempVectorRange.at(i + 1).elem0) / frenetFrameLength;
+//				step_xyz.y = (tempVectorRange.at(i).elem1 - tempVectorRange.at(i + 1).elem1) / frenetFrameLength;
+//			}
+//			else {
+//				step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
+//				step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
+//
+//			}
+//
+//		}
+//
+//
+//		vProtoSplineVecs.push_back(vecs.at(i));
+//
+//		// calculating double end points for seam UV coords (0  ->  1)
+//		for (int j = 0; j < crossSectionDetail; j++) {
+//
+//			// customize tube based on transform function
+//			if (getIsTransformFunction()) {
+//
+//				switch (transFuncObj.getFunctionType()) {
+//				case ProtoTransformFunction::LINEAR:
+//					//step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
+//					//step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
+//					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x * i + random(-perturbation.x, perturbation.x)));
+//					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y * i + random(-perturbation.y, perturbation.y)));
+//					break;
+//				case ProtoTransformFunction::LINEAR_INVERSE:
+//					//step_xyz.x = (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x) / frenetFrameLength;
+//					//step_xyz.y = (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y) / frenetFrameLength;
+//					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem1.x - step_xyz.x * i + random(-perturbation.x, perturbation.x)));
+//					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem1.y - step_xyz.y * i + random(-perturbation.y, perturbation.y)));
+//					break;
+//				case ProtoTransformFunction::SINUSOIDAL:
+//					//step = fabs(sin(phi) * (transFuncObj.getScalerRange().elem1 - transFuncObj.getScalerRange().elem0));
+//					step_xyz.x = fabs(sin(phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
+//					step_xyz.y = fabs(sin(phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));
+//					//std::cout << "phi = " << phi << std::endl;
+//					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x)));
+//					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y)));
+//					//trace("x = ", x, "y = ", y);
+//					break;
+//				case ProtoTransformFunction::SINUSOIDAL_INVERSE:
+//					//step = fabs(sin(phi) * (transFuncObj.getScalerRange().elem1 - transFuncObj.getScalerRange().elem0));
+//					step_xyz.x = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
+//					step_xyz.y = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));
+//					//std::cout << "phi = " << phi << std::endl;
+//					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x)));
+//					y = sin(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y)));
+//					break;
+//					// HERE 5/22/2019 ****** need to fix this
+//
+//					//step_xyz.x = (tempVectorRange.at(i).elem0 - tempVectorRange.at(i + 1).elem0) / frenetFrameLength;
+//					//step_xyz.y = (tempVectorRange.at(i).elem1 - tempVectorRange.at(i + 1).elem1) / frenetFrameLength;
+//
+//
+//				case TransformFunction::SINUSOIDAL_RANDOM:
+//					/*		step_xyz.x = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.x - transFuncObj.getVectorRange().elem0.x));
+//							step_xyz.y = fabs(sin(HALF_PI - phi) * (transFuncObj.getVectorRange().elem1.y - transFuncObj.getVectorRange().elem0.y));*/
+//
+//					step_xyz.x = fabs(sin(HALF_PI - phi) * (tempVectorRange.at(i).elem0));
+//					step_xyz.y = step_xyz.x;
+//					//fabs(sin(HALF_PI - phi)* (tempVectorRange.at(i).elem1));
+//
+//					x = cos(theta) * (radii.at(i) + (transFuncObj.getVectorRange().elem0.x + step_xyz.x + ijg::random(-perturbation.x, perturbation.x)));
+//					y = sin(theta) * +(radii.at(i) + (transFuncObj.getVectorRange().elem0.y + step_xyz.y + ijg::random(-perturbation.y, perturbation.y)));
+//					break;
+//
+//					//default:
+//				};
+//
+//				// no transform function
+//			}
+//			else {
+//				x = cos(theta) * (radii.at(i) + ijg::random(-perturbation.x, perturbation.x));
+//				y = sin(theta) * (radii.at(i) + ijg::random(-perturbation.y, perturbation.y));
+//			}
+//
+//			// calculate cross section shape
+//			// TO DO: add param for ribbon asymmetry (radius per axis)
+//			//float x = cos(theta) * radii.at(i) * step*i; //*10;
+//			//float y = sin(theta) * radii.at(i) * step*i;
+//			// std::cout << "radii.at(" << i << ") = " << radii.at(i) << std::endl;
+//
+//
+//			float z = ijg::random(-perturbation.z, perturbation.z);
+//			theta += TWO_PI / (float(crossSectionDetail) - random(.98, 1.0)); // added -.99 to avoid seams 7/27
+//
+//			if (i == 0 && j == 0) {
+//				//trace("vecs.at(0) =", vecs.at(0));
+//				//trace("vecs.at(1) =", vecs.at(1));
+//				//trace("vecs.at(vecs.size()-1) =", vecs.at(vecs.size() - 1));
+//				//trace("vecs.at(vecs.size()-2) =", vecs.at(vecs.size() - 2));
+//			}
+//			// transform to Frenet frame of reference
+//			//float px = vecs.at(i + 1).x + x * ff.at(i).getN().x + y * ff.at(i).getB().x;
+//			//float py = vecs.at(i + 1).y + x * ff.at(i).getN().y + y * ff.at(i).getB().y;
+//			//float pz = vecs.at(i + 1).z + x * ff.at(i).getN().z + y * ff.at(i).getB().z;
+//
+//			float px = vecs.at(i + 1).x + x * ff.at(i).getTNB()[1].x + y * ff.at(i).getTNB()[2].x;
+//			float py = vecs.at(i + 1).y + x * ff.at(i).getTNB()[1].y + y * ff.at(i).getTNB()[2].y;
+//			float pz = vecs.at(i + 1).z + x * ff.at(i).getTNB()[1].z + y * ff.at(i).getTNB()[2].z;
+//
+//
+//			/*std::cout <<"ff[i].getB() = " << ff[i].getB() << std::endl;
+//			 std::cout << "vecs.at(i + 1) = " << vecs.at(i + 1) << std::endl;
+//			std::cout << " ff.at(i).getN() = " <<  ff.at(i).getN() << std::endl;
+//		   std::cout << "ff.at(i).getB() = " << ff.at(i).getB() << std::endl;*/
+//		   //std::cout << "Vec3f(px, py, pz).at(" << i << ") = " << Vec3f(px, py, pz) << std::endl;
+//		   //trace("Vec3f(px, py, pz) = " , Vec3f(px, py, pz));
+//		   //verts.at(i * crossSectionDetail + j) = ProtoVertex3(Vec3f(px, py, pz), col4s.at(i));
+//
+//
+//			// set uv coords
+//			u = theta2 / (TWO_PI * (1.0f / textureScale.x));
+//			v = (float(i * crossSectionDetail + j) / float(crossSectionDetail * frenetFrameLength)) * (1.0f / textureScale.y);
+//			//trace("u =", u);
+//			//trace(" theta2*180/PI =", theta2 * 180 / PI);
+//
+//			verts.push_back(ProtoVertex3(Vec3f(px, py, pz), col4s.at(i), ProtoTuple2f(u, v)));
+//			//trace("v = ", (i * float(crossSectionDetail) + j) / float(crossSectionDetail*frenetFrameLength) );
+//			theta2 += TWO_PI / (crossSectionDetail);
+//
+//			//verts.at(i * crossSectionDetail + j) = ProtoVertex3(Vec3f(px, py, pz), col4s.at(i), ProtoTuple2f(px/size.w, py/size.h));
+//			//std::cout << "Vec3f(px, py, pz).at(" << i << ") = " << Vec3f(px, py, pz) << std::endl;
+//
+//			//std::cout << "perturbation = " << perturbation << std::endl;
+//
+//
+//			// get centroid of top and bottom cross-section for caps
+//			if (i == 0)
+//				topCapVec += Vec3f(px, py, pz);
+//			else if (i == ff.size() - 1)
+//				bottomCapVec += Vec3f(px, py, pz);
+//		}
+//
+//		// only calculate if necessary
+//		if (getIsTransformFunction()) {
+//			phi += PI / frenetFrameLength * transFuncObj.getPeriodCount();
+//		}
+//	}
+//
+//	// finish getting top and bottom cap centroid vecs.
+//	topCapVec /= crossSectionDetail;
+//	bottomCapVec /= crossSectionDetail;
+//
+//	// add cap centroids to verts.
+//	//verts.push_back(ProtoVertex3(topCapVec, col4s.at(0)));
+//	//verts.push_back(ProtoVertex3(bottomCapVec, col4s.at(frenetFrameLength - 1)));
+//
+//
+//
+//	// calculate all cross-section centroids - used by transforamtions such as breath()
+//	std::vector<Vec3f> centerPts(frenetFrameLength);
+//	crossSectionCentroids.resize(frenetFrameLength);
+//
+//
+//	// std::cout << "crossSectionDetail = " << crossSectionDetail << std::endl;
+//	for (int i = 0; i < frenetFrameLength; i++) {
+//		float cx = 0, cy = 0, cz = 0;
+//		for (int j = 0; j < crossSectionDetail; j++) {
+//			cx += verts.at(i * crossSectionDetail + j).pos.x;
+//			cy += verts.at(i * crossSectionDetail + j).pos.y;
+//			cz += verts.at(i * crossSectionDetail + j).pos.z;
+//			//            std::cout << "cx = " << cx << std::endl;
+//			//            std::cout << "cy = " << cy << std::endl;
+//			//            std::cout << "cz = " << cz << std::endl;
+//		}
+//		cx /= crossSectionDetail;
+//		cy /= crossSectionDetail;
+//		cz /= crossSectionDetail;
+//		crossSectionCentroids.at(i) = Vec3f(cx, cy, cz);
+//
+//	}
+//}
 
 void ProtoTube::calcInds() {
 	if (inds.size() > 0) inds.clear();
