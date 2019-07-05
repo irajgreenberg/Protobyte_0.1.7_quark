@@ -112,6 +112,8 @@ namespace ijg {
 
 		float aspectRatio;
 
+		void hermite();
+
 
 	public:
 		void _initUniforms(ProtoShader* shader_ptr); // temporarily here. put back in private eventually
@@ -406,7 +408,7 @@ namespace ijg {
 
 		// Drawing Methods API
 		void beginPath(PathRenderMode pathRenderMode = POLYGON);
-		void endPath(bool isClosed = OPEN);
+		void endPath(PathEnd pathEnd = OPEN);
 
 		// straight path
 		void vertex(const Vec2f& vec);

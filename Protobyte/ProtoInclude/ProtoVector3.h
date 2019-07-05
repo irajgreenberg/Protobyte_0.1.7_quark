@@ -42,6 +42,7 @@ namespace ijg {
     template <class T> class ProtoVector3;
     typedef ProtoVector3<float> Vec3f;
     typedef Vec3f Vec3; // most common usage
+	typedef Vec3f Vec; // most common usage! (Fuck it!!)
     typedef ProtoVector3<double> Vec3d;
     typedef ProtoVector3<int> Vec3i;
     typedef ProtoVector3<long> Vec3L;

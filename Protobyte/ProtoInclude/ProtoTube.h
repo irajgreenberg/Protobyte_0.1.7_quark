@@ -45,83 +45,83 @@ namespace ijg {
          */
         ProtoTube(const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed, const std::string& textureImageURL, const Vec2f& textureScale = Vec2f(1, 1));
 
-        /*!
-         * Constructor 
-         * with TransformFunction object
-         */
-        ProtoTube(const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
-        
-        /*!
-         * Constructor
-         * with TransformFunction object & texture
-         */
-		ProtoTube(const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed, const std::string& textureImageURL, const Vec2f& textureScale = Vec2f(1, 1));
+  //      /*!
+  //       * Constructor 
+  //       * with TransformFunction object
+  //       */
+  //      ProtoTube(const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
+  //      
+  //      /*!
+  //       * Constructor
+  //       * with TransformFunction object & texture
+  //       */
+		//ProtoTube(const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed, const std::string& textureImageURL, const Vec2f& textureScale = Vec2f(1, 1));
 
-        /*!
-         * Constructor 
-         * with TransformFunction object
-         */
-        ProtoTube(const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
+  //      /*!
+  //       * Constructor 
+  //       * with TransformFunction object
+  //       */
+  //      ProtoTube(const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
 
-        /*!
-         * Constructor 
-         * varied thickness*/
-        ProtoTube(const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed = true);
+  //      /*!
+  //       * Constructor 
+  //       * varied thickness*/
+  //      ProtoTube(const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed = true);
 
-        /*!
-         * Constructor 
-         * varied color*/
-        ProtoTube(const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed = true);
+  //      /*!
+  //       * Constructor 
+  //       * varied color*/
+  //      ProtoTube(const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed = true);
 
-        /*!
-         * Constructor 
-         * varied color and TransformFunction object*/
-        ProtoTube(const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
+  //      /*!
+  //       * Constructor 
+  //       * varied color and TransformFunction object*/
+  //      ProtoTube(const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
 
-        /*!
-         * Constructor 
-         * varied thickness and color */
-        ProtoTube(const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed = true);
-        
-        /*!
-         * Constructor 
-         * All */
-        ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed = true);
+  //      /*!
+  //       * Constructor 
+  //       * varied thickness and color */
+  //      ProtoTube(const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed = true);
+  //      
+  //      /*!
+  //       * Constructor 
+  //       * All */
+  //      ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed = true);
 
-        /*!
-         * Constructor 
-         * All with TransformFunction obj*/
-        ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
-        
-        // NEW
-        /*!
-         * Constructor
-         * All with TransformFunction obj*/
-		ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed, const std::string& textureImageURL, const Vec2f& textureScale = Vec2f(1, 1));
+  //      /*!
+  //       * Constructor 
+  //       * All with TransformFunction obj*/
+  //      ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
+  //      
+  //      // NEW
+  //      /*!
+  //       * Constructor
+  //       * All with TransformFunction obj*/
+		//ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed, const std::string& textureImageURL, const Vec2f& textureScale = Vec2f(1, 1));
 
-        /*!
-         * Constructor 
-         * All with varied radii*/
-        ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed = true);
+  //      /*!
+  //       * Constructor 
+  //       * All with varied radii*/
+  //      ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed = true);
 
-        /*!
-         * Constructor 
-         * all with varied color */
-        ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed = true);
+  //      /*!
+  //       * Constructor 
+  //       * all with varied color */
+  //      ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, bool isClosed = true);
 
-        /*!
-         * Constructor 
-         * all with varied color and TransformFunction obj */
-        ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
+  //      /*!
+  //       * Constructor 
+  //       * all with varied color and TransformFunction obj */
+  //      ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, float radius, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
 
-        /*!
-         * Constructor 
-         * All with varied thickness and color */
-        ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed = true);
-        
-        
-        // added 12/27/13
-        ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
+  //      /*!
+  //       * Constructor 
+  //       * All with varied thickness and color */
+  //      ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const std::vector<ProtoColor4f>& col4s, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, bool isClosed = true);
+  //      
+  //      
+  //      // added 12/27/13
+  //      ProtoTube(const Vec3f& pos, const Vec3f& rot, const ProtoDimension3f& size, const ProtoColor4f& col4, const ProtoSpline3& path, std::vector<float>& radii, int crossSectionDetail, const ProtoTransformFunction& transFuncObj, bool isClosed = true);
 
         ~ProtoTube();
 
