@@ -6,6 +6,7 @@ Ira Greenberg 2019
 #include "ProtoController.h"
 
 void ProtoController::init() {
+	setSize(Dim2i(900, 200));
 	float t = 0.0f;
 	float r = 100.0f;
 	for (int i = 0; i < count; ++i) {

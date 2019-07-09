@@ -59,6 +59,18 @@ baseApp(baseApp), appWidth(1920), appHeight(1080), appTitle("Protobyte App")
 	runGLFW();
 }
 
+ProtoPlasm::ProtoPlasm(std::string appTitle, ProtoBaseApp* baseApp) :
+	appWidth(1920), appHeight(1080), appTitle(appTitle), baseApp(baseApp) {
+	// this->baseApp = baseApp;
+	baseApp->setWidth(appWidth);
+	baseApp->setHeight(appHeight);
+	baseApp->setSize(Dim2i(appWidth, appHeight));
+
+	// Create GL context and call init() and run() to activate functions in user defined BaseApp derived class
+	initGLFW();
+	runGLFW();
+}
+
 ProtoPlasm::ProtoPlasm(int appWidth, int appHeight, std::string appTitle, ProtoBaseApp* baseApp) :
 appWidth(appWidth), appHeight(appHeight), appTitle(appTitle), baseApp(baseApp){
 	// this->baseApp = baseApp;

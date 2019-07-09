@@ -93,7 +93,7 @@ namespace ijg {
 	private:
 		void setWidth(int canvasWidth);
 		void setHeight(int canvasHeight);
-		void setSize(const Dim2i& canvasSize);
+		/* MOVED TO PUBLIC void setSize(const Dim2i& canvasSize);*/
 		void _init();
 		void _run(const Vec2f& mousePos, const Vec4i& windowCoords = Vec4i(0, 0, 1, 1)/*, int mouseBtn, int key*/);
 		void setFrameCount(float frameCount);
@@ -116,6 +116,7 @@ namespace ijg {
 
 
 	public:
+		void setSize(const Dim2i& canvasSize); 
 		void _initUniforms(ProtoShader* shader_ptr); // temporarily here. put back in private eventually
 		// Mouse fields
 		float mouseX, mouseY, mouseLastFrameX, mouseLastFrameY;

@@ -72,6 +72,7 @@ namespace ijg {
         
         //cstrs
 		explicit ProtoPlasm(ProtoBaseApp* baseApp);
+		ProtoPlasm(std::string appTitle, ProtoBaseApp* baseApp);
         ProtoPlasm(int appWidth, int appHeight, std::string appTitle, ProtoBaseApp* baseApp);
         
     private:
