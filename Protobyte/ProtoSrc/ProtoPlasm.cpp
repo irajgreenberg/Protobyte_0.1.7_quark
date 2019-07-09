@@ -35,7 +35,12 @@ namespace ijg {
 			glfwSetWindowShouldClose(window, GL_TRUE);
 
 		ProtoBaseApp* ba = (ProtoBaseApp*)glfwGetWindowUserPointer(window);
-		ba->setKeyEvent(key, scancode, action, mods);
+	
+
+		// detect press 1x
+		if (action == GLFW_PRESS) {
+			ba->setKeyEvent(key, scancode, action, mods);
+		}
 	}
 
 	void window_size_callback(GLFWwindow* window, int width, int height) {

@@ -461,7 +461,7 @@ namespace ijg {
 		//void threadSave(std::string name, int scaleFactor); // thread safe save with mutex locking
 		std::mutex mtx;
 		//void saveTiles(int rows, int columns);
-		bool stitchTiles(std::string url, int tiles);
+		bool stitchTiles(std::string url, std::string  name, int tiles);
 		/****END Save/Thread/Other****/
 
 		// FOR TESTING ONLY

@@ -2712,6 +2712,7 @@ void ProtoBaseApp::endPath(PathEnd pathEnd) {
 	//}
 
 	void ProtoBaseApp::save(std::string name, int scaleFactor) {
+		trace(name,"image tile saving begun. Please wait...");
 		//trace("ProtoUtility::getPathToOutput() =", ProtoUtility::getPathToOutput());
 		//if (getFrameCount() < 1){
 
@@ -2827,8 +2828,11 @@ void ProtoBaseApp::endPath(PathEnd pathEnd) {
 				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
 			}
 		}
+
+		trace("Image tile saving complete. \nBeginning stitching process. Please wait...");
 		//trace("ProtoUtility::getPath() =", ProtoUtility::getPath());
-		bool isOk = stitchTiles(directory, scaleFactor);
+		bool isOk = stitchTiles(directory, name, scaleFactor);
+		trace("Image stitching complete.");
 		//}
 	}
 
@@ -2936,8 +2940,8 @@ void ProtoBaseApp::endPath(PathEnd pathEnd) {
 	//	//mtx.unlock();
 	//}
 
-	bool ProtoBaseApp::stitchTiles(std::string url, int tiles) {
-		trace(" url =", url);
+	bool ProtoBaseApp::stitchTiles(std::string url, std::string name, int tiles) {
+		//trace(" url =", url);
 		url += "\\";
 		std::vector<std::string> fileNames = ProtoUtility::getFileNames(url);
 		for (size_t i = 0; i < fileNames.size(); ++i) {
@@ -3034,7 +3038,7 @@ void ProtoBaseApp::endPath(PathEnd pathEnd) {
 			//
 			//		std::string folder = url + "ProtoJuncusEffusus01_" + stream.str();
 			//		CreateDirectory(folder.c_str(), 0);
-			std::string compositeName = url + "\\ProtoJuncusEffusus01.jpg";
+			std::string compositeName = url + "\\" + name + ".jpg";
 			FreeImage_Save(FIF_JPEG, compositeImg, compositeName.c_str(), 0);
 			FreeImage_Unload(compositeImg);
 		}

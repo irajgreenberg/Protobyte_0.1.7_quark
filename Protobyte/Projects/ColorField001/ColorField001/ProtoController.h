@@ -31,7 +31,7 @@ public:
 	void onResized();
 	void onClosed();
 
-	int count{ 3000 };
+	int count{ 13000 };
 	std::vector<Vec> pts;
 	std::vector<Col4> cols;
 
