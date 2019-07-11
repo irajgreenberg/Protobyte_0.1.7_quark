@@ -26,10 +26,10 @@ void ProtoController::run() {
 
 void ProtoController::display() {
 	background(0);
-	noStroke();
 	for (int i = 0; i < starCount; i++) {
-		fill(random(1));
-		rect(starLocs.at(i).x, starLocs.at(i).y, starLocs.at(i).z, 2, 2);
+		strokeWeight(random(1, 5));
+		stroke(random(1));
+		point(starLocs.at(i).x, starLocs.at(i).y, starLocs.at(i).z);
 	}
 
 	scale(300);

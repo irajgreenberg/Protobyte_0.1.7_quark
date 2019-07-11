@@ -316,6 +316,11 @@ namespace ijg {
 		// Precalculating buffers for 2D primitives for efficiency
 		// updated with glBufferSubData and binding vbo/vao
 
+		// point buffer ids
+		float ptPrims[7];
+		GLuint vaoPtID, vboPtID;
+		void _createPt();
+		
 		// rect buffer ids
 		float rectPrims[28];
 		GLuint vaoRectID, vboRectID;
@@ -382,6 +387,11 @@ namespace ijg {
 		void _createBox();
 
 		// primitive funcs
+		void point(float x, float y); 
+		void point(Vec2 v);
+		void point(float x, float y, float z);
+		void point(Vec3 v);
+
 		void rect(float x, float y, float w, float h, Registration reg = CORNER);
 		void rect(float x, float y, float z, float w, float h, Registration reg = CORNER);
 		void rect(const Vec2& pt0, const Vec2& pt1, Registration reg = CORNER);
@@ -421,8 +431,8 @@ namespace ijg {
 		void line(float x1, float y1, float x2, float y2);
 		void line(float x1, float y1, float z1, float x2, float y2, float z2);
 
-		void point(float x, float y);
-		void point(float x, float y, float z); 
+		/*void point(float x, float y);
+		void point(float x, float y, float z); */
 
 		// Catmull-Rom spline curve
 		void curveVertex(const Vec2f& vec);
