@@ -6,7 +6,7 @@ Ira Greenberg 2019
 #include "ProtoController.h"
 
 void ProtoController::init() {
-	strokeWeight(1);
+	strokeWeight(12);
 }
 
 void ProtoController::run() {
@@ -17,6 +17,18 @@ void ProtoController::display() {
 	stroke(1, 0, 0, 1);
 	for (int i = 0; i < 3000; i++) {
 		point(random(-400, 400), random(-400, 400), random(-400, 400));
+	}
+
+	stroke(0, .5, .75, 1);
+	strokeWeight(60);
+	float t = 0;
+	float r = 375;
+	int pts = 30;
+	for (int i = 0; i < pts; i++) {
+		line(cos(t) * r, sin(t) * r,
+			cos(t + TWO_PI / (pts / 2)) * r, sin(t + TWO_PI / (pts / 2)) * r);
+		t += TWO_PI / pts * 2;
+		r -= 25;
 	}
 }
 

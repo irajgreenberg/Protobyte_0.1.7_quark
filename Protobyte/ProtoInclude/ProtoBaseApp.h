@@ -320,6 +320,11 @@ namespace ijg {
 		float ptPrims[7];
 		GLuint vaoPtID, vboPtID;
 		void _createPt();
+
+		// point buffer ids
+		float linePrims[14];
+		GLuint vaoLineID, vboLineID;
+		void _createLine();
 		
 		// rect buffer ids
 		float rectPrims[28];
@@ -392,6 +397,12 @@ namespace ijg {
 		void point(float x, float y, float z);
 		void point(Vec3 v);
 
+		// primitive funcs
+		void line(float x1, float y1, float x2, float y2);
+		void line(float x1, float y1, float z1, float x2, float y2, float z2);
+		void line(Vec2 t1, Vec2 t2);
+		void line(Vec3 t1, Vec3 t2);
+
 		void rect(float x, float y, float w, float h, Registration reg = CORNER);
 		void rect(float x, float y, float z, float w, float h, Registration reg = CORNER);
 		void rect(const Vec2& pt0, const Vec2& pt1, Registration reg = CORNER);
@@ -428,8 +439,8 @@ namespace ijg {
 		void vertex(float x, float y, float z);
 
 		// NEW
-		void line(float x1, float y1, float x2, float y2);
-		void line(float x1, float y1, float z1, float x2, float y2, float z2);
+		//void line(float x1, float y1, float x2, float y2);
+		//void line(float x1, float y1, float z1, float x2, float y2, float z2);
 
 		/*void point(float x, float y);
 		void point(float x, float y, float z); */

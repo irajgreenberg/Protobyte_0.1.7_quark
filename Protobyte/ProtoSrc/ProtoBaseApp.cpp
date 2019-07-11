@@ -113,6 +113,7 @@ void ProtoBaseApp::_init() {
 
 	//precalculate 2D geometry
 	_createPt();
+	_createLine();
 	_createRect();
 	_createQuad();
 	_createEllipse();
@@ -185,6 +186,47 @@ void ProtoBaseApp::_createPt() {
 	glBindVertexArray(0);
 }
 
+// create default buffers for line function
+void ProtoBaseApp::_createLine() {
+
+	// interleaved float[] (x, y, 0, r, g, b, a) 7*4 pts
+	float prims[] = {
+		0, 0, 0, fillColor.r, fillColor.g, fillColor.b, fillColor.a,
+		0, 0, 0, fillColor.r, fillColor.g, fillColor.b, fillColor.a
+	};
+	for (int i = 0; i < 14; ++i) {
+		rectPrims[i] = prims[i];
+	}
+
+	// vert data
+	// 1. Create and bind VAO
+	glGenVertexArrays(1, &vaoLineID); // Create VAO
+	glBindVertexArray(vaoLineID); // Bind VAO (making it active)
+
+	// 2. Create and bind VBO
+	// a. Vertex attributes vboID;
+	//GLuint vboID;
+	glGenBuffers(1, &vboLineID); // Create the buffer ID
+	glBindBuffer(GL_ARRAY_BUFFER, vboLineID); // Bind the buffer (vertex array data)
+	int vertsDataSize = sizeof(GLfloat) * 14;
+	glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &linePrims[0]); // upload the data
+
+	// draw rect
+	glBindBuffer(GL_ARRAY_BUFFER, vboLineID);
+
+	glEnableVertexAttribArray(0); // vertices
+	glEnableVertexAttribArray(2); // color
+	// stride is 7: pos(3) + col(4)
+	// (x, y, z, r, g, b, a)
+	int stride = 7;
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), BUFFER_OFFSET(0)); // pos
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), BUFFER_OFFSET(12)); // col
+
+	// Disable buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+}
 
 // create default buffers for rect function
 void ProtoBaseApp::_createRect() {
@@ -1180,7 +1222,6 @@ void ProtoBaseApp::bumpTexture(const ProtoTexture& bumpTexture) {
 
 
 //PRIMITIVES
-
 void ProtoBaseApp::point(float x, float y, float z) {
 
 	ptPrims[0] = x;
@@ -1222,6 +1263,63 @@ void ProtoBaseApp::point(Vec2 v) {
 void ProtoBaseApp::point(Vec3 v) {
 	point(v.x, v.y, v.z);
 }
+
+void ProtoBaseApp::line(float x1, float y1, float z1, float x2, float y2, float z2) {
+
+	linePrims[0] = x1;
+	linePrims[1] = y1;
+	linePrims[2] = z1;
+	linePrims[3] = strokeColor.r;
+	linePrims[4] = strokeColor.g;
+	linePrims[5] = strokeColor.b;
+	linePrims[6] = strokeColor.a;
+	linePrims[7] = x2;
+	linePrims[8] = y2;
+	linePrims[9] = z2;
+	linePrims[10] = strokeColor.r;
+	linePrims[11] = strokeColor.g;
+	linePrims[12] = strokeColor.b;
+	linePrims[13] = strokeColor.a;
+
+	int stride = 7;
+	int linePrimCount = 14;
+
+	for (int i = 0; i < linePrimCount; i += stride) {
+		linePrims[i + 3] = strokeColor.r;
+		linePrims[i + 4] = strokeColor.g;
+		linePrims[i + 5] = strokeColor.b;
+		linePrims[i + 6] = strokeColor.a;
+	}
+
+	enable2DRendering();
+	glBindVertexArray(vaoLineID);
+	// NOTE::this may not be most efficient - eventually refactor
+	glBindBuffer(GL_ARRAY_BUFFER, vboLineID); // Bind the buffer (vertex array data)
+	int vertsDataSize = sizeof(GLfloat) * linePrimCount;
+	glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &linePrims[0]); // upload the data
+
+	glLineWidth(lineWidth);
+	glDrawArrays(GL_LINES, 0, linePrimCount / stride);
+	disable2DRendering();
+
+	// Disable VAO
+	glBindVertexArray(0);
+
+}
+
+void ProtoBaseApp::line(float x1, float y1, float x2, float y2) {
+	line(x1, y1, 0, x2, y2, 0);
+}
+
+void ProtoBaseApp::line(Vec2 t1, Vec2 t2) {
+	line(t1.x, t1.y, 0, t2.x, t2.y, 0);
+
+}
+void ProtoBaseApp::line(Vec3 t1, Vec3 t2) {
+	line(t1.x, t1.y, t1.z, t2.x, t2.y, t2.z);
+}
+
 
 void ProtoBaseApp::rect(float x, float y, float z, float w, float h, Registration reg) {
 
@@ -2536,53 +2634,8 @@ void ProtoBaseApp::endPath(PathEnd pathEnd) {
 //	*/
 //}
 
-void ProtoBaseApp::line(float x1, float y1, float x2, float y2) {
-	beginShape();
-	vertex(x1, y1);
-	vertex(x2, y2);
-	endShape();
-}
-void ProtoBaseApp::line(float x1, float y1, float z1, float x2, float y2, float z2) {
-	beginShape();
-	vertex(x1, y1, z1);
-	vertex(x2, y2, z2);
-	endShape();
-}
 
-/*void ProtoBaseApp::point(float x, float y, float z) {
-	glDisable(GL_DITHER);
-	glDisable(GL_POINT_SMOOTH);
-	glDisable(GL_LINE_SMOOTH);
-	glDisable(GL_POLYGON_SMOOTH);
-	glHint(GL_POINT_SMOOTH, GL_DONT_CARE);
-	glHint(GL_LINE_SMOOTH, GL_DONT_CARE);
-	glHint(GL_POLYGON_SMOOTH_HINT, GL_DONT_CARE);
-#define GL_MULTISAMPLE_ARB 0x809D
-		glDisable(GL_MULTISAMPLE_ARB);
-		noStroke();
-		if (lineWidth < 2) {
-			rect(x, y, z, 1, 1);
-		}
-		else {
-			ellipse(x, y, z, lineWidth, lineWidth);
-		}
-		stroke(strokeColor);
-		glEnable(GL_DITHER);
-		glEnable(GL_POINT_SMOOTH);
-		glEnable(GL_LINE_SMOOTH);
-		glEnable(GL_POLYGON_SMOOTH);
-		glHint(GL_POINT_SMOOTH, GL_NICEST);
-		glHint(GL_LINE_SMOOTH, GL_NICEST);
-		glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-#define GL_MULTISAMPLE_ARB 0x809D
-		glEnable(GL_MULTISAMPLE_ARB);
 
-	}
-
-	void ProtoBaseApp::point(float x, float y) {
-		point(x, y, 0);
-	}
-*/
 
 /****END 2D API****/
 //3D
