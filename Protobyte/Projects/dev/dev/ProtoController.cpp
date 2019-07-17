@@ -13,14 +13,16 @@ void ProtoController::run() {
 }
 
 void ProtoController::display() {
-	background(0);
+	//background({ .5f, .5f, .5f});
+	beginArcBall();
 	stroke(1, 0, 0, 1);
+	strokeWeight(getFrameCount()*.001);
 	for (int i = 0; i < 3000; i++) {
 		point(random(-400, 400), random(-400, 400), random(-400, 400));
 	}
 
 	stroke(0, .5, .75, 1);
-	strokeWeight(60);
+	strokeWeight(.05);
 	float t = 0;
 	float r = 375;
 	int pts = 30;
@@ -30,6 +32,7 @@ void ProtoController::display() {
 		t += TWO_PI / pts * 2;
 		r -= 25;
 	}
+	endArcBall();
 }
 
 // Key and Mouse Events

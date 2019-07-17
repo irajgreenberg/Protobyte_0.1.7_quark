@@ -729,7 +729,7 @@ Tup2i ProtoBaseApp::getShadowSharpness() const {
 }
 
 void ProtoBaseApp::_run(const Vec2f& mousePos, const Vec4i& windowCoords/*, int mouseBtn, int key*/) {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	// NOTE:: reset state - why did I have these calls uncommented?
 	//fillColor = Col4f(1, 1, 1, 1); // white fill
@@ -950,12 +950,23 @@ void ProtoBaseApp::arcballEnd() {
 
 // gen funcs
 // overloaded background
+
+//void ProtoBaseApp::setBackground(float r, float g, float b, float a) {
+//	bgColor.setR(r);
+//	bgColor.setG(g);
+//	bgColor.setB(b);
+//	bgColor.setB(a);
+//	glClearColor(r, g, b, a);
+//	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+//}
+
+
 void ProtoBaseApp::setBackground(float r, float g, float b) {
-	bgColor.setR(r);
-	bgColor.setG(g);
-	bgColor.setB(b);
-	glClearColor(r, g, b, 1);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		bgColor.setR(r);
+		bgColor.setG(g);
+		bgColor.setB(b);
+		glClearColor(r, g, b, 1);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 }
 
 void ProtoBaseApp::setBackground(float c) {
@@ -966,9 +977,9 @@ void ProtoBaseApp::setBackground(const Col3f& col) {
 	setBackground(col.getR(), col.getG(), col.getB());
 }
 
-void ProtoBaseApp::setBackground(const Col4f& col) {
-	setBackground(col.getR(), col.getG(), col.getB());
-}
+//void ProtoBaseApp::setBackground(const Col4f& col) {
+//	setBackground(col.getR(), col.getG(), col.getB());
+//}
 
 // END background
 

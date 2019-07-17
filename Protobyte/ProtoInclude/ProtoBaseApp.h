@@ -225,9 +225,10 @@ namespace ijg {
 
 		// set background color
 		void setBackground(float r, float g, float b);
+		/*void setBackground(float r, float g, float b, float a);*/
 		void setBackground(float c);
 		void setBackground(const Col3f& col);
-		void setBackground(const Col4f& col);
+		//void setBackground(const Col4f& col);
 
 		bool areShadowsOn;
 		void setShadowsOn(bool areShadowsOn);
