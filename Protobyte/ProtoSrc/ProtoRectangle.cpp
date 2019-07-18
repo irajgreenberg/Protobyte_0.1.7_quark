@@ -191,10 +191,20 @@ Geom3(Vec3f(x, y, 0), Vec3f(), Dim3f(w, h, 0), cols4, textureImageURL, textureSc
 //Uses uuplicate vertices to allow proper texture mapping
 
 void ProtoRectangle::calcVerts() {
-	verts.push_back(ProtoVertex3(Vec3f(-.5, .5, 0), col4, Tup2(0, 0)) );
-	verts.push_back(ProtoVertex3(Vec3f(-.5, -.5, 0), col4, Tup2(0, 1)));
-	verts.push_back(ProtoVertex3(Vec3f(.5, -.5, 0), col4, Tup2(1, 1)));
-	verts.push_back(ProtoVertex3(Vec3f(.5, .5, 0), col4, Tup2(1, 0)));
+	//verts.push_back(ProtoVertex3(Vec3f(-.5, .5, 0), col4, Tup2(0, 0)) );
+	//verts.push_back(ProtoVertex3(Vec3f(-.5, -.5, 0), col4, Tup2(0, 1)));
+	//verts.push_back(ProtoVertex3(Vec3f(.5, -.5, 0), col4, Tup2(1, 1)));
+	//verts.push_back(ProtoVertex3(Vec3f(.5, .5, 0), col4, Tup2(1, 0)));
+
+	//verts.push_back(ProtoVertex3(Vec3f(-.5, .5, 0), col4, Tup2(0, 0)));
+	//verts.push_back(ProtoVertex3(Vec3f(-.5, -.5, 0), col4, Tup2(0, 1)));
+	//verts.push_back(ProtoVertex3(Vec3f(.5, -.5, 0), col4, Tup2(1, 1)));
+	//verts.push_back(ProtoVertex3(Vec3f(.5, .5, 0), col4, Tup2(1, 0)));
+
+	verts.push_back(ProtoVertex3(Vec3f(-size.w / 2, size.h / 2, 0), col4, Tup2f(0, 0))); // LB
+	verts.push_back(ProtoVertex3(Vec3f(-size.w / 2, -size.h / 2, 0), col4, Tup2f(0, 1.0f / textureScale.y))); // LF
+	verts.push_back(ProtoVertex3(Vec3f(size.w / 2, -size.h / 2, 0), col4, Tup2f(1.0f / textureScale.x, 1.0f / textureScale.y))); // RF
+	verts.push_back(ProtoVertex3(Vec3f(size.w / 2, size.h / 2, 0), col4, Tup2f(1.0f / textureScale.x, 0))); // RB
 }
 
 void ProtoRectangle::calcInds() {

@@ -108,7 +108,7 @@ namespace ijg {
 		int shadowMapWidth, shadowMapHeight;
 
 		// for relatively accurate pixel values in 2D
-		float defaultCameraDepth = 400.0f;
+		float defaultCameraDepth = 850.0f;
 
 		float aspectRatio;
 

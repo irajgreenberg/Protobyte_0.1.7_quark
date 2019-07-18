@@ -32,6 +32,7 @@ public:
 	void onClosed();
 
 	std::vector<Vec> pts;
+	ProtoRectangle r;
 
 };
 

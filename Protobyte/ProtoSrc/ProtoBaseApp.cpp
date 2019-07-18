@@ -1403,7 +1403,7 @@ void ProtoBaseApp::rect(float x, float y, float z, float w, float h, Registratio
 			rectPrims[i + 6] = fillColor.a;
 		}
 
-		enable2DRendering();
+	//	enable2DRendering();
 		glBindVertexArray(vaoRectID);
 		// NOTE::this may not be most efficient - eventually refactor
 		glBindBuffer(GL_ARRAY_BUFFER, vboRectID); // Bind the buffer (vertex array data)
@@ -1412,7 +1412,7 @@ void ProtoBaseApp::rect(float x, float y, float z, float w, float h, Registratio
 		glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &rectPrims[0]); // upload the data
 
 		glDrawArrays(GL_TRIANGLE_FAN, 0, rectPrimCount / stride);
-		disable2DRendering();
+		//disable2DRendering();
 
 		// Disable VAO
 		glBindVertexArray(0);
@@ -1425,7 +1425,7 @@ void ProtoBaseApp::rect(float x, float y, float z, float w, float h, Registratio
 			rectPrims[i + 6] = strokeColor.a;
 		}
 
-		enable2DRendering();
+		//enable2DRendering();
 		glBindVertexArray(vaoRectID);
 		// NOTE::this may not be most efficient - eventually refactor
 		glBindBuffer(GL_ARRAY_BUFFER, vboRectID); // Bind the buffer (vertex array data)
@@ -1436,7 +1436,7 @@ void ProtoBaseApp::rect(float x, float y, float z, float w, float h, Registratio
 		glLineWidth(lineWidth);
 		glDrawArrays(GL_LINE_LOOP, 0, rectPrimCount / stride);
 
-		disable2DRendering();
+		//disable2DRendering();
 
 		// Disable VAO
 		glBindVertexArray(0);
