@@ -7,16 +7,17 @@ Ira Greenberg 2019
 
 void ProtoController::init() {
 	strokeWeight(12);
+	background(1);
 }
 
 void ProtoController::run() {
 }
 
 void ProtoController::display() {
-	//background({ .5f, .5f, .5f});
+	background({ 1.0f, .15f, .15f});
 	beginArcBall();
-	stroke(1, 0, 0, 1);
-	strokeWeight(getFrameCount()*.001);
+	stroke(0,.2,0, 1);
+	strokeWeight(getFrameCount()*.01);
 	for (int i = 0; i < 3000; i++) {
 		point(random(-400, 400), random(-400, 400), random(-400, 400));
 	}
