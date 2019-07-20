@@ -94,6 +94,8 @@ namespace ijg {
 		void setWidth(int canvasWidth);
 		void setHeight(int canvasHeight);
 		/* MOVED TO PUBLIC void setSize(const Dim2i& canvasSize);*/
+
+		ProtoRectangle backgroundPlane;
 		void _init();
 		void _run(const Vec2f& mousePos, const Vec4i& windowCoords = Vec4i(0, 0, 1, 1)/*, int mouseBtn, int key*/);
 		void setFrameCount(float frameCount);
@@ -102,15 +104,24 @@ namespace ijg {
 		Dim2i canvasSize;
 		Dim2i windowFrameSize;
 		int frameCount;
-		float frameRate;
+		float frameRate{ 0.0f };
 		Col3f bgColor;
 		int shadowSharpnessWidth, shadowSharpnessHeight;
 		int shadowMapWidth, shadowMapHeight;
 
+
+
 		// for relatively accurate pixel values in 2D
 		float defaultCameraDepth = 850.0f;
 
-		float aspectRatio;
+		float viewAngle{ 65.0f * PI / 180.0f };
+		float nearDist{ 0.1f };
+		float farDist{ 3000.0f };
+		float aspectRatio{ 0.0f };
+		float left{ 0.0f };
+		float right{ 0.0f };
+		float top{ 0.0f };
+		float bottom{ 0.0f };
 
 		void hermite();
 
@@ -147,14 +158,25 @@ namespace ijg {
 		ProtoShader shader;
 		ProtoShader shader3D, shader2D;
 
+		// For Perspective vals
 		void setViewAngle(float viewAngle);
-		void setAspect(float aspect);
+		void setAspectRatio(float aspectRatio);
 		void setNearDist(float nearDist);
 		void setFarDist(float farDist);
+		float getViewAngle();
+		float getAspectRatio();
+		float getNearDist();
+		float getFarDist();
+
+		// For Orthogonal vals
 		void setLeft(float left);
 		void setRight(float right);
 		void setBottom(float bottom);
 		void setTop(float top);
+		float getLeft();
+		float getRight();
+		float getBottom();
+		float getTop();
 
 		// For view matrix
 		void setSceneCenter(const Vec3& axis);
@@ -166,6 +188,8 @@ namespace ijg {
 			ORTHOGONAL
 		};
 		void setProjection(ProjectionType projType, float viewAngle, float aspect, float nearDist, float farDist);
+
+		void setProjectionType(ProjectionType projType);
 
 		/***********************************
 		*           path plotting
@@ -228,6 +252,7 @@ namespace ijg {
 		/*void setBackground(float r, float g, float b, float a);*/
 		void setBackground(float c);
 		void setBackground(const Col3f& col);
+		void setBackground(const std::string& image);
 		//void setBackground(const Col4f& col);
 
 		bool areShadowsOn;
@@ -543,30 +568,55 @@ namespace ijg {
 
 	// perspective projection
 	inline void ProtoBaseApp::setViewAngle(float viewAngle){
-		//this->viewAngle = viewAngle;
+		this->viewAngle = viewAngle;
 	}
-	inline void ProtoBaseApp::setAspect(float aspect){
-		//this->aspect = aspect;
+	inline void ProtoBaseApp::setAspectRatio(float aspectRatio){
+		this->aspectRatio = aspectRatio;
 	}
 	inline void ProtoBaseApp::setNearDist(float nearDist){
-		//this->nearDist = nearDist;
+		this->nearDist = nearDist;
 	}
 	inline void ProtoBaseApp::setFarDist(float farDist){
-		//this->farDist = farDist;
+		this->farDist = farDist;
+	}
+	inline float ProtoBaseApp::getViewAngle() {
+		return viewAngle;
+	}
+	inline float ProtoBaseApp::getAspectRatio() {
+		return aspectRatio;
+	}
+	inline float ProtoBaseApp::getNearDist() {
+		return nearDist;
+	}
+	inline float ProtoBaseApp::getFarDist() {
+		return farDist;
 	}
 
-	// ortho projection
+
+	// Orthogonal projection
 	inline void  ProtoBaseApp::setLeft(float left){
-		//this->left = left;
+		this->left = left;
 	}
 	inline void  ProtoBaseApp::setRight(float right){
-		//this->right = right;
+		this->right = right;
 	}
 	inline void  ProtoBaseApp::setBottom(float bottom){
-		//this->bottom = bottom;
+		this->bottom = bottom;
 	}
 	inline void  ProtoBaseApp::setTop(float top){
-		//this->top = top;
+		this->top = top;
+	}
+	inline float  ProtoBaseApp::getLeft() {
+		return left;
+	}
+	inline float  ProtoBaseApp::getRight() {
+		return right;
+	}
+	inline float  ProtoBaseApp::getBottom() {
+		return bottom;
+	}
+	inline float  ProtoBaseApp::getTop() {
+		return top;
 	}
 
 	// SET 8 LEIGHTS

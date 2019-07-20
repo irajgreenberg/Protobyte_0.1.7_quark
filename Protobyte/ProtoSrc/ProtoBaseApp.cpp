@@ -52,6 +52,10 @@ void ProtoBaseApp::_init() {
 	ctx->setLight(6, { 0, 0, 1 }, { 0, 0, 0 });
 	ctx->setLight(7, { 0, 0, 1 }, { 0, 0, 0 });
 
+
+	
+
+
 	// initialize mouse vars
 	mouseX = mouseY = mouseLastFrameX = mouseLastFrameY = 0;
 
@@ -61,16 +65,38 @@ void ProtoBaseApp::_init() {
 
 	// START standard transformation matrices: ModelView / Projection / Normal
 	ctx->setModel(glm::mat4(1.0f));
+	
 	// only relavent if draw not invoked
+
+	//glm::mat4& projMat = glm::lookAt(glm::vec3(0.0, 0.0, defaultCameraDepth), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
+	//ctx->setView(projMat);
+	//const float* pSource = (const float*)glm::value_ptr(projMat);
+	//for (int i = 0; i < 16; ++i)
+	//	trace("pSource[i] = ", pSource[i]);
+
+
+	
+
+	//std::cout << glm::tmat4x4(m) << std::endl;
+	
+	//trace(m.v1);
+
 	ctx->setView(glm::lookAt(glm::vec3(0.0, 0.0, defaultCameraDepth), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)));
 
-	float viewAngle = 65.0f * PI / 180.0f;
+	viewAngle = 65.0f * PI / 180.0f;
 	//float aspect = float(width) / float(height);
-	aspectRatio = float(width) / float(height);
-	float nearDist = 0.1f;
-	float farDist = 3000.0f;
+	aspectRatio = float(getWidth()) / float(getHeight());
+	nearDist = 0.1f;
+	farDist = 3000.0f;
 	// perspective
 	ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
+
+
+	//ctx->setView(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
+
+	/*const float* ps = (const float*)glm::value_ptr(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
+	for (int i = 0; i < 16; ++i)
+		trace("ps[i] = ", ps[i]);*/
 	// END Model / View / Projection data
 
 
@@ -120,6 +146,10 @@ void ProtoBaseApp::_init() {
 	_createPath();
 	_createStar();
 
+	backgroundPlane = ProtoRectangle(0, 0, width, height, Col4f(0, 0, 0, 1));
+	backgroundPlane.setDiffuseMaterial({ 1.0f, 1.0f, 1.0f });
+	backgroundPlane.setAmbientMaterial(0);
+
 	//precalculate 3D geometry
 	//_createBox();
 
@@ -141,6 +171,22 @@ void ProtoBaseApp::setEyePosition(const Vec3& eyePos) {
 void ProtoBaseApp::setUpAxis(const Vec3& axis) {
 	ctx->setUpAxis(axis);
 }
+
+// change projection type
+void ProtoBaseApp::setProjectionType(ProjectionType projType) {
+	switch (projType) {
+	PERSPECTIVE:
+		ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
+		break;
+	ORTHOGONAL:
+		//glOrtho(0.0f, windowWidth, windowHeight, 0.0f, 0.0f, 1.0f);
+		ctx->setProjection(glm::ortho(0.0f, float(getWidth()), float(getHeight()), 0.0f, 0.0f, 1.0f));
+		break;
+	default:
+		ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
+	};
+}
+
 
 // create default buffers for rect function
 void ProtoBaseApp::_createPt() {
@@ -764,9 +810,10 @@ void ProtoBaseApp::_run(const Vec2f& mousePos, const Vec4i& windowCoords/*, int 
 		glUniform3fv(ctx->getLight_U(i).intensity, 1, &ctx->getLight(i).getIntensity().x);
 	}
 
-	// I thought I needed this to reset matrix each frame?
-	// was 18
-	ctx->setView(glm::lookAt(glm::vec3(0, 0, defaultCameraDepth), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)));
+	// This was originally uncommented
+	/*ctx->setView(glm::lookAt(glm::vec3(0, 0, defaultCameraDepth), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)));*/
+
+
 
 	// update shadow map texture matrix should light(s) changes position (only for light0 for now)
 	/*ctx->setLightView(glm::lookAt(glm::normalize(glm::vec3(ctx->getLight(0).getPosition().x, ctx->getLight(0).getPosition().y, ctx->getLight(0).getPosition().z)), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0)));*/
@@ -796,10 +843,10 @@ void ProtoBaseApp::render(int x, int y, int scaleFactor) {
 
 	// reset transformation matrix each frame
 	ctx->setModel(glm::mat4{ 1.0f });
-	float viewAngle = 75.0f * PI / 180.0f;
-	//float aspect = float(width) / float(height);
-	float nearDist = .5f;
-	float farDist = 3000.0f;
+	//float viewAngle = 75.0f * PI / 180.0f;
+	////float aspect = float(width) / float(height);
+	//float nearDist = .5f;
+	//float farDist = 3000.0f;
 
 	if (areShadowsEnabled) {
 		// Make shadow frame buffer active
@@ -869,8 +916,8 @@ void ProtoBaseApp::render(int x, int y, int scaleFactor) {
 		//float nearDist = 0.1f;
 		//float farDist = 6000.0f;
 		// perspective
-		viewAngle = 60.0f * PI / 180.0f; //parameterize eventually
-		ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
+		//viewAngle = 60.0f * PI / 180.0f; //parameterize eventually
+		/*ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));*/
 		// call user defined display
 		display();
 	}
@@ -890,12 +937,12 @@ void ProtoBaseApp::render(int x, int y, int scaleFactor) {
 		//glCullFace(GL_BACK);
 		glDisable(GL_CULL_FACE);
 
-		float viewAngle = 65.0f * PI / 180.0f;
-		//float aspect = float(width) / float(height);
-		float nearDist = 0.1f;
-		float farDist = 6000.0f;
+		//float viewAngle = 65.0f * PI / 180.0f;
+		////float aspect = float(width) / float(height);
+		//float nearDist = 0.1f;
+		//float farDist = 6000.0f;
 		// perspective
-		ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
+		/*ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));*/
 
 		// call user defined display
 		display();
@@ -981,6 +1028,27 @@ void ProtoBaseApp::setBackground(const Col3f& col) {
 //	setBackground(col.getR(), col.getG(), col.getB());
 //}
 
+void ProtoBaseApp::setBackground(const std::string& image) {
+	
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+	glDisable(GL_DEPTH_TEST);
+	ctx->setProjection(glm::ortho(-getWidth() / 2.0f, getWidth() / 2.0f, -getHeight() / 2.0f, getHeight() / 2.0f, getNearDist(), getFarDist()));
+
+	// performance hack
+	// avoids having to use a ProtoImage
+	// to manage diffuseMap. Needs ot be refactored!
+	static int counter = 0;
+	if (counter++ < 1){
+		backgroundPlane.setDiffuseMap(image);
+	}
+	
+	backgroundPlane.display();
+	glEnable(GL_DEPTH_TEST);
+
+	ctx->setProjection(glm::perspective(getViewAngle(), getAspectRatio(), getNearDist(), getFarDist()));
+	
+}
 // END background
 
 //LIGHTS
