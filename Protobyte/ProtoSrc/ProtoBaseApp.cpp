@@ -31,6 +31,10 @@ void ProtoBaseApp::setWindowFrameSize(const Dim2i& windowFrameSize) {
 
 
 void ProtoBaseApp::_init() {
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	////calls init() in derived ProtoController class
+	
 
 	shader3D = ProtoShader("bumpmapping.vs.glsl", "bumpmapping.fs.glsl");
 	shader3D.bind();
@@ -70,16 +74,17 @@ void ProtoBaseApp::_init() {
 
 	//glm::mat4& projMat = glm::lookAt(glm::vec3(0.0, 0.0, defaultCameraDepth), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0));
 	//ctx->setView(projMat);
-	//const float* pSource = (const float*)glm::value_ptr(projMat);
-	//for (int i = 0; i < 16; ++i)
-	//	trace("pSource[i] = ", pSource[i]);
+
+	////const float* pSource = (const float*)glm::value_ptr(projMat);
+	////for (int i = 0; i < 16; ++i)
+	////	trace("pSource[i] = ", pSource[i]);
 
 
-	
+	//
 
-	//std::cout << glm::tmat4x4(m) << std::endl;
-	
-	//trace(m.v1);
+	////std::cout << glm::tmat4x4(m) << std::endl;
+	//
+	////trace(m.v1);
 
 	ctx->setView(glm::lookAt(glm::vec3(0.0, 0.0, defaultCameraDepth), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)));
 
@@ -153,11 +158,27 @@ void ProtoBaseApp::_init() {
 	//precalculate 3D geometry
 	//_createBox();
 
-	//calls init() in derived ProtoController class
+
+	//// flag set to disable shadow implementation in shader
+	//glUniform1i(ctx->getShaderPassFlag_U(), 0);
+
+	//// no shadowing use default run
+	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	//// set viewport to window size.
+	//glViewport(windowFrameSize.w, windowFrameSize.h,  windowFrameSize.w, windowFrameSize.h);
+
+	//// reset backface culling
+	////glCullFace(GL_BACK);
+	//glDisable(GL_CULL_FACE);
+	
+	
+	//render();
 	init();
 
 	// shows uniform and attribute locations in shader
 	GLSLInfo(&shader3D);
+	
 }
 
 
@@ -776,6 +797,7 @@ Tup2i ProtoBaseApp::getShadowSharpness() const {
 
 void ProtoBaseApp::_run(const Vec2f& mousePos, const Vec4i& windowCoords/*, int mouseBtn, int key*/) {
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	// NOTE:: reset state - why did I have these calls uncommented?
 	//fillColor = Col4f(1, 1, 1, 1); // white fill
@@ -849,6 +871,7 @@ void ProtoBaseApp::render(int x, int y, int scaleFactor) {
 	//float farDist = 3000.0f;
 
 	if (areShadowsEnabled) {
+		//trace("I am here.");
 		// Make shadow frame buffer active
 		glBindFramebuffer(GL_FRAMEBUFFER, ctx->getShadowBuffer_U());
 		glClear(GL_DEPTH_BUFFER_BIT);
@@ -917,7 +940,7 @@ void ProtoBaseApp::render(int x, int y, int scaleFactor) {
 		//float farDist = 6000.0f;
 		// perspective
 		//viewAngle = 60.0f * PI / 180.0f; //parameterize eventually
-		/*ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));*/
+		ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
 		// call user defined display
 		display();
 	}
@@ -1009,11 +1032,14 @@ void ProtoBaseApp::arcballEnd() {
 
 
 void ProtoBaseApp::setBackground(float r, float g, float b) {
-		bgColor.setR(r);
-		bgColor.setG(g);
-		bgColor.setB(b);
-		glClearColor(r, g, b, 1);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+	bgColor.setR(r);
+	bgColor.setG(g);
+	bgColor.setB(b);
+	glClearColor(r, g, b, 0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	//glClear(GL_DEPTH_BUFFER_BIT);
+	//glClear(GL_STENCIL_BUFFER_BIT);
+		
 }
 
 void ProtoBaseApp::setBackground(float c) {
@@ -1029,7 +1055,6 @@ void ProtoBaseApp::setBackground(const Col3f& col) {
 //}
 
 void ProtoBaseApp::setBackground(const std::string& image) {
-	
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
 
 	glDisable(GL_DEPTH_TEST);
@@ -2932,128 +2957,141 @@ void ProtoBaseApp::box(float w, float h, float d, Registration reg) {
 //}
 
 void ProtoBaseApp::save(std::string name, int scaleFactor) {
-	trace(name, "image tile saving begun. Please wait...");
-	//trace("ProtoUtility::getPathToOutput() =", ProtoUtility::getPathToOutput());
-	//if (getFrameCount() < 1){
 
-	//ProtoBaseApp pba;
-	//std::thread t(&ProtoBaseApp::threadSave, &pba, name, scaleFactor);
-	//t.join();
+	try {
+		ProtoException p;
+		p.checkAppWidth4Safety(getWidth());
 
+		// continue saving if App window width divisible by 4
 
+		trace(name, "image tile saving begun. Please wait...");
+		//trace("ProtoUtility::getPathToOutput() =", ProtoUtility::getPathToOutput());
+		//if (getFrameCount() < 1){
 
-#if defined (_WIN32) || defined(_WIN64)
-	time_t now = time(0);
-	tm ltm;
-	localtime_s(&ltm, &now);
-#else // os x uses localtime instead of localtime_s
-	time_t now = time(0);
-	tm* ltm = localtime(&now);
-#endif
-
-	// thanks: http://stackoverflow.com/questions/191757/c-concatenate-string-and-int, DannyT
-	std::stringstream stream;
-	stream << (ltm.tm_year + 1900) << "_" << (ltm.tm_mon + 1) << "_" << ltm.tm_mday << "_" << ltm.tm_hour << "_" << ltm.tm_min << "_" << ltm.tm_sec;
-
-
-
-	std::string url = ProtoUtility::getPathToOutput();
-	std::string directory = url + name + "_" + stream.str();
-	//trace("directory = ", directory);
-	CreateDirectory(directory.c_str(), 0);
-
-
-	/*trace("width =", width);
-	trace("height =", height);*/
-	for (int i = 0; i < scaleFactor; ++i) {
-		for (int j = 0; j < scaleFactor; ++j) {
-			//trace("in drawToFrameBuffer");
-			//glClearColor(0, 0, 0, 1.0f);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-			//From: http://stackoverflow.com/questions/12157646/how-to-render-offscreen-on-opengl
-
-			//glViewport(-i*width, -j*height, scaleFactor * width, scaleFactor * height);
-			//if (i == 0) trace("scaleFactor =", scaleFactor);
-			render(-i, -j, scaleFactor);
-			//trace(" in loop, in save");
-			/*glReadPixels(0, 0, WIDTH, HEIGHT, GL_BGR, GL_BYTE, pixels);
-			FIBITMAP Image = FreeImage_ConvertFromRawBits(pixels, WIDTH, HEIGHT, 3WIDTH, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
-			FreeImage_Save(FIF_BMP, Image, "test.bmp", 0)*/
-
-
-			//after drawing
-			std::vector<uint8_t> data(width * height * 3);
-			glReadBuffer(GL_BACK);
-			//glReadPixels(0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, &data[0]);
-			//glPixelStorei(GL_PACK_ALIGNMENT, 1);
-			glReadPixels(0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, &data[0]);
-
-			//std::vector<std::uint8_t> data(width*height * 4);
-			//glReadBuffer(GL_BACK);
-			//glReadPixels(0, 0, width, height, GL_BGRA, GL_UNSIGNED_BYTE, &data[0]);
+		//ProtoBaseApp pba;
+		//std::thread t(&ProtoBaseApp::threadSave, &pba, name, scaleFactor);
+		//t.join();
 
 
 
 #if defined (_WIN32) || defined(_WIN64)
-			time_t now = time(0);
-			tm ltm;
-			localtime_s(&ltm, &now);
+		time_t now = time(0);
+		tm ltm;
+		localtime_s(&ltm, &now);
 #else // os x uses localtime instead of localtime_s
-			time_t now = time(0);
-			tm* ltm = localtime(&now);
+		time_t now = time(0);
+		tm* ltm = localtime(&now);
+#endif
+
+		// thanks: http://stackoverflow.com/questions/191757/c-concatenate-string-and-int, DannyT
+		std::stringstream stream;
+		stream << (ltm.tm_year + 1900) << "_" << (ltm.tm_mon + 1) << "_" << ltm.tm_mday << "_" << ltm.tm_hour << "_" << ltm.tm_min << "_" << ltm.tm_sec;
+
+
+
+		std::string url = ProtoUtility::getPathToOutput();
+		std::string directory = url + name + "_" + stream.str();
+		//trace("directory = ", directory);
+		CreateDirectory(directory.c_str(), 0);
+
+
+		/*trace("width =", width);
+		trace("height =", height);*/
+		for (int i = 0; i < scaleFactor; ++i) {
+			for (int j = 0; j < scaleFactor; ++j) {
+				//trace("in drawToFrameBuffer");
+				//glClearColor(0, 0, 0, 1.0f);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+				//From: http://stackoverflow.com/questions/12157646/how-to-render-offscreen-on-opengl
+
+				//glViewport(-i*width, -j*height, scaleFactor * width, scaleFactor * height);
+				//if (i == 0) trace("scaleFactor =", scaleFactor);
+				render(-i, -j, scaleFactor);
+				//trace(" in loop, in save");
+				/*glReadPixels(0, 0, WIDTH, HEIGHT, GL_BGR, GL_BYTE, pixels);
+				FIBITMAP Image = FreeImage_ConvertFromRawBits(pixels, WIDTH, HEIGHT, 3WIDTH, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
+				FreeImage_Save(FIF_BMP, Image, "test.bmp", 0)*/
+
+
+				//after drawing
+				std::vector<uint8_t> data(width * height * 3);
+				glReadBuffer(GL_BACK);
+				//glReadPixels(0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, &data[0]);
+				//glPixelStorei(GL_PACK_ALIGNMENT, 1);
+				glReadPixels(0, 0, width, height, GL_BGR, GL_UNSIGNED_BYTE, &data[0]);
+
+				//std::vector<std::uint8_t> data(width*height * 4);
+				//glReadBuffer(GL_BACK);
+				//glReadPixels(0, 0, width, height, GL_BGRA, GL_UNSIGNED_BYTE, &data[0]);
+
+
+
+#if defined (_WIN32) || defined(_WIN64)
+				time_t now = time(0);
+				tm ltm;
+				localtime_s(&ltm, &now);
+#else // os x uses localtime instead of localtime_s
+				time_t now = time(0);
+				tm* ltm = localtime(&now);
 #endif
 
 
-			// FROM http://stackoverflow.com/questions/5844858/how-to-take-screenshot-in-opengl
-			// Convert to FreeImage format & save to file
-			FIBITMAP* image = FreeImage_ConvertFromRawBits(&data[0], width, height, width * 3, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
-			// FreeImage_ConvertFromRawBits(pixels, WIDTH, HEIGHT, 3WIDTH, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
+				// FROM http://stackoverflow.com/questions/5844858/how-to-take-screenshot-in-opengl
+				// pitch must but be a multiple of 32 bits (4 bytes)
+				// Convert to FreeImage format & save to file
+				FIBITMAP* image = FreeImage_ConvertFromRawBits(&data[0], width, height, width * 3, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
+				// FreeImage_ConvertFromRawBits(pixels, WIDTH, HEIGHT, 3WIDTH, 24, 0xFF0000, 0x00FF00, 0x0000FF, false);
 
 
-			// thanks: http://stackoverflow.com/questions/191757/c-concatenate-string-and-int, DannyT
-			//std::stringstream stream;
+				// thanks: http://stackoverflow.com/questions/191757/c-concatenate-string-and-int, DannyT
+				//std::stringstream stream;
 #if defined (_WIN32) || defined(_WIN64)
 			// stream << (ltm.tm_year + 1900) << "_" << (ltm.tm_mon + 1) << "_" << ltm.tm_mday << "_" << ltm.tm_hour << "_" << ltm.tm_min << "_" << ltm.tm_sec;
 			// c++ 11 conversion form num to string
 			//std::string url = "\\Users\\Ira\\Desktop\\ProtoJucnusEffusus01_stills\\" + name + "_" + std::to_string(i*scaleFactor+j) + ".jpg";
 
 			// ensure no single digit nums, for easy sorting
-			std::string imgNum;
+				std::string imgNum;
 
-			if (i * scaleFactor + j < 10) {
-				imgNum = "00" + std::to_string(i * scaleFactor + j);
-			}
-			else if (i * scaleFactor + j < 100) {
-				imgNum = "0" + std::to_string(i * scaleFactor + j);
-			}
-			else {
-				imgNum = std::to_string(i * scaleFactor + j);
-			}
+				if (i * scaleFactor + j < 10) {
+					imgNum = "00" + std::to_string(i * scaleFactor + j);
+				}
+				else if (i * scaleFactor + j < 100) {
+					imgNum = "0" + std::to_string(i * scaleFactor + j);
+				}
+				else {
+					imgNum = std::to_string(i * scaleFactor + j);
+				}
 
-			std::string tileURL = directory + "\\" + name + "_" + imgNum + ".jpg";
+				std::string tileURL = directory + "\\" + name + "_" + imgNum + ".jpg";
 #else
 			// stream << (ltm->tm_year + 1900) << "_" << (ltm->tm_mon + 1) << "_" << ltm->tm_mday << "_" << ltm->tm_hour << "_" << ltm->tm_min << "_" << ltm->tm_sec;
 			// c++ 11 conversion form num to string
-			std::string url = "/Users/33993405/Desktop/ProtoJucnusEffusus01_stills/" + namme + "_" + std::to_string(i * scaleFactor + j) + ".jpg";
+				std::string url = "/Users/33993405/Desktop/ProtoJucnusEffusus01_stills/" + namme + "_" + std::to_string(i * scaleFactor + j) + ".jpg";
 #endif
 
-			FreeImage_Save(FIF_JPEG, image, tileURL.c_str(), JPEG_QUALITYSUPERB);
-			//trace("-i = ", -i, "-j =", -j);
+				FreeImage_Save(FIF_JPEG, image, tileURL.c_str(), JPEG_QUALITYSUPERB);
+				//trace("-i = ", -i, "-j =", -j);
 
-			// Free resources
-			FreeImage_Unload(image);
+				// Free resources
+				FreeImage_Unload(image);
 
 
-			// Return to onscreen rendering:
-			glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+				// Return to onscreen rendering:
+				glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
+			}
 		}
-	}
 
-	trace("Image tile saving complete. \nBeginning stitching process. Please wait...");
-	//trace("ProtoUtility::getPath() =", ProtoUtility::getPath());
-	bool isOk = stitchTiles(directory, name, scaleFactor);
-	trace("Image stitching complete.");
-	//}
+		trace("Image tile saving complete. \nBeginning stitching process. Please wait...");
+		//trace("ProtoUtility::getPath() =", ProtoUtility::getPath());
+		bool isOk = stitchTiles(directory, name, scaleFactor);
+		trace("Image stitching complete.");
+		//}
+
+	}
+	catch (const char* msg) {
+		std::cerr << msg << std::endl;
+	}
 }
 
 //void ProtoBaseApp::threadSave(std::string name, int scaleFactor){

@@ -231,6 +231,7 @@ namespace ijg {
     inline void ProtoTube::setTransFuncObj(ProtoTransformFunction transFuncObj) {
         this->transFuncObj = transFuncObj;
         setIsTransformFunction(true);
+		init();
     }
 
     inline ProtoTransformFunction ProtoTube::getTransFuncObj() const {

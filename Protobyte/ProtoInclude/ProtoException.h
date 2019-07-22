@@ -29,9 +29,19 @@ This class is part of the group common (update)
 #include <stdexcept>
 
 namespace ijg {
+
+
 	class ProtoException : public std::runtime_error {
 	public:
 		ProtoException::ProtoException();
+
+		int checkAppWidth4Safety(int w) {
+			if (w % 4 != 0) {
+				throw "\nERROR ON SAVE: The Protobyte Application Window width MUST be a multiple of 4.";
+			}
+		}
+
+		
 	};
 
 }

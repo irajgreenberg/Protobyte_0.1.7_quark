@@ -6,7 +6,10 @@ Ira Greenberg 2019
 #include "ProtoController.h"
 
 void ProtoController::init() {
-	//background("crit_background.jpg");
+	//glEnable(GL_DEPTH_TEST);
+//	trace("In init in ProtoController");
+	background(1, 0, 0);
+	
 	pts.push_back({ -400, 0, 0 });
 	pts.push_back({ -300, 0, 0 });
 	pts.push_back({ 0, 200, 0 });
@@ -24,6 +27,13 @@ void ProtoController::init() {
 	//r.display();
 
 	//setProjectionType(ORTHOGONAL);
+	/*strokeWeight(15);
+	beginPath();
+	for (Vec v : pts) {
+		curveVertex(v);
+	}
+	endPath(CLOSE);*/
+	//background("crit_background.jpg");
 	
 }
 
@@ -31,9 +41,9 @@ void ProtoController::run() {
 }
 
 void ProtoController::display() {
-	background("crit_background.jpg");
-
-
+	//background(1, 1, 0);
+	//background("iraWrapped_low.jpg");
+	//background("crit_background.jpg");
 	
 	//stroke(1, 0, 0);
 	/*push();
@@ -64,15 +74,15 @@ void ProtoController::display() {
 	translate(0, 0, -1000);
 	r.display();
 	pop();*/
+
 	beginArcBall();
 	//glEnable(GL_DEPTH_TEST);
-	//pop();
-	//trace(getFarDist());
 	curveDetail(20);
-	stroke(1);
+	strokeWeight(15);
 	/*ctx->setProjection(glm::perspective(getViewAngle(), getAspectRatio(), getNearDist(), getFarDist()));*/
 	push(); 
 	translate(0, 0, 0);
+	stroke(1);
 	rotate(getFrameCount() * .75 * PI / 180, { 0, 1, 0 });
 	beginPath();
 	for (Vec v : pts) {

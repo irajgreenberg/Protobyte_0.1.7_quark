@@ -73,6 +73,9 @@ ProtoPlasm::ProtoPlasm(std::string appTitle, ProtoBaseApp* baseApp) :
 
 ProtoPlasm::ProtoPlasm(int appWidth, int appHeight, std::string appTitle, ProtoBaseApp* baseApp) :
 appWidth(appWidth), appHeight(appHeight), appTitle(appTitle), baseApp(baseApp){
+
+	
+
 	// this->baseApp = baseApp;
 	baseApp->setWidth(appWidth);
 	baseApp->setHeight(appHeight);
@@ -194,11 +197,11 @@ void ProtoPlasm::initGLFW(){
 
 	// Set gl states
 	//glClearColor(.46f, .485f, .575f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glFrontFace(GL_CCW); // default
-	//glFrontFace(GL_CW);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glFrontFace(GL_CCW); // default
+	////glFrontFace(GL_CW);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 	//glDisable(GL_CULL_FACE);
 	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	//glEnable(GL_COLOR_MATERIAL); // incorporates per vertex color with lights
@@ -222,14 +225,18 @@ void ProtoPlasm::initGLFW(){
 	//glEnable(GL_POLYGON_SMOOTH);
 	//glEnable(GL_POINT_SMOOTH);
 	//glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
+	
 	glClearStencil(0); // clear stencil buffer
 	glClearDepth(1.0f); // 0 is near, 1 is far
 	
 	glDepthMask(GL_TRUE); 
 	glDepthFunc(GL_LEQUAL);
+
+
 	//glDepthFunc(GL_LESS);
 	//glDepthRange(0.0f, 1.0f);
 
@@ -266,8 +273,11 @@ void ProtoPlasm::runGLFW(){
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	int mouseBtn = 0;
+	
 	while (!glfwWindowShouldClose(window))
 	{
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClearColor(1,1,0,1);
 		/*
 		 TO DO – fix timing issues with control for users:
 		 From: http://stackoverflow.com/questions/2182675/how-do-you-make-sure-the-speed-of-opengl-animation-is-consistent-on-different-ma
@@ -289,6 +299,10 @@ void ProtoPlasm::runGLFW(){
 		baseApp->setFrameCount(frameCount);
 		//baseApp->runWorld();
 
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+		glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 		baseApp->_run(Vec2f(float(mouseX), float(mouseY)/*, mouseBtn, key*/)); // called in base class
 		//baseApp->run(); // called in derived class
 
@@ -296,7 +310,8 @@ void ProtoPlasm::runGLFW(){
 		// handle GLFW events
 
 		// clear the buffers
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
+		
 
 
 		// end the current frame (internally swaps the front and back buffers)
