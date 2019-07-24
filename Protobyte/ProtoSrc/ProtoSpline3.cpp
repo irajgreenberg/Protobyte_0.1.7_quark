@@ -79,18 +79,18 @@ void ProtoSpline3::init() {
 	// ensures curve is drawn between all control points
 	// maintaining smooth curvature
 	if (areTerminalPtsIncluded) {
-		std::vector<Vec3f>::iterator it;
-		it = controlPts.begin();
-		it = controlPts.insert(it, controlPts.at(controlPts.size() - 1));
-		//it = controlPts.insert(it, controlPts.at(0));
-		it = controlPts.end();
-		it = controlPts.insert(it, controlPts.at(0));
+		//std::vector<Vec3f>::iterator it;
+		//it = controlPts.begin();
 		//it = controlPts.insert(it, controlPts.at(controlPts.size() - 1));
-		// draw smooth closed curve
-		if (isCurveClosed) {
-			//	controlPts.push_back(controlPts.at(2));
-			//	controlPts.push_back(controlPts.at(3));
-		}
+		////it = controlPts.insert(it, controlPts.at(0));
+		//it = controlPts.end();
+		//it = controlPts.insert(it, controlPts.at(0));
+		////it = controlPts.insert(it, controlPts.at(controlPts.size() - 1));
+		//// draw smooth closed curve
+		//if (isCurveClosed) {
+		//	//	controlPts.push_back(controlPts.at(2));
+		//	//	controlPts.push_back(controlPts.at(3));
+		//}
 	}
 	else {
 	}
@@ -100,6 +100,7 @@ void ProtoSpline3::init() {
 		controlPtPrims.push_back(i.x);
 		controlPtPrims.push_back(i.y);
 		controlPtPrims.push_back(i.z);
+		// question: should I tie in stroke and fill function calls to new color property here?
 		controlPtPrims.push_back(0.0f); //r
 		controlPtPrims.push_back(0.0f); //g
 		controlPtPrims.push_back(0.0f); //b
@@ -116,10 +117,11 @@ void ProtoSpline3::init() {
 		p3 = controlPts[i + 3];
 
 
+		// getT calculates interpolated knots between contol points
 		float t0 = 0.0f;
-		float t1 = getT(t0, p0, p1);
-		float t2 = getT(t1, p1, p2);
-		float t3 = getT(t2, p2, p3);
+		float t1 = getKnot(t0, p0, p1);
+		float t2 = getKnot(t1, p1, p2);
+		float t3 = getKnot(t2, p2, p3);
 		for (float t = t1; t < t2; t += ((t2 - t1) / interpolatedPtsCount)) {
 			Vec3f a1 = (t1 - t) / (t1 - t0) * p0 + (t - t0) / (t1 - t0) * p1;
 			Vec3f a2 = (t2 - t) / (t2 - t1) * p1 + (t - t1) / (t2 - t1) * p2;
@@ -157,6 +159,7 @@ void ProtoSpline3::init() {
 		curveVertsPrims.push_back(i.x);
 		curveVertsPrims.push_back(i.y);
 		curveVertsPrims.push_back(i.z);
+		// arbitrary color defined
 		curveVertsPrims.push_back(.3); //r
 		curveVertsPrims.push_back(.6); //g
 		curveVertsPrims.push_back(.2); //b
@@ -169,8 +172,8 @@ void ProtoSpline3::initFrenetFrames() {
 	for (int i = 1; i < verts.size() - 1; i++) {
 		frenetFrames.push_back(FrenetFrame(verts.at(i - 1), verts.at(i), verts.at(i + 1)));
 	}
-	trace("verts.size =", verts.size());
-	trace("renetFrames.size =", frenetFrames.size());
+	/*trace("verts.size =", verts.size());
+	trace("renetFrames.size =", frenetFrames.size());*/
 	/*for (int i = 0; i < frenetFrames.size(); i++) {
 		trace("frenetFrames.at(", i ,").getTNB()[0] =", frenetFrames.at(i).getTNB()[0]);
 		trace("frenetFrames.at(", i, ").getTNB()[1] =", frenetFrames.at(i).getTNB()[1]);
@@ -180,7 +183,7 @@ void ProtoSpline3::initFrenetFrames() {
 
 
 // Calculates interpolated knots along curve, between control points
-float ProtoSpline3::getT(float t, Vec3f p0, Vec3f p1) {
+float ProtoSpline3::getKnot(float t, Vec3f p0, Vec3f p1) {
 	float a = pow((p1.x - p0.x), 2.0f) + pow((p1.y - p0.y), 2.0f) + pow((p1.z - p0.z), 2.0f);
 	float b = pow(a, 0.5f);
 	float c = pow(b, splineAlpha);

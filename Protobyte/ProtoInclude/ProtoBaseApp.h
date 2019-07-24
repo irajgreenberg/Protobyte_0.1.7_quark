@@ -1,7 +1,7 @@
 #ifndef _PROTO_BASEAPP_H_
 #define _PROTO_BASEAPP_H_
 
-#include "poly2tri.h" // tesselator
+#include "poly2tri.h" // tesselator not currently utilized
 #include <thread>
 #include <mutex>
 #include <memory>
@@ -99,15 +99,15 @@ namespace ijg {
 		void _init();
 		void _run(const Vec2f& mousePos, const Vec4i& windowCoords = Vec4i(0, 0, 1, 1)/*, int mouseBtn, int key*/);
 		void setFrameCount(float frameCount);
-		int canvasWidth, canvasHeight;
-		int width, height;
+		int canvasWidth{ 0 }, canvasHeight{ 0 };
+		int width{ 0 }, height{ 0 };
 		Dim2i canvasSize;
 		Dim2i windowFrameSize;
-		int frameCount;
+		int frameCount{ 0 };
 		float frameRate{ 0.0f };
 		Col3f bgColor;
-		int shadowSharpnessWidth, shadowSharpnessHeight;
-		int shadowMapWidth, shadowMapHeight;
+		int shadowSharpnessWidth{ 0 }, shadowSharpnessHeight{ 0 };
+		int shadowMapWidth{ 0 }, shadowMapHeight{ 0 };
 
 
 
@@ -132,21 +132,21 @@ namespace ijg {
 		// Mouse fields
 		float mouseX, mouseY, mouseLastFrameX, mouseLastFrameY;
 		// 1, 2, or 3
-		int mouseButton;
-		int mouseAction;
-		int mouseMods;
+		int mouseButton{ 0 };
+		int mouseAction{ 0 };
+		int mouseMods{ 0 };
 		bool isMousePressed;
 
 		// for arcball
-		float arcballRotX, arcballRotY;
-		float arcballRotXLast, arcballRotYLast;
-		float mouseXIn, mouseYIn;
+		float arcballRotX{ 0.0f }, arcballRotY{ 0.0f };
+		float arcballRotXLast{ 0.0f }, arcballRotYLast{ 0.0f };
+		float mouseXIn{ 0.0f }, mouseYIn{ 0.0f };
 		//bool isArcballOn;
 
 		// Key Fields
-		int key;
-		int scancode;
-		int action;
+		int key{ 0 };
+		int scancode{ 0 };
+		int action{ 0 };
 
 		enum Format {
 			STL,

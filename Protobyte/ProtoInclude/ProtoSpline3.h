@@ -132,9 +132,9 @@ namespace ijg {
 		void initFrenetFrames();
 
 		/**
-		* allocate memory and initialize stuff.
+		* Calcualte and retriev interpolted knot.
 		*/
-		float getT(float t, Vec3f p0, Vec3f p1);
+		float getKnot(float t, Vec3f p0, Vec3f p1);
 
         /**
          * Frenet frame is used to calcuate extrusions
