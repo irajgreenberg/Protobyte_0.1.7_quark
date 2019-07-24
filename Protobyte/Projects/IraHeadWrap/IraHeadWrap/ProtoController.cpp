@@ -20,25 +20,26 @@ void ProtoController::init() {
 	}
 
 
-	s1 = Spline(vs, 6, false);
-	tube = Tube(s1, 10, 12, false, "STG_Flesh/Diffuse_Maps/STG_Flesh_27-diffuse.jpg");
-	//tube.setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, ProtoTuple2f{4, 18}, 24));
-	tube.setColor({ .3, .2, .2, 1 });
+	s1 = Spline(vs, 8, false);
+	tube = Tube(s1, 8, 24, false, "STG_Flesh/Diffuse_Maps/STG_Flesh_27-diffuse.jpg");
+	tube.setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, Tup2f{2, 24}, 30));
+	tube.setPerturbation({.2, .5, .2});
+	tube.setColor({ .1, 0, 0, 1 });
 	tube.setDiffuseMaterial(1);
-	tube.setAmbientMaterial(0.05f);
-	tube.setBumpMap("STG_Flesh/Normal_Maps/STG_Flesh_27-normal.jpg", 1.0f);
+	//tube.setAmbientMaterial(0.05f);
+	tube.setBumpMap("STG_Flesh/Normal_Maps/STG_Flesh_27-normal.jpg", .1f);
 	//tube.loadBumpMapTexture("vascular3_normal2.jpg");
 	tube.setTextureScale({ 1.0f, 0.03f });
 	tube.setSpecularMaterial(1);
-	tube.setShininess(80);
+	tube.setShininess(68);
 }
 
 void ProtoController::run() {
 }
 
 void ProtoController::display() {
-	background("iraWrapped_low.jpg");
-	//background(1, 1,0);
+	//background("iraWrapped_low.jpg");
+	background(1, 1,0);
 	arcBallBegin();
 	//tube.display(WIREFRAME);
 	tube.display();
@@ -58,7 +59,7 @@ void ProtoController::mouseRightPressed() {
 }
 
 void ProtoController::mouseReleased() {
-	save("wrap", 1);
+	save("wrap", 4);
 }
 
 void ProtoController::mouseRightReleased() {
