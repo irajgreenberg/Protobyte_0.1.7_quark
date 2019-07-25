@@ -471,7 +471,7 @@ void ProtoSpline3::parallelTransport() {
 	Vec3f tan, biNorm, norm, nextBiNorm, nextNorm;
 
 
-	for (int i = 1; i < verts.size()-1; i++) {
+	for (int i = 1; i < verts.size(); i++) {
 		//if (i == 0) {
 		//	//cp0 = verts[verts.size() - 1];
 		//	cp0 = verts.at(i);
@@ -486,10 +486,27 @@ void ProtoSpline3::parallelTransport() {
 
 		//}
 		//else {
+		//}
+
+		if (i == 0) {
+			//cp0 = verts[verts.size() - 1];
+			cp0 = verts.at(i);
+			cp1 = verts.at(i);
+			cp2 = verts.at(i + 1);
+
+		} else
+
+		if (i == verts.size() - 1) {
+			cp0 = verts.at(i - 1);
+			cp1 = verts.at(i);
+			cp2 = verts.at(i); // 0, circled back here? changed to i
+
+		}
+		else {
 			cp0 = verts.at(i - 1);
 			cp1 = verts.at(i);
 			cp2 = verts.at(i + 1);
-		//}
+		}
 		// fill tangents
 		tan = cp2 - cp0;
 		tan.normalize();

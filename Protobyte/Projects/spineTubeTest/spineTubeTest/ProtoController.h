@@ -31,7 +31,7 @@ public:
 	void onResized();
 	void onClosed();
 
-	int count{ 6 };
+	int count{ 32 };
 	std::vector<Vec3> pts;
 	Spline s;
 	Tube tube;
