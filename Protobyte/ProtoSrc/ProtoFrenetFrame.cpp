@@ -77,6 +77,7 @@ void ProtoFrenetFrame::init() {
 
 	// Used for 1st deriviatve 
 	Vec3f vel = v1 - v0;
+	trace("vel = ", vel);
 	vel.normalize();
 
 	TNB.resize(3);
@@ -104,6 +105,7 @@ void ProtoFrenetFrame::initBuffers() {
 	for (int i = 0; i < 3 * 2 * stride; i++) {
 		frenetPrims.push_back(0.0f);
 	}
+	//trace("frenetPrims. length =", frenetPrims.size());
 
 	// prepare shader handles to verts data
 	// 1. Create and bind VAO
@@ -137,6 +139,38 @@ void ProtoFrenetFrame::initBuffers() {
 }
 
 void ProtoFrenetFrame::display(float length, float strokeWeight, Col4f TCol, Col4f NCol, Col4f BCol) {
+	//frenetPrims.at(0) = (v1.x);
+	//frenetPrims.at(1) = (v1.y);
+	//frenetPrims.at(2) = (v1.z);
+	//frenetPrims.at(3) = TCol.r;
+	//frenetPrims.at(4) = TCol.g;
+	//frenetPrims.at(5) = TCol.b;
+	//frenetPrims.at(6) = TCol.a;
+
+	//frenetPrims.at(7) = (v1.x + TNB.at(0).x * length);
+	//frenetPrims.at(8) = (v1.y + TNB.at(0).y * length);
+	//frenetPrims.at(9) = (v1.z + TNB.at(0).z * length);
+	//frenetPrims.at(10) = TCol.r;
+	//frenetPrims.at(11) = TCol.g;
+	//frenetPrims.at(12) = TCol.b;
+	//frenetPrims.at(13) = TCol.a;
+
+	//frenetPrims.at(14) = (v1.x);
+	//frenetPrims.at(15) = (v1.y);
+	//frenetPrims.at(16) = (v1.z);
+	//frenetPrims.at(17) = NCol.r;
+	//frenetPrims.at(18) = NCol.g;
+	//frenetPrims.at(19) = NCol.b;
+	//frenetPrims.at(20) = NCol.a;
+
+	//frenetPrims.at(21) = (v1.x + TNB.at(1).x * length);
+	//frenetPrims.at(22) = (v1.y + TNB.at(1).y * length);
+	//frenetPrims.at(23) = (v1.z + TNB.at(1).z * length);
+	//frenetPrims.at(24) = NCol.r;
+	//frenetPrims.at(25) = NCol.g;
+	//frenetPrims.at(26) = NCol.b;
+	//frenetPrims.at(27) = NCol.a;
+
 
 	//populate Frenet Frame prims
 	Col4f cols[] = { TCol, NCol, BCol };

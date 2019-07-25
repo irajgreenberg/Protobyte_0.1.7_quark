@@ -131,13 +131,14 @@ void ProtoSpline3::init() {
 			Vec3f b2 = (t3 - t) / (t3 - t1) * a2 + (t - t1) / (t3 - t1) * a3;
 
 			Vec3f c = (t2 - t) / (t2 - t1) * b1 + (t - t1) / (t2 - t1) * b2;
-
+			//trace("c = ", c);
 			verts.push_back(c);
 		}
 	}
 
 	// add last interpolated point on control point
 	verts.push_back(controlPts.at(controlPts.size() - 2));
+	//sverts.push_back(verts.at(verts.size() - 1));
 
 	// calculate local path tangent vectors
 	// in parent class
@@ -155,6 +156,7 @@ void ProtoSpline3::init() {
 
 	//curveVertsPrims.clear();
 		// create convenient interleaved primitives array of vertices for shader based curve rendering
+
 	for (auto i : verts) {
 		curveVertsPrims.push_back(i.x);
 		curveVertsPrims.push_back(i.y);
@@ -165,6 +167,8 @@ void ProtoSpline3::init() {
 		curveVertsPrims.push_back(.2); //b
 		curveVertsPrims.push_back(.85); //a
 	}
+	//trace("vert length = ", verts.size());
+	//trace("curveVertsPrims length = ", curveVertsPrims.size() / 7);
 }
 
 

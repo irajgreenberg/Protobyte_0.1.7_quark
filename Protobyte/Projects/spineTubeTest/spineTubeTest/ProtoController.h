@@ -34,7 +34,7 @@ public:
 	int count{ 6 };
 	std::vector<Vec3> pts;
 	Spline s;
-	Tube t;
+	Tube tube;
 
 };
 
