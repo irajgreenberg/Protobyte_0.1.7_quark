@@ -10,17 +10,17 @@ void ProtoController::init() {
 	float gap = w / count;
 	for (int i = 0; i < count; i++) {
 		float x = -w / 2 + gap * i;
-		float y = random(-5, 5);
-		float z = random(-5, 5);
+		float y = cos(i*75*PI/180)*75;
+		float z = i;
 		if (i == 0 || i == count-1) y = -10;
 		pts.push_back(Vec3(x, y, z));
 	}
 	
 	
-	s = Spline(pts, 8, false, ProtoSpline3::CHORDAL);
+	s = Spline(pts, 8, false, CHORDAL);
 
 	tube = Tube(s, 4, 24, false, "STG_Flesh/Diffuse_Maps/STG_Flesh_27-diffuse.jpg");
-	tube.setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, Tup2f{2, 12}, 12));
+	tube.setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, Tup2f{12, 12}, 10));
 	tube.setPerturbation({ 0 });
 	tube.setColor({ .1, 0, 0, 1 });
 	tube.setDiffuseMaterial(1);

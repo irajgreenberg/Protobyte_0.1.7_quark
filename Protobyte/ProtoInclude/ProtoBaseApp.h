@@ -76,7 +76,7 @@ namespace ijg {
 
 	public:
 		//ProtoBaseApp();
-		
+
 		// GLFW Mouse events
 		void setMouseButton(int mouseAction, int mouseButton, int mouseMods);
 
@@ -127,7 +127,7 @@ namespace ijg {
 
 
 	public:
-		void setSize(const Dim2i& canvasSize); 
+		void setSize(const Dim2i& canvasSize);
 		void _initUniforms(ProtoShader* shader_ptr); // temporarily here. put back in private eventually
 		// Mouse fields
 		float mouseX, mouseY, mouseLastFrameX, mouseLastFrameY;
@@ -210,7 +210,7 @@ namespace ijg {
 		/************************************
 		 **********   FUNCTIONS   ***********
 		 ***********************************/
-		// pure virtual funcs require override
+		 // pure virtual funcs require override
 		virtual void init() = 0;
 		virtual void run() = 0;
 		virtual void display() = 0;
@@ -304,7 +304,7 @@ namespace ijg {
 		/***********BEGIN************
 		 2D Automatic Procedural API
 		 ***************************/
-		enum Registration{
+		enum Registration {
 			CENTER,
 			CORNER, // assumed top left
 			CORNER_TR,
@@ -351,7 +351,7 @@ namespace ijg {
 		float linePrims[14];
 		GLuint vaoLineID, vboLineID;
 		void _createLine();
-		
+
 		// rect buffer ids
 		float rectPrims[28];
 		GLuint vaoRectID, vboRectID;
@@ -381,7 +381,7 @@ namespace ijg {
 		struct PathPrims {
 			float x, y, z, r, g, b, a;
 			PathPrims(float x, float y, float z, float r, float g, float b, float a) :
-				x(x), y(y), z(z), r(r), g(g), b(b), a(a){}
+				x(x), y(y), z(z), r(r), g(g), b(b), a(a) {}
 
 			Vec3f vec() {
 				return Vec3f(x, y, z);
@@ -418,7 +418,7 @@ namespace ijg {
 		void _createBox();
 
 		// primitive funcs
-		void point(float x, float y); 
+		void point(float x, float y);
 		void point(Vec2 v);
 		void point(float x, float y, float z);
 		void point(Vec3 v);
@@ -435,7 +435,7 @@ namespace ijg {
 		void rect(float radius1, float radius2, Registration reg = CENTER);
 		void quad(float x0, float y0, float x1, float y1, float x2, float y2, float x3, float y3, Registration reg = CENTER);
 		void quad(const Vec2& pt0, const Vec2& pt1, const Vec2& pt2, const Vec2& pt3, Registration reg = CENTER);
-		void ellipse(float x, float y, float z, float w, float h, Registration reg = CENTER); 
+		void ellipse(float x, float y, float z, float w, float h, Registration reg = CENTER);
 		void ellipse(float x, float y, float w, float h, Registration reg = CENTER);
 		void ellipse(float r0, float r1, Registration reg = CENTER);
 		void ellipse(float r, Registration reg = CENTER);
@@ -502,7 +502,7 @@ namespace ijg {
 		* Includes optional shadowing implementation, using
 		* double pass with shadow map framebuffer.
 		*/
-		virtual void render(int x = 0, int y = 0, int scaleFactor = 1); 
+		virtual void render(int x = 0, int y = 0, int scaleFactor = 1);
 
 		// begin save functions
 		void save(std::string name = "img", int scaleFactor = 1);
@@ -537,22 +537,22 @@ namespace ijg {
 
 	// inline methods
 
-	inline void ProtoBaseApp::setFrameRate(float frameRate){
+	inline void ProtoBaseApp::setFrameRate(float frameRate) {
 		this->frameRate = frameRate;
 	}
-	inline void ProtoBaseApp::setFrameCount(float frameCount){
+	inline void ProtoBaseApp::setFrameCount(float frameCount) {
 		this->frameCount = frameCount;
 	}
 
-	inline float ProtoBaseApp::getFrameRate() const{
+	inline float ProtoBaseApp::getFrameRate() const {
 		return frameRate;
 	}
-	inline int ProtoBaseApp::getFrameCount() const{
+	inline int ProtoBaseApp::getFrameCount() const {
 		return frameCount;
 	}
 
 
-	inline void ProtoBaseApp::setProjection(ProjectionType projType, float viewAngle, float aspect, float nearDist, float farDist){
+	inline void ProtoBaseApp::setProjection(ProjectionType projType, float viewAngle, float aspect, float nearDist, float farDist) {
 		//if (projType == PERSPECTIVE){
 		//	ctx->setProjectionMatrix(glm::perspective(viewAngle, aspect, nearDist, farDist));
 		//	//P = glm::frustum(left, right, bottom, top, nearDist, farDist);
@@ -567,16 +567,16 @@ namespace ijg {
 	}
 
 	// perspective projection
-	inline void ProtoBaseApp::setViewAngle(float viewAngle){
+	inline void ProtoBaseApp::setViewAngle(float viewAngle) {
 		this->viewAngle = viewAngle;
 	}
-	inline void ProtoBaseApp::setAspectRatio(float aspectRatio){
+	inline void ProtoBaseApp::setAspectRatio(float aspectRatio) {
 		this->aspectRatio = aspectRatio;
 	}
-	inline void ProtoBaseApp::setNearDist(float nearDist){
+	inline void ProtoBaseApp::setNearDist(float nearDist) {
 		this->nearDist = nearDist;
 	}
-	inline void ProtoBaseApp::setFarDist(float farDist){
+	inline void ProtoBaseApp::setFarDist(float farDist) {
 		this->farDist = farDist;
 	}
 	inline float ProtoBaseApp::getViewAngle() {
@@ -594,16 +594,16 @@ namespace ijg {
 
 
 	// Orthogonal projection
-	inline void  ProtoBaseApp::setLeft(float left){
+	inline void  ProtoBaseApp::setLeft(float left) {
 		this->left = left;
 	}
-	inline void  ProtoBaseApp::setRight(float right){
+	inline void  ProtoBaseApp::setRight(float right) {
 		this->right = right;
 	}
-	inline void  ProtoBaseApp::setBottom(float bottom){
+	inline void  ProtoBaseApp::setBottom(float bottom) {
 		this->bottom = bottom;
 	}
-	inline void  ProtoBaseApp::setTop(float top){
+	inline void  ProtoBaseApp::setTop(float top) {
 		this->top = top;
 	}
 	inline float  ProtoBaseApp::getLeft() {
@@ -621,31 +621,31 @@ namespace ijg {
 
 	// SET 8 LEIGHTS
 	inline void ProtoBaseApp::setLight(int lightID, const Vec3& Position, const Vec3& intensity) {
-		
-			/*if (lightID < 0 || lightID > 7)
-				throw std::runtime_error("Maximum light count is 8. Use index values 0-7");*/
 
-			try
+		/*if (lightID < 0 || lightID > 7)
+			throw std::runtime_error("Maximum light count is 8. Use index values 0-7");*/
+
+		try
+		{
+			if (lightID < 0 || lightID > 7)
 			{
-				if (lightID < 0 || lightID > 7)
-				{
-					lightID = 0; // set to 0
-					throw lightID;
-				}
-				ctx->setLight(lightID, Position, intensity);
+				lightID = 0; // set to 0
+				throw lightID;
 			}
-			catch (int id)
-			{
-				std::cout << "Exception: Light index value " << id << " is out of range. Value \'0\' will be used. Legal values are 0-7. \n";
-				//std::cout << "ENTER to continue\n";
-				//int opt;
-				//std::cin >> opt;
-				//// add condition a code
-				//if (opt == std::cin.get()){
-				//	return;
-				//}
-				
-			}
+			ctx->setLight(lightID, Position, intensity);
+		}
+		catch (int id)
+		{
+			std::cout << "Exception: Light index value " << id << " is out of range. Value \'0\' will be used. Legal values are 0-7. \n";
+			//std::cout << "ENTER to continue\n";
+			//int opt;
+			//std::cin >> opt;
+			//// add condition a code
+			//if (opt == std::cin.get()){
+			//	return;
+			//}
+
+		}
 
 	}
 
@@ -653,11 +653,11 @@ namespace ijg {
 		this->areShadowsOn = areShadowsOn;
 	}
 
-	inline void ProtoBaseApp::shadowsOn(){
+	inline void ProtoBaseApp::shadowsOn() {
 		areShadowsEnabled = true;
 	}
 
-	inline void ProtoBaseApp::shadowOff(){
+	inline void ProtoBaseApp::shadowOff() {
 		areShadowsEnabled = false;
 	}
 
@@ -683,7 +683,13 @@ namespace ijg {
 #define LINES ProtoGeom3::LINES // not used yet
 #define SURFACE ProtoGeom3::SURFACE
 
-	// make this intuitive
+// Spline curve type
+#define UNIFORM ProtoSpline3::UNIFORM
+#define CENTRIPETAL ProtoSpline3::CENTRIPETAL
+#define CHORDAL ProtoSpline3::CHORDAL
+
+
+// make this intuitive
 #define arcBallBegin arcballBegin
 #define arcBallEnd arcballEnd
 #define beginArcball arcballBegin

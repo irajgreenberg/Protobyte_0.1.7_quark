@@ -179,6 +179,8 @@ namespace ijg {
 
 
 	public:
+
+
 		// constructors
 
 		ProtoCurve3();
