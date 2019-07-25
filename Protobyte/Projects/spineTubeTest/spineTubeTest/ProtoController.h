@@ -31,10 +31,11 @@ public:
 	void onResized();
 	void onClosed();
 
-	int count{ 8 };
-	std::vector<Vec3> pts;
-	Spline s;
-	Tube tube;
+	int tubeCount{ 9 };
+	int pointCount{ 20 };
+	std::vector< std::vector<Vec3>> pts2D;
+	std::vector<Spline> splines;
+	std::vector <Tube> tubes;
 
 };
 
