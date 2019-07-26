@@ -15,7 +15,7 @@ void ProtoController::init() {
 		float x{ 0 }, y{ 0 }, z{ 0 };
 		float t1{ 0 };
 		float r1{ random(20, 50) };
-		Vec loc(random(-15, 15), random(-5, 5), random(-15, 15));
+		Vec loc(random(-35, 35), random(-5, 5), random(-35, 35));
 		for (int j = 0; j < pointCount; j++) {
 			float x = sin(t1) * r1 * random(3);
 			float y = ht/2 - step*j + random(-3, 3);
@@ -25,9 +25,9 @@ void ProtoController::init() {
 			r1 *= .9;
 		}
 		splines.push_back(Spline(pts2D.at(i), 4, false, CHORDAL));
-		tubes.push_back(Tube(splines.at(i), 1, 24, false, "STG_Flesh/Diffuse_Maps/STG_Flesh_27-diffuse.jpg"));
+		tubes.push_back(Tube(splines.at(i), random(1, 5), 24, false, "STG_Flesh/Diffuse_Maps/STG_Flesh_27-diffuse.jpg"));
 		tubes.at(i).setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::LINEAR, Tup2f{ 2, 20 }, random(1, 12)));
-		tubes.at(i).setPerturbation({ random(5) });
+		tubes.at(i).setPerturbation({ random(2) });
 		//tube.setColor({ .1, 0, 0, 1 });
 		tubes.at(i).setDiffuseMaterial(1);
 		tubes.at(i).setAmbientMaterial(0.05f);
