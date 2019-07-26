@@ -14,28 +14,42 @@ void ProtoController::init() {
 		pts2D.push_back(v);
 		float x{ 0 }, y{ 0 }, z{ 0 };
 		float t1{ 0 };
-		float r1{ random(20, 50) };
-		Vec loc(random(-35, 35), random(-5, 5), random(-35, 35));
+		float r1{ random(15, 45) };
+		Vec loc(cos(random(TWO_PI)) * random(25, 85), random(-15, 15), sin(random(TWO_PI)) * random(25, 85));
+		ht = random(400, 500);
 		for (int j = 0; j < pointCount; j++) {
-			float x = sin(t1) * r1 * random(3);
-			float y = ht/2 - step*j + random(-3, 3);
-			float z = cos(t1 * random(2, 6)) * r1*random(3);
-			pts2D.at(i).push_back(Vec3(x, y, z)+loc);
-			t1 += PI / 2 ;
-			r1 *= .9;
+			float x = y = z = 0.0;
+			int toggle = static_cast<int>(random(8));
+			if (toggle % 8 == 0) {
+				x = loc.x + cos(t1) * -r1 * random(3);
+				y = loc.y + ht / 2 - step * j + random(-3, 3);
+				z = loc.z + sin(t1 * random(2, 6)) * -r1 * random(3);
+			}
+			else {
+				x = loc.x + sin(t1) * r1 * random(3);
+				y = loc.y + ht / 2 - step * j + random(-3, 3);
+				z = loc.z + cos(t1 * random(2, 6)) * r1 * random(3);
+			}
+
+			pts2D.at(i).push_back(Vec3(x, y, z));
+			t1 += PI / 2;
+			r1 *= random(.95, .99);
+			//trace("r1 = ", r1);
 		}
-		splines.push_back(Spline(pts2D.at(i), 4, false, CHORDAL));
-		tubes.push_back(Tube(splines.at(i), random(1, 5), 24, false, "STG_Flesh/Diffuse_Maps/STG_Flesh_27-diffuse.jpg"));
-		tubes.at(i).setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::LINEAR, Tup2f{ 2, 20 }, random(1, 12)));
-		tubes.at(i).setPerturbation({ random(2) });
+		splines.push_back(Spline(pts2D.at(i), 8, false, CHORDAL));
+		int textureIndex = static_cast<int>(random(6));
+		std::string randTexture = textures.at(textureIndex);
+		tubes.push_back(Tube(splines.at(i), random(1, 2), 30, false, randTexture));
+		tubes.at(i).setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::LINEAR, Tup2f{ 0, random(15, 25) }, random(1)));
+		tubes.at(i).setPerturbation({ random(random(2)) });
 		//tube.setColor({ .1, 0, 0, 1 });
 		tubes.at(i).setDiffuseMaterial(1);
 		tubes.at(i).setAmbientMaterial(0.05f);
-		//tube.setBumpMap("STG_Flesh/Normal_Maps/STG_Flesh_27-normal.jpg", .1f);
-		tubes.at(i).loadBumpMapTexture("vascular3_normal2.jpg");
-		tubes.at(i).setTextureScale({ 1, .1f});
+		tubes.at(i).setBumpMap("STG_Flesh/Normal_Maps/STG_Flesh_27-normal.jpg", .5f);
+		//tubes.at(i).loadBumpMapTexture("vascular3_normal2.jpg");
+		tubes.at(i).setTextureScale({ 1, .05f});
 		tubes.at(i).setSpecularMaterial(1);
-		tubes.at(i).setShininess(68);
+		tubes.at(i).setShininess(34);
 	}
 
 
@@ -73,7 +87,7 @@ void ProtoController::display() {
 	background(127);
 	beginArcBall();
 	//push();
-	scale(2);
+	scale(1.65);
 	//s.displayControlPts(7, { 0 });
 	////s.display(1, { 200, 200, 0, 1 });
 	//s.displayFrenetFrames(5);
@@ -93,6 +107,7 @@ void ProtoController::display() {
 
 // Key and Mouse Events
 void ProtoController::keyPressed() {
+	save("handForm.jpg", 4);
 }
 
 void ProtoController::mousePressed() {

@@ -364,8 +364,8 @@ void ProtoTube::calcVerts() {
 
 	// NOTE: ff and vecs are not the same size
 	ff = path.getFrenetFrames();
-	trace("****Frenet Frames length = ", ff.size());
-	trace("****path length = ", path.getVertsLength());
+	//trace("****Frenet Frames length = ", ff.size());
+	//trace("****path length = ", path.getVertsLength());
 	std::vector<Vec3f> vecs = path.getVerts();
 	frenetFrameLength = static_cast<int>(ff.size());
 	

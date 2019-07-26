@@ -77,7 +77,7 @@ void ProtoFrenetFrame::init() {
 
 	// Used for 1st deriviatve 
 	Vec3f vel = v1 - v0;
-	trace("vel = ", vel);
+	//trace("vel = ", vel);
 	vel.normalize();
 
 	TNB.resize(3);

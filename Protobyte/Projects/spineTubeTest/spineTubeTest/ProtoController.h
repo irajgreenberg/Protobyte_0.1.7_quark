@@ -31,11 +31,19 @@ public:
 	void onResized();
 	void onClosed();
 
-	int tubeCount{ 9 };
-	int pointCount{ 20 };
+	int tubeCount{ 24 };
+	int pointCount{ 30 };
 	std::vector< std::vector<Vec3>> pts2D;
 	std::vector<Spline> splines;
 	std::vector <Tube> tubes;
+	std::vector<std::string> textures {
+		"jellySkin.jpg", 
+		"meat01.jpg", 
+		"humanSkin02.jpg", 
+		"vascular.jpg", 
+		"STG_Flesh//Diffuse_Maps//STG_Flesh_27-diffuse.jpg", 
+		"STG_Flesh//Diffuse_Maps//STG_Flesh_22-diffuse.jpg" 
+	};
 
 };
 
