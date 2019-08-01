@@ -731,4 +731,7 @@ namespace ijg {
 //	glViewport(0, 0, width, height);
 //}
 
+
+// Key codes
+
 #endif /* defined(PROTO_BASEAPP_H) */

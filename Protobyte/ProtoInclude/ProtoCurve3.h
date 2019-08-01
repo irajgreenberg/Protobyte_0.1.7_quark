@@ -211,14 +211,14 @@ namespace ijg {
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayControlPts(float pointSize = 10,
-			Col4 strokeCol = { 1.0f, 0.0f, 0.0f, 1.0f }) = 0;
+		virtual void displayControlPts(float pointSize = 5,
+			Col4 strokeCol = { 1.0f, 0.0f, 1.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayInterpolatedPts(float pointSize = 2, Col4
-			strokeCol = { 0.0f, 0.0f, 1.0f, 1.0f }) = 0;
+		virtual void displayInterpolatedPts(float pointSize = 4, Col4
+			strokeCol = { 0.0f, 0.5f, .5f, 1.0f }) = 0;
 
 		/**
 		 * Create Frenet Frames using v-1, v, v+1.
@@ -228,8 +228,8 @@ namespace ijg {
 		/**
 		 * Draw the Frenet Frame.
 		 */
-		virtual  void displayFrenetFrames(float length = 25,
-			float strokeWeight = 4,
+		virtual  void displayFrenetFrames(float length = 15,
+			float strokeWeight = 2,
 			Col4f TCol = { 1.0f, 0.0f, 0.0f, 1.0f },
 			Col4f NCol = { 0.0f, 0.0f, 1.0f, 1.0f },
 			Col4f BCol = { 0.0f, 1.0f, 0.0f, 1.0f }) = 0;
@@ -245,6 +245,11 @@ namespace ijg {
 		 * Returns length of the points std::vector (pts between control points).
 		 */
 		int getInterpolatedPtsCount();
+
+		/**
+		 * get reference to the interpolated points along curve.
+		 */
+		const std::vector<Vec3f>& getInterpolatedPts() const;
 
 
 		/**
@@ -361,6 +366,10 @@ namespace ijg {
 	inline const std::vector<ProtoFrenetFrame>& ProtoCurve3::getFrenetFrames() const
 	{
 		return frenetFrames;
+	}
+
+	inline  const std::vector<Vec3f>& ProtoCurve3::getInterpolatedPts() const {
+		return interpolatedPts;
 	}
 
 

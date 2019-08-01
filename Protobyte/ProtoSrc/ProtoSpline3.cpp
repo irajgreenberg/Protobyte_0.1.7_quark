@@ -122,6 +122,7 @@ void ProtoSpline3::init() {
 		float t1 = getKnot(t0, p0, p1);
 		float t2 = getKnot(t1, p1, p2);
 		float t3 = getKnot(t2, p2, p3);
+		Vec past{};
 		for (float t = t1; t < t2; t += ((t2 - t1) / interpolatedPtsCount)) {
 			Vec3f a1 = (t1 - t) / (t1 - t0) * p0 + (t - t0) / (t1 - t0) * p1;
 			Vec3f a2 = (t2 - t) / (t2 - t1) * p1 + (t - t1) / (t2 - t1) * p2;
@@ -131,8 +132,19 @@ void ProtoSpline3::init() {
 			Vec3f b2 = (t3 - t) / (t3 - t1) * a2 + (t - t1) / (t3 - t1) * a3;
 
 			Vec3f c = (t2 - t) / (t2 - t1) * b1 + (t - t1) / (t2 - t1) * b2;
-			//trace("c = ", c);
+			
+			trace("c = ", c);
+			/*if(c != verts.at(verts.size()-2))
 			verts.push_back(c);
+			past = c;*/
+			trace("dist = ", c.dist(verts.at(verts.size()-2)));
+			/*if (
+				trace("hello");*/
+
+			if (past != c)
+			verts.push_back(c);
+
+			past = c;
 		}
 	}
 
@@ -472,21 +484,6 @@ void ProtoSpline3::parallelTransport() {
 
 
 	for (int i = 1; i < verts.size(); i++) {
-		//if (i == 0) {
-		//	//cp0 = verts[verts.size() - 1];
-		//	cp0 = verts.at(i);
-		//	cp1 = verts.at(i);
-		//	cp2 = verts.at(i + 1);
-
-		//}
-		//else if (i == verts.size() - 1) {
-		//	cp0 = verts.at(i - 1);
-		//	cp1 = verts.at(i);
-		//	cp2 = verts.at(i); // 0, circled back here? changed to i
-
-		//}
-		//else {
-		//}
 
 		if (i == 0) {
 			//cp0 = verts[verts.size() - 1];
@@ -543,6 +540,8 @@ void ProtoSpline3::parallelTransport() {
 	//  std::cout << "tans.size() = " << tans.size() << std::endl;
 	for (int i = 0; i < tans.size() - 1; i++) {
 		if (biNorm.mag() == 0) {
+			trace("binorm mag = 0");
+
 			nextNorm = norm;
 			//frenetFrames.push_back(FrenetFrame(verts.at(i), Vec3f(1,1,1), Vec3f(1,1,1), Vec3f(1,1,1)));
 			// std::cout << "norm = " << norm << std::endl;
