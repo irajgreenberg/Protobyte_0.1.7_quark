@@ -31,11 +31,11 @@ public:
 	void onResized();
 	void onClosed();
 
-	int tubeCount{ 1 };
-	float tubeDetail{ 12 };
+	int tubeCount{ 2 };
+	float tubeDetail{ 24 };
 	int pointCount{ 12 };
-	int splineInterpCount{ 3 };
-	std::vector< std::vector<Vec3>> pts2D;
+	int splineInterpCount{ 12 };
+	
 	std::vector<Spline> splines;
 	std::vector <Tube> tubes;
 	std::vector<std::string> textures{

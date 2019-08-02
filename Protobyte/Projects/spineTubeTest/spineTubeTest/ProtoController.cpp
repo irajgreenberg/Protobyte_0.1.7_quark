@@ -97,9 +97,9 @@ void ProtoController::display() {
 
 	for (int i = 0; i < tubeCount; i++) {
 
-		for (int j = 0; j < pointCount; j++) {
+		//for (int j = 0; j < pointCount; j++) {
 			tubes.at(i).display();
-		}
+		//}
 	}
 	endArcBall();
 

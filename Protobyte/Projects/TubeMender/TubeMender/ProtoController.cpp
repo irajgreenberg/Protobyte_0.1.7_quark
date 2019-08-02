@@ -9,6 +9,7 @@ void ProtoController::init() {
 	float ht{ 500 };
 	int step = ht / pointCount;
 	for (int i = 0; i < tubeCount; i++) {
+		std::vector< std::vector<Vec3>> pts2D;
 		std::vector<Vec> v;
 		pts2D.push_back(v);
 		float x{ 0 }, y{ 0 }, z{ 0 };
@@ -30,6 +31,9 @@ void ProtoController::init() {
 				z = loc.z + cos(t1 * random(2, 6)) * r1 * random(3);
 			}
 
+			x = random(-getWidth() /5, getWidth()/5);
+			y = random(-getHeight() / 5, getHeight() / 5);
+			z = random(-300, 300);
 			pts2D.at(i).push_back(Vec3(x, y, z));
 			
 			t1 += PI / 2;
@@ -41,7 +45,11 @@ void ProtoController::init() {
 		int textureIndex = static_cast<int>(random(6));
 		std::string randTexture = textures.at(textureIndex);
 		tubes.push_back(Tube(splines.at(i), random(1, 2), tubeDetail, false, randTexture));
-		tubes.at(i).setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::LINEAR, Tup2f{ 0, random(15, 25) }, random(1)));
+		//tubes.at(i).setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::LINEAR, Tup2f{ 0, random(15, 25) }, random(5)));
+
+		tubes.at(i).setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, Tup2f{ 8, random(15, 40) }, 5));
+
+
 		tubes.at(i).setPerturbation({ random(random(2)) });
 		//tube.setColor({ .1, 0, 0, 1 });
 		tubes.at(i).setDiffuseMaterial(1);
@@ -56,12 +64,10 @@ void ProtoController::init() {
 		// HUH?
 		/*std::vector<Vec3> tempPts = splines.at(i).getInterpolatedPts();*/
 
-		std::vector<Vec3> tempPts = splines.at(i).getVerts();
-
-
+	/*	std::vector<Vec3> tempPts = splines.at(i).getVerts();
 		for (Vec3 v : tempPts) {
 			trace("v = ", v);
-		}
+		}*/
 		
 	}
 
@@ -100,7 +106,7 @@ void ProtoController::display() {
 	background(127);
 	beginArcBall();
 	//push();
-	scale(1.65);
+	scale(1.25);
 	//s.displayControlPts(7, { 0 });
 	////s.display(1, { 200, 200, 0, 1 });
 	//s.displayFrenetFrames(5);
@@ -108,14 +114,18 @@ void ProtoController::display() {
 	//tube.display();
 	//pop();
 	push();
-	translate(-250, 0, 0);
-	for (int i = 0; i < tubeCount; i++) {
-		for (int j = 0; j < pointCount; j++) {
+	//translate(-250, 0, 0);
+	//for (int i = 0; i < tubeCount; i++) {
+	//	for (int j = 0; j < pointCount; j++) {
+	//		tubes.at(i).display();
+	//	}
+	//}
+
+	for (int i = 0; i < tubes.size(); i++) {
 			tubes.at(i).display();
-		}
 	}
 	pop();
-	push();
+	/*push();
 	translate(-150, 0, 0);
 	for (int i = 0; i < tubeCount; i++) {
 		for (int j = 0; j < pointCount; j++) {
@@ -158,7 +168,7 @@ void ProtoController::display() {
 			splines.at(i).displayFrenetFrames(15, 1);
 		}
 	}
-	pop();
+	pop();*/
 
 
 	endArcBall();

@@ -122,8 +122,9 @@ void ProtoSpline3::init() {
 		float t1 = getKnot(t0, p0, p1);
 		float t2 = getKnot(t1, p1, p2);
 		float t3 = getKnot(t2, p2, p3);
-		Vec past{};
+		//Vec past{};
 		for (float t = t1; t < t2; t += ((t2 - t1) / interpolatedPtsCount)) {
+			static int cntr = 0;
 			Vec3f a1 = (t1 - t) / (t1 - t0) * p0 + (t - t0) / (t1 - t0) * p1;
 			Vec3f a2 = (t2 - t) / (t2 - t1) * p1 + (t - t1) / (t2 - t1) * p2;
 			Vec3f a3 = (t3 - t) / (t3 - t2) * p2 + (t - t2) / (t3 - t2) * p3;
@@ -132,19 +133,23 @@ void ProtoSpline3::init() {
 			Vec3f b2 = (t3 - t) / (t3 - t1) * a2 + (t - t1) / (t3 - t1) * a3;
 
 			Vec3f c = (t2 - t) / (t2 - t1) * b1 + (t - t1) / (t2 - t1) * b2;
-			
-			trace("c = ", c);
-			/*if(c != verts.at(verts.size()-2))
-			verts.push_back(c);
-			past = c;*/
-			trace("dist = ", c.dist(verts.at(verts.size()-2)));
-			/*if (
-				trace("hello");*/
 
-			if (past != c)
-			verts.push_back(c);
-
-			past = c;
+			if (cntr++ > 1) {
+				// ensure no duplilcate points
+				std::vector<Vec3>::iterator it = verts.end() - 1;
+				if (c.dist(*it)< 1) {
+					trace("Match found: duplicate point skipped");
+					/*trace("*it = ", *it);
+					trace("c = ", c);*/
+				}
+				else {
+					verts.push_back(c);
+				}
+			}
+			// ensure first point included
+			else {
+				verts.push_back(c);
+			}
 		}
 	}
 
