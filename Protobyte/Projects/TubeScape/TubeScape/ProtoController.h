@@ -31,6 +31,10 @@ public:
 	void onResized();
 	void onClosed();
 
+	int tubeCount{ 1 };
+	std::vector<Spline3> splines;
+	std::vector<Tube> tubes;
+
 };
 
 #endif //__PROTOCONTROLLER_H__
