@@ -35,6 +35,9 @@ public:
 	std::vector<Spline3> splines;
 	std::vector<Tube> tubes;
 
+	int blockCount{ 900 };
+	std::vector<ProtoBlock> geoScape;
+
 };
 
 #endif //__PROTOCONTROLLER_H__
