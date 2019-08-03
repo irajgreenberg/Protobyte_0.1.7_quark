@@ -35,8 +35,12 @@ public:
 	std::vector<Spline3> splines;
 	std::vector<Tube> tubes;
 
-	int blockCount{ 900 };
+	int blockCount{ 3000 };
 	std::vector<ProtoBlock> geoScape;
+
+	std::vector<Vec> pos;
+	std::vector<Dim3> sz;
+	GroundPlane plane;
 
 };
 

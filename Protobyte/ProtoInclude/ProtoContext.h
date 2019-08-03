@@ -37,6 +37,7 @@ This class is part of the group common (update)
 #include <stack>
 #include <memory>
 
+#include "ProtoDimension3.h"
 #include "ProtoVector3.h"
 #include "ProtoVector4.h"
 #include "ProtoShader.h"
@@ -272,7 +273,8 @@ namespace ijg {
 		void rotate(float angle, const Vec3f& rXYZ);
 		void scale(float s);
 		void scale(float sx, float sy, float sz);
-		void scale(const Vec3f& sXYZ);
+		void scale(const Vec3f& xyz);
+		void scale(const Dim3& whd);
 		
 		//implements transform matrix stack
 		void concat();

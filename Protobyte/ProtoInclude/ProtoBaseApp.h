@@ -293,7 +293,8 @@ namespace ijg {
 		void rotate(float angle, const Vec3f& rXYZ);
 		void scale(float s);
 		void scale(float sx, float sy, float sz);
-		void scale(const Vec3f& sXYZ);
+		void scale(const Vec3f& xyz);
+		void scale(const Dim3f& whd);
 		//implements transform matrix stack
 		void push();
 		void pop();

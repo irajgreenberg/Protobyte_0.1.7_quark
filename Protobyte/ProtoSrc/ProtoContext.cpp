@@ -141,8 +141,12 @@ void ProtoContext::scale(float sx, float sy, float sz){
 	model = glm::scale(model, glm::vec3(sx, sy, sz));
 	concat();
 }
-void ProtoContext::scale(const Vec3f& sXYZ){
-	model = glm::scale(model, glm::vec3(sXYZ.x, sXYZ.y, sXYZ.z));
+void ProtoContext::scale(const Vec3f& xyz){
+	model = glm::scale(model, glm::vec3(xyz.x, xyz.y, xyz.z));
+	concat();
+}
+void ProtoContext::scale(const Dim3f& whd) {
+	model = glm::scale(model, glm::vec3(whd.w, whd.h, whd.d));
 	concat();
 }
 

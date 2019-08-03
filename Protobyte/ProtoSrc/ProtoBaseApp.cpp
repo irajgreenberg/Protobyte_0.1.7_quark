@@ -92,7 +92,7 @@ void ProtoBaseApp::_init() {
 	//float aspect = float(width) / float(height);
 	aspectRatio = float(getWidth()) / float(getHeight());
 	nearDist = 0.1f;
-	farDist = 3000.0f;
+	farDist = 10000.0f;
 	// perspective
 	ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
 
@@ -3334,8 +3334,12 @@ void ProtoBaseApp::scale(float sx, float sy, float sz) {
 	ctx->scale(sx, sy, sz);
 }
 
-void ProtoBaseApp::scale(const Vec3f& sXYZ) {
-	ctx->scale(sXYZ);
+void ProtoBaseApp::scale(const Vec3f& xyz) {
+	ctx->scale(xyz);
+}
+
+void ProtoBaseApp::scale(const Dim3f& whd) {
+	ctx->scale(whd);
 }
 
 void ProtoBaseApp::push() {

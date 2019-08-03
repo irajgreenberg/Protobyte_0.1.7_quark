@@ -6,8 +6,8 @@ Ira Greenberg 2019
 #include "ProtoController.h"
 
 void ProtoController::init() {
-
-	setLight(0, { 900, 0, 400 }, { 1, 1, 1 });
+	shadowsOn();
+	setLight(0, { -400, -200, 500 }, { 1, 1, 1 });
 	float theta{ 0.0f }, theta2{ 0 };
 	float r{ 240.0f };
 	//float theta2{ 0 };
@@ -44,21 +44,38 @@ void ProtoController::init() {
 	//	tubes.at(i).setShininess(125);
 	//}
 
+	plane = GroundPlane(Vec{0}, Vec{0}, Dim2f{},Col4{ 1, 1, 1, 1},10, 10);
+	plane.setDiffuseMaterial(1);
+	plane.setSpecularMaterial(1);
+	plane.setShininess(15);
 	for (int i = 0; i < blockCount; i++) {
+		pos.push_back(Vec(random(-getWidth()*1.5, getWidth()*1.5),
+			0,
+			random(-4500)
+		));
+		float h{};
+		if (i % 27 == 0) { 
+			h = random(425, 795); 
+		}
+		else if (i % 329 == 0) {
+			h = random(900, 1200);
+		} else {
+			h = random(2, 290);
+		}
+		sz.push_back(Dim3(
+			random(30, 60),
+			h,
+			random(30, 60)
+		));
+	}
+
+	for (int i = 0; i < 1; i++) {
 		geoScape.push_back(
 			Block(
-				Vec(random(-getWidth() / 16, getWidth() / 16),
-					0,
-					random(-100, 100)
-				),
 				{},
-				Dim3(
-					random(3, 9),
-					random(3, 25),
-					random(3, 9)
-				),
-				Col4(0,0,0, 1),
-				"STG_Flesh/Diffuse_Maps/STG_Flesh_27-diffuse.jpg")
+				{},
+				{},
+				Col4(.2, .2, .2, 1))
 		);
 
 		//	tubes.push_back(Tube(splines.at(i), 8, 18, false, "STG_Flesh/Diffuse_Maps/STG_Flesh_27-diffuse.jpg"));
@@ -66,12 +83,12 @@ void ProtoController::init() {
 		//geoScape.at(i).setPerturbation({ random(3.2), random(1.5), random(1.2) });
 		//geoScape.at(i).setColor({ .1, 0, 0, 1 });
 		geoScape.at(i).setDiffuseMaterial(1);
-		geoScape.at(i).setAmbientMaterial(0.05f);
+		geoScape.at(i).setAmbientMaterial(0.0f);
 		//geoScape.at(i).setBumpMap("STG_Flesh/Normal_Maps/STG_Flesh_27-normal.jpg", .1f);
 		//geoScape.at(i).loadBumpMapTexture("vascular3_normal2.jpg");
 		geoScape.at(i).setTextureScale({ 1.0f, 1.0f });
 		geoScape.at(i).setSpecularMaterial(1);
-		geoScape.at(i).setShininess(20);
+		geoScape.at(i).setShininess(70);
 
 	}
 
@@ -81,17 +98,23 @@ void ProtoController::run() {
 }
 
 void ProtoController::display() {
-	background(1, 1, 0);
+	background(0);
 	arcBallBegin();
 	
-	translate(0, -500, -1100);
+	push();
+	translate(0, -500, 0);
+	scale(5000, 1, 5000);
+	//rotate(PI, { 1, 0, 0 });
+	plane.display();
+	pop();
+
+	translate(0, -500, 0);
 	for (int i = 0; i < blockCount; i++) {
 		push();
-		translate(geoScape.at(i).getPosition());
-		scale(geoScape.at(i).getSize().w, geoScape.at(i).getSize().h, geoScape.at(i).getSize().d);
-		geoScape.at(i).display();
+		translate(pos.at(i));
+		scale(sz.at(i));
+		geoScape.at(0).display();
 		pop();
-
 	}
 
 
