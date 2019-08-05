@@ -706,6 +706,9 @@ namespace ijg {
 #define disableLights enable2DRendering
 #define enableLights disable2DRendering
 
+	// less typing please
+#define vect std::vector
+
 
 	// remove this old stuff
 	//#define pushMatrix glPushMatrix

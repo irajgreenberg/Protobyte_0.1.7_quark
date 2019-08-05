@@ -35,12 +35,24 @@ public:
 	std::vector<Spline3> splines;
 	std::vector<Tube> tubes;
 
-	int blockCount{ 3000 };
+	int blockCount{ 2000 };
 	std::vector<ProtoBlock> geoScape;
 
 	std::vector<Vec> pos;
 	std::vector<Dim3> sz;
 	GroundPlane plane;
+
+	// particles and physics
+	int particleCount{ 300 };
+	vect<Vec> particles;
+	vect<Vec> speed;
+	vect<float> damping;
+	vect<float> gravity;
+	vect<float> friction;
+	bool collide(const Vec& p);
+
+
+
 
 };
 

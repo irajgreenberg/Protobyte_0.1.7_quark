@@ -6,7 +6,7 @@ Ira Greenberg 2019
 #include "ProtoController.h"
 
 void ProtoController::init() {
-	shadowsOn();
+	//shadowsOn();
 	setLight(0, { -400, -200, 500 }, { 1, 1, 1 });
 	float theta{ 0.0f }, theta2{ 0 };
 	float r{ 240.0f };
@@ -55,17 +55,17 @@ void ProtoController::init() {
 		));
 		float h{};
 		if (i % 27 == 0) { 
-			h = random(425, 795); 
+			h = random(625, 1295); 
 		}
 		else if (i % 329 == 0) {
-			h = random(900, 1200);
+			h = random(900, 2600);
 		} else {
-			h = random(2, 290);
+			h = random(2, 490);
 		}
 		sz.push_back(Dim3(
-			random(30, 60),
+			random(60, 460),
 			h,
-			random(30, 60)
+			random(60, 460)
 		));
 	}
 
@@ -92,15 +92,42 @@ void ProtoController::init() {
 
 	}
 
+	// particles
+	for (int i = 0; i < particleCount; i++) {
+		particles.push_back({0, 1500, random(-1000,-200)});
+		speed.push_back({random(-4, 4), 0, random(-4, 4) });
+		gravity.push_back(-.5);
+		damping.push_back(.925);
+		friction.push_back(.965);
+	}
+
 }
 
 void ProtoController::run() {
+	for (int i = 0; i < particleCount; i++) {
+		speed.at(i).y += gravity.at(i);
+		particles.at(i) += speed.at(i);
+		if (collide(particles.at(i))) {
+			speed.at(i).y *= -1;
+		}
+	}
+
+}
+
+bool ProtoController::collide(const Vec& p) {
+	for (int i = 0; i < blockCount; i++) {
+		if (pos.at(i).dist(p) < 125) {
+			return true;
+		}
+	}
+	return false;
 }
 
 void ProtoController::display() {
 	background(0);
 	arcBallBegin();
 	
+	// ground plane
 	push();
 	translate(0, -500, 0);
 	scale(5000, 1, 5000);
@@ -108,6 +135,7 @@ void ProtoController::display() {
 	plane.display();
 	pop();
 
+	// geometric block
 	translate(0, -500, 0);
 	for (int i = 0; i < blockCount; i++) {
 		push();
@@ -117,6 +145,18 @@ void ProtoController::display() {
 		pop();
 	}
 
+	// particles
+	for (int i = 0; i < particleCount; i++) {
+		push();
+		translate(particles.at(i));
+		strokeWeight(5);
+		stroke(1, .5, 0, 1);
+		point(0, 0, 0);
+		pop();
+		/*gravity.push_back(-.03);
+		damping.push_back(.925);
+		friction.push_back(.965);*/
+	}
 
 	arcBallEnd();
 }
