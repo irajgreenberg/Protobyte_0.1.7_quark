@@ -145,6 +145,7 @@
      <!-- ClCompile Include="..\..\..\ProtoSrc\ProtoJuncusEffusus.cpp" -->
     <ClCompile Include="..\..\..\ProtoSrc\ProtoLight.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoMath.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoParticle.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoPath2.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoPath3.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoPlane.cpp" />
@@ -199,6 +200,7 @@
     <ClInclude Include="..\..\..\ProtoInclude\ProtoMatrix2.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoMatrix3.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoMatrix4.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoParticle.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoPath2.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoPath3.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoPlane.h" />
