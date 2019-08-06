@@ -31,6 +31,7 @@
 #include "ProtoVector2.h"
 #include "ProtoVector3.h"
 #include "ProtoParticle.h"
+#include "ProtoParticleSystem.h"
 #include "ProtoCylinder.h"
 #include "ProtoToroid.h"
 #include "ProtoSpline3.h"
