@@ -155,10 +155,16 @@
     <ClCompile Include="..\..\..\ProtoSrc\ProtoVertex3.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ProtoSrc\ProtoParticle.cpp">
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoParticleSystem.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\ProtoSrc\ProtoParticleSystem.cpp">
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoCollider.cpp">
+      <Filter>ProtoLib\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoEmitter.cpp">
+      <Filter>ProtoLib\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoParticle.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
   </ItemGroup>
@@ -348,10 +354,16 @@
     <ClInclude Include="..\..\..\ProtoInclude\ProtoVertex3.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ProtoInclude\ProtoParticle.h">
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoParticleSystem.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\ProtoInclude\ProtoParticleSystem.h">
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoCollider.h">
+      <Filter>ProtoLib\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoEmitter.h">
+      <Filter>ProtoLib\.h</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoParticle.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
   </ItemGroup>

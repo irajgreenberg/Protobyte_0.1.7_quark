@@ -41,6 +41,9 @@
     <ClCompile Include="..\..\..\ProtoSrc\ProtoCilia.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoCollider.cpp">
+      <Filter>ProtoLib\.cpp</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\ProtoSrc\ProtoContext.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
@@ -51,6 +54,9 @@
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\ProtoSrc\ProtoEllipse.cpp">
+      <Filter>ProtoLib\.cpp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoEmitter.cpp">
       <Filter>ProtoLib\.cpp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\ProtoSrc\ProtoException.cpp">
@@ -183,6 +189,9 @@
     <ClInclude Include="..\..\..\ProtoInclude\ProtoCilia.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
+     <ClInclude Include="..\..\..\ProtoInclude\ProtoCollider.h">
+      <Filter>ProtoLib\.h</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\..\ProtoInclude\ProtoColor3.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
@@ -208,6 +217,9 @@
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\ProtoInclude\ProtoEllipse.h">
+      <Filter>ProtoLib\.h</Filter>
+    </ClInclude>
+	<ClInclude Include="..\..\..\ProtoInclude\ProtoEmitter.h">
       <Filter>ProtoLib\.h</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\ProtoInclude\ProtoException.h">

@@ -31,6 +31,7 @@ using namespace ijg;
 
 
 ProtoParticle::ProtoParticle(){
+	ProtoContext::getContext();
 }
 
 ProtoParticle::ProtoParticle(const Vec& position) :
@@ -53,6 +54,10 @@ ProtoParticle::ProtoParticle(const Vec& position, float radius, const std::strin
 	position(position), radius(radius), icon(icon) {
 }
 
+void ProtoParticle::init() {
+	context = ProtoContext::getContext();
+
+}
 
 void ProtoParticle::move() {
 	position += speed;
@@ -60,10 +65,9 @@ void ProtoParticle::move() {
 }
 
 void ProtoParticle::display() {
-	ProtoContext::getContext()->push();
-	ProtoContext::getContext()->translate(position);
-	ProtoContext::getContext()->pop();
-
+	context->push();
+	context->translate(position);
+	context->pop();
 }
 //void ProtoParticle::collide() {
 //

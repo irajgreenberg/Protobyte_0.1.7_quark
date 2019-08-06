@@ -1,5 +1,4 @@
 #pragma once
-// NOTE: something is screwy with my overloaded ops (Need to FIX)
 
 /*!  \brief  PROTO_PARTICLE.h: Base Physics class (perhaps)
  ProtoParticle.h
@@ -28,16 +27,18 @@
 #ifndef PROTO_PARTICLE_H
 #define PROTO_PARTICLE_H
 
-#include "ProtoCore.h"
-#include <string.h>
-#include <iostream>
-#include <vector>
-#include "ProtoMath.h"
-#include <cmath>
-#include <cassert>
+//#include "ProtoCore.h"
+//#include <string.h>
+//#include <iostream>
+//#include <vector>
+//#include "ProtoMath.h"
+//#include <cmath>
+//#include <cassert>
 #include "ProtoVector3.h"
 #include "ProtoColor4.h"
 //#include "ProtoBaseApp.h"
+//#include <iostream>
+//#include <memory>
 #include "ProtoContext.h"
 
 
@@ -45,11 +46,14 @@ namespace ijg {
 
 	// forward declaration and namespace safe short names
 	class ProtoParticle;
-	typedef ProtoParticle Part; // common usage
 	typedef ProtoParticle Particle;
+	typedef ProtoParticle Part; // common usage
+	
+
 
 	
-	class ProtoParticle  {
+	class ProtoParticle {
+
 	public:
 		ProtoParticle();
 		ProtoParticle(const Vec& position);
@@ -80,6 +84,11 @@ namespace ijg {
 		float radius{ 0.0f };
 		Col4 col{ 0 };
 		std::string icon;
+
+		void init();
+
+		// call transformations within the class 
+		std::shared_ptr<ProtoContext> context;
 	};
 
 	//inline

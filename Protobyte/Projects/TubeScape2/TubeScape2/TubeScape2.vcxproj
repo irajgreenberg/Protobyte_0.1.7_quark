@@ -130,10 +130,12 @@
     <ClCompile Include="..\..\..\ProtoSrc\ProtoBlock.cpp" />
     <!-- ClCompile Include="..\..\..\ProtoSrc\ProtoCephalopod.cpp" -->
     <ClCompile Include="..\..\..\ProtoSrc\ProtoCilia.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoCollider.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoContext.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoCurve3.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoCylinder.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoEllipse.cpp" />
+    <ClCompile Include="..\..\..\ProtoSrc\ProtoEmitter.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoException.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoFace3.cpp" />
     <ClCompile Include="..\..\..\ProtoSrc\ProtoFrenetFrame.cpp" />
@@ -177,6 +179,7 @@
     <ClInclude Include="..\..\..\ProtoInclude\ProtoBounds.h" />
     <!-- ClInclude Include="..\..\..\ProtoInclude\ProtoCephalopod.h" -->
     <ClInclude Include="..\..\..\ProtoInclude\ProtoCilia.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoCollider.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoColor3.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoColor4.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoContext.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="..\..\..\ProtoInclude\ProtoDimension2.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoDimension3.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoEllipse.h" />
+    <ClInclude Include="..\..\..\ProtoInclude\ProtoEmitter.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoException.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoFace3.h" />
     <ClInclude Include="..\..\..\ProtoInclude\ProtoFrenetFrame.h" />

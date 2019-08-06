@@ -28,7 +28,8 @@
 #define PROTO_PARTICLE_SYSTEM_H
 
 #include "ProtoParticle.h"
-#include "ProtoBaseApp.h"
+#include "ProtoEmitter.h"
+#include "ProtoCollider.h"
 
 
 namespace ijg {
@@ -44,11 +45,14 @@ namespace ijg {
 		ProtoParticleSystem();
 		ProtoParticleSystem(int particleCount);
 		ProtoParticleSystem(int particleCount, const Particle& particle);
+
+		void init();
+		void run();
 	
 	private:
 		int particleCount{ 0 };
-		//vect<Particle> particles;
-		//std::vector<Emitter> emitters;
+		std::vector <Particle> particles;
+		std::vector <Emitter> emitters;
 
 	};
 

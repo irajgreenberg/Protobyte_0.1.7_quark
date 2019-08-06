@@ -1,9 +1,8 @@
-
-/*!  \brief  PROTO_PARTICLE_SYSTEM.h:
- ProtoParticleSystem.h
+/*!  \brief  PROTO_EMITTER.h: Emits particles for particle system
+ ProtoParticleEmitter.h
  Protobyte Library v02
 
- class Created by Ira on 8/5/19.
+ class Created by Ira on 8/6/19.
 
  Protobyte Library Copyright (c) 2013 Ira Greenberg. All rights reserved.
 
@@ -23,25 +22,11 @@
  \sa NO LINK
  */
 
-#include "ProtoParticleSystem.h"
+
+#include "ProtoEmitter.h"
 
 using namespace ijg;
 
-ProtoParticleSystem::ProtoParticleSystem() {
+ProtoEmitter::ProtoEmitter() {
 
-}
-
-ProtoParticleSystem::ProtoParticleSystem(int particleCount) {
-
-}
-
-ProtoParticleSystem::ProtoParticleSystem(int particleCount, const Particle& particle) {
-
-}
-
-
-void ProtoParticleSystem::init() {
-}
-
-void ProtoParticleSystem::run() {
 }
