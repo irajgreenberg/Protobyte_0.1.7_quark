@@ -27,16 +27,29 @@
 #ifndef PROTO_PARTICLE_SYSTEM_H
 #define PROTO_PARTICLE_SYSTEM_H
 
+#include "ProtoParticle.h"
+#include "ProtoBaseApp.h"
 
 
 namespace ijg {
 
 	// forward declaration and namespace safe short names
 	class ProtoParticleSystem;
-	typedef ProtoParticleSystem PartSystem; // common usage
+	typedef ProtoParticleSystem PartSystem; 
 	typedef ProtoParticleSystem ParticleSystem;
 
 	class ProtoParticleSystem {
+
+	public:
+		ProtoParticleSystem();
+		ProtoParticleSystem(int particleCount);
+		ProtoParticleSystem(int particleCount, const Particle& particle);
+	
+	private:
+		int particleCount{ 0 };
+		//vect<Particle> particles;
+		//std::vector<Emitter> emitters;
+
 	};
 
 }  // END ijg namespace

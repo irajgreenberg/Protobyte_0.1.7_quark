@@ -25,6 +25,7 @@
 #define Protobyte_dev_ProtoCore_h
 
 #include <iostream>
+#include <vector>
 
 
 namespace ijg {
