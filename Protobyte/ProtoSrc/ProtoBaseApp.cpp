@@ -40,7 +40,8 @@ void ProtoBaseApp::_init() {
 	shader3D.bind();
 
 	// create context and initialize
-	ctx = ProtoContext::getContext(width, height);
+	//ctx = ProtoContext::getContext(width, height);
+	ctx = ProtoContext::getContext();
 	ctx->init();
 
 	// default global ambient

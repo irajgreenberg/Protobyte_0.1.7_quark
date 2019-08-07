@@ -30,6 +30,13 @@ float ProtoContext::height{ 0.0f };
 std::shared_ptr<ProtoContext> ProtoContext::ctx = nullptr;
 
 
+const std::shared_ptr<ProtoContext> ProtoContext::getContext() {
+	if (!ProtoContext::ctx) {
+		ProtoContext::ctx = std::shared_ptr<ProtoContext>(new ProtoContext());
+	}
+	return ProtoContext::ctx;
+}
+
 const std::shared_ptr<ProtoContext> ProtoContext::getContext(float width, float height) {
 	ProtoContext::width = width;
 	ProtoContext::height = height;

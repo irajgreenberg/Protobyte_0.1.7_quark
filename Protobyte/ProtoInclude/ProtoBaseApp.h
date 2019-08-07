@@ -714,6 +714,7 @@ namespace ijg {
 #define vect std::vector
 
 
+
 	// remove this old stuff
 	//#define pushMatrix glPushMatrix
 	//#define popMatrix glPopMatrix

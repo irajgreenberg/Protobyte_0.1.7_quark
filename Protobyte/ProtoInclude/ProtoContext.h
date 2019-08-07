@@ -101,7 +101,9 @@ namespace ijg {
 
 
 	public:
-		static const std::shared_ptr<ProtoContext> getContext(float width = 1024.0f, float height = 768.0f);
+		static const std::shared_ptr<ProtoContext> getContext(); 
+		static const std::shared_ptr<ProtoContext> getContext(float width, float height);
+
 		void init();
 
 		/*** Geometry Matrices ***/

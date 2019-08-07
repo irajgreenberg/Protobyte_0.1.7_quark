@@ -31,44 +31,111 @@ using namespace ijg;
 
 
 ProtoParticle::ProtoParticle(){
-	ProtoContext::getContext();
+	init();
 }
 
 ProtoParticle::ProtoParticle(const Vec& position) :
 	position(position) {
-
+	init();
 }
 ProtoParticle::ProtoParticle(const Vec& position, float radius) :
 	position(position), radius(radius) {
-
+	init();
 }
 ProtoParticle::ProtoParticle(const Vec& position, const Col4& col) :
 	position(position), col(col) {
-
+	init();
 }
 ProtoParticle::ProtoParticle(const Vec& position, float radius, const Col4& col) :
 	position(position), radius(radius), col(col) {
+	init();
 }
 
 ProtoParticle::ProtoParticle(const Vec& position, float radius, const std::string& icon) :
 	position(position), radius(radius), icon(icon) {
+	init();
 }
 
 void ProtoParticle::init() {
-	context = ProtoContext::getContext();
+	ctx = ProtoContext::getContext();
+	partPrims[0] = 0;
+	partPrims[1] = 0;
+	partPrims[2] = 0;
+	partPrims[3] = col.r;
+	partPrims[4] = col.g;
+	partPrims[5] = col.b;
+	partPrims[6] = col.a;
 
+	
+	// vert data
+	// 1. Create and bind VAO
+	glGenVertexArrays(1, &vaoPartID); // Create VAO
+	glBindVertexArray(vaoPartID); // Bind VAO (making it active)
+
+	// 2. Create and bind VBO
+	// a. Vertex attributes vboID;
+	//GLuint vboID;
+	glGenBuffers(1, &vboPartID); // Create the buffer ID
+	glBindBuffer(GL_ARRAY_BUFFER, vboPartID); // Bind the buffer (vertex array data)
+	int vertsDataSize = sizeof(GLfloat);
+	glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &partPrims[0]); // upload the data
+
+	// fill state is true - need to create this
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	//glPolygonMode(GL_BACK, GL_FILL);
+
+	// draw rect
+	glBindBuffer(GL_ARRAY_BUFFER, vboPartID);
+
+	glEnableVertexAttribArray(0); // vertices
+	glEnableVertexAttribArray(2); // color
+	// stride is 7: pos(3) + col(4)
+	// (x, y, z, r, g, b, a)
+	int stride = 7;
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), BUFFER_OFFSET(0)); // pos
+	glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, stride * sizeof(GLfloat), BUFFER_OFFSET(12)); // col
+
+	// Disable buffers
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
 }
 
 void ProtoParticle::move() {
 	position += speed;
-
 }
 
 void ProtoParticle::display() {
-	context->push();
-	context->translate(position);
-	context->pop();
+	ctx->push();
+	ctx->translate(position);
+
+	ctx->setLightRenderingFactors({ 0.0, 0.0, 0.0, 1.0 });
+	glUniform4fv(ctx->getLightRenderingFactors_U(), 1, &ctx->getLightRenderingFactors().x);
+	
+	glBindVertexArray(vaoPartID);
+	// NOTE::this may not be most efficient - eventually refactor
+	glBindBuffer(GL_ARRAY_BUFFER, vboPartID); // Bind the buffer (vertex array data)
+
+	int partPrimCount = 7;
+	int vertsDataSize = sizeof(GLfloat) * partPrimCount;
+	glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
+	glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &partPrims[0]); // upload the data
+
+	//glDrawArrays(GL_POINTS, 0, ptPrimCount / stride);
+	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+	glPointSize(radius*2);
+	glDrawArrays(GL_POINTS, 0, 1);
+
+	ctx->setLightRenderingFactors({ 1.0, 1.0, 1.0, 0.0 });
+	glUniform4fv(ctx->getLightRenderingFactors_U(), 1, &ctx->getLightRenderingFactors().x);
+
+	// Disable VAO
+	glBindVertexArray(0);
+
+	ctx->pop();
+
 }
+
 //void ProtoParticle::collide() {
 //
 //}

@@ -36,11 +36,12 @@
 //#include <cassert>
 #include "ProtoVector3.h"
 #include "ProtoColor4.h"
-//#include "ProtoBaseApp.h"
 //#include <iostream>
 //#include <memory>
 #include "ProtoContext.h"
 
+// for offset into the FBO interleaved buffer (ugly I know!)
+#define BUFFER_OFFSET(i) ((void*)(i))
 
 namespace ijg {
 
@@ -48,9 +49,6 @@ namespace ijg {
 	class ProtoParticle;
 	typedef ProtoParticle Particle;
 	typedef ProtoParticle Part; // common usage
-	
-
-
 	
 	class ProtoParticle {
 
@@ -87,8 +85,14 @@ namespace ijg {
 
 		void init();
 
+
 		// call transformations within the class 
-		std::shared_ptr<ProtoContext> context;
+		std::shared_ptr<ProtoContext> ctx;
+
+		// For rendering 
+		int stride = 7; // for interleaved data
+		float partPrims[7];
+		GLuint vaoPartID, vboPartID;
 	};
 
 	//inline
