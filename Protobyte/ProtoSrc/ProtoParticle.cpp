@@ -30,7 +30,7 @@
 using namespace ijg;
 
 
-ProtoParticle::ProtoParticle(){
+ProtoParticle::ProtoParticle() {
 	init();
 }
 
@@ -66,7 +66,7 @@ void ProtoParticle::init() {
 	partPrims[5] = col.b;
 	partPrims[6] = col.a;
 
-	
+
 	// vert data
 	// 1. Create and bind VAO
 	glGenVertexArrays(1, &vaoPartID); // Create VAO
@@ -109,28 +109,34 @@ void ProtoParticle::display() {
 	ctx->push();
 	ctx->translate(position);
 
-	ctx->setLightRenderingFactors({ 0.0, 0.0, 0.0, 1.0 });
-	glUniform4fv(ctx->getLightRenderingFactors_U(), 1, &ctx->getLightRenderingFactors().x);
-	
-	glBindVertexArray(vaoPartID);
-	// NOTE::this may not be most efficient - eventually refactor
-	glBindBuffer(GL_ARRAY_BUFFER, vboPartID); // Bind the buffer (vertex array data)
+	// image mapped particle
+	if (isIconified) {
+	}
+	//plain vanilla particle, still lovely though
+	else {
+		ctx->setLightRenderingFactors({ 0.0, 0.0, 0.0, 1.0 });
+		glUniform4fv(ctx->getLightRenderingFactors_U(), 1, &ctx->getLightRenderingFactors().x);
 
-	int partPrimCount = 7;
-	int vertsDataSize = sizeof(GLfloat) * partPrimCount;
-	glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
-	glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &partPrims[0]); // upload the data
+		glBindVertexArray(vaoPartID);
+		// NOTE::this may not be most efficient - eventually refactor
+		glBindBuffer(GL_ARRAY_BUFFER, vboPartID); // Bind the buffer (vertex array data)
 
-	//glDrawArrays(GL_POINTS, 0, ptPrimCount / stride);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-	glPointSize(radius*2);
-	glDrawArrays(GL_POINTS, 0, 1);
+		int partPrimCount = 7;
+		int vertsDataSize = sizeof(GLfloat) * partPrimCount;
+		glBufferData(GL_ARRAY_BUFFER, vertsDataSize, NULL, GL_STREAM_DRAW);// allocate space
+		glBufferSubData(GL_ARRAY_BUFFER, 0, vertsDataSize, &partPrims[0]); // upload the data
 
-	ctx->setLightRenderingFactors({ 1.0, 1.0, 1.0, 0.0 });
-	glUniform4fv(ctx->getLightRenderingFactors_U(), 1, &ctx->getLightRenderingFactors().x);
+		//glDrawArrays(GL_POINTS, 0, ptPrimCount / stride);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+		glPointSize(radius * 2);
+		glDrawArrays(GL_POINTS, 0, partPrimCount / stride);
 
-	// Disable VAO
-	glBindVertexArray(0);
+		ctx->setLightRenderingFactors({ 1.0, 1.0, 1.0, 0.0 });
+		glUniform4fv(ctx->getLightRenderingFactors_U(), 1, &ctx->getLightRenderingFactors().x);
+
+		// Disable VAO
+		glBindVertexArray(0);
+	}
 
 	ctx->pop();
 

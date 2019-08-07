@@ -93,6 +93,8 @@ namespace ijg {
 		int stride = 7; // for interleaved data
 		float partPrims[7];
 		GLuint vaoPartID, vboPartID;
+
+		bool isIconified{ 0 };
 	};
 
 	//inline
