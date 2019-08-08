@@ -45,6 +45,13 @@ namespace ijg {
 		* Constructor */
 		ProtoRectangle(const Vec2f& pos, const Dim2f& size, const ProtoColor4<float>& col4);
 
+		//// 3D
+		///*!
+		//* Constructor */
+		//ProtoRectangle(const Vec3f& pos, const Dim2f& size, const ProtoColor4<float>& col4);
+
+
+
 		/*!
 		* Constructor */
 		ProtoRectangle(float x, float y, const Dim2f& size, const ProtoColor4<float>& col4);
@@ -87,6 +94,13 @@ namespace ijg {
 		/*!
 		* Constructor */
 		ProtoRectangle(const Vec2f& pos, float w, float h, const ProtoColor4<float>& col4, const std::string& textureImageURL, const Vec2f& textureScale = Vec2f(1, 1));
+
+
+		// 3D
+		/*!
+		* Constructor */
+		ProtoRectangle(const Vec3f& pos, float w, float h, const ProtoColor4<float>& col4, const std::string& textureImageURL, const Vec2f& textureScale = Vec2f(1, 1));
+
 
 		/*!
 		* Constructor */

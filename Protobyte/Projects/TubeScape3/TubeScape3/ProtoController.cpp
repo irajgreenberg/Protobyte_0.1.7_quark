@@ -61,7 +61,15 @@ void ProtoController::init() {
 
 	// particles
 	for (int i = 0; i < particleCount; i++) {
-		parts.push_back(Particle({ 0, 1500, random(-2000,-300) }, particleRadius, Col4(1, .5, 0, 1 )));
+		parts.push_back(
+			Particle(
+				Vec{ 0, 1500, random(-2000,-300) }, 
+				Vec{ 0,0,0 }, 
+				Dim3f(20, 20, 0),
+				Particle::RECT, 
+				"corroded_red.jpg"
+			));
+
 		parts.at(i).setSpeed(Vec( random(-14, 14), 0, random(-4, 4) ));
 		gravity.push_back(-.5);
 		damping.push_back(.525);

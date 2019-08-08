@@ -37,8 +37,10 @@
 #include "ProtoVector3.h"
 #include "ProtoColor4.h"
 //#include <iostream>
-//#include <memory>
+#include <memory>
 #include "ProtoContext.h"
+#include "ProtoGeom3.h"
+#include "ProtoRectangle.h"
 
 // for offset into the FBO interleaved buffer (ugly I know!)
 #define BUFFER_OFFSET(i) ((void*)(i))
@@ -50,15 +52,26 @@ namespace ijg {
 	typedef ProtoParticle Particle;
 	typedef ProtoParticle Part; // common usage
 	
-	class ProtoParticle {
+	class ProtoParticle  {
 
 	public:
+
+		enum PartType {
+			POINT,
+			LINE,
+			RECT,
+			ELLIPSE,
+			BOX,
+			SPHERE
+		};
+
+
 		ProtoParticle();
-		ProtoParticle(const Vec& position);
-		ProtoParticle(const Vec& position, float radius);
-		ProtoParticle(const Vec& position, const Col4& col);
-		ProtoParticle(const Vec& position, float radius, const Col4& col);
-		ProtoParticle(const Vec& position, float radius, const std::string& icon);
+		//ProtoParticle(const Vec& position);
+		//ProtoParticle(const Vec& position, float radius);
+		//ProtoParticle(const Vec& position, const Col4& col);
+		//ProtoParticle(const Vec& position, float radius, const Col4& col);
+		ProtoParticle(const Vec& position, const Vec& rotation, Dim3f size, PartType type, const std::string& icon);
 		
 		void move();
 		void display();
@@ -75,13 +88,18 @@ namespace ijg {
 		void setColor(const Col4& col);
 		Col4& getColor();
 
+		
+
 	private:
 		Vec position{ 0 };
+		Vec rotation{ 0 };
 		Vec speed{ 0 };
 		Vec jitter{ 0 };
+		Dim3f size{ 0 };
 		float radius{ 0.0f };
 		Col4 col{ 0 };
 		std::string icon;
+		PartType type;
 
 		void init();
 
@@ -89,12 +107,9 @@ namespace ijg {
 		// call transformations within the class 
 		std::shared_ptr<ProtoContext> ctx;
 
-		// For rendering 
-		int stride = 7; // for interleaved data
-		float partPrims[7];
-		GLuint vaoPartID, vboPartID;
+		/*bool isIconified{ 0 };*/
 
-		bool isIconified{ 0 };
+		std::unique_ptr<Geom3>  partGeom;
 	};
 
 	//inline

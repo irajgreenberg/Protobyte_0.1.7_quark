@@ -187,6 +187,12 @@ Geom3(Vec3f(x, y, 0), Vec3f(), Dim3f(w, h, 0), cols4, textureImageURL, textureSc
 	init();
 }
 
+// NEW 3D
+ProtoRectangle::ProtoRectangle(const Vec3f& pos, float w, float h, const ProtoColor4<float>& col4, const std::string& textureImageURL, const Vec2f& textureScale) :
+	Geom3(pos, Vec3f(), Dim3f(w, h, 0), col4, textureImageURL, textureScale) {
+	init();
+}
+
 
 //Uses uuplicate vertices to allow proper texture mapping
 
