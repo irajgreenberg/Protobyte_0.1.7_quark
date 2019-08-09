@@ -96,6 +96,7 @@ ProtoGeom3::~ProtoGeom3() {
 
 
 void ProtoGeom3::init() {
+	ctx = ProtoContext::getContext();
 	clearVectors(); // empty all vectors in case called by setter
 	createDiffuseMapTexture(diffuseMapImage); // set default diffuse color texture
 	loadBumpMapTexture("white_tile_normal.jpg"); // set default
@@ -519,7 +520,10 @@ void ProtoGeom3::display(RenderMode render, float pointSize) {
 	// this will need further refactoring
 	// including potentially a geometry shader implementation
 	//update();
-
+	ctx->push();
+	ctx->translate(pos);
+	ctx->scale(size);
+	//ctx->rotate(rot);
 	GLuint d = diffuseMapTexture.getTextureID();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, d);
@@ -580,6 +584,7 @@ void ProtoGeom3::display(RenderMode render, float pointSize) {
 	}
 	glBindVertexArray(0);
 
+	ctx->pop();
 }
 
 

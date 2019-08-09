@@ -44,6 +44,7 @@
 #include "ProtoDimension3.h"
 #include "ProtoColor4.h"
 #include "ProtoTexture.h"
+#include "ProtoContext.h"
 //#include "ProtoGLInfo.h"
 #include <fstream>
 #include <sys/stat.h>
@@ -65,6 +66,7 @@ namespace ijg {
     
     protected:
        
+		std::shared_ptr<ProtoContext> ctx;
 		// called from cstr's
 		virtual void init();
 		virtual void update();

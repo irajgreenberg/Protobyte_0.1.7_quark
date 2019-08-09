@@ -45,14 +45,19 @@ void ProtoParticle::move() {
 
 void ProtoParticle::init() {
 	ctx = ProtoContext::getContext();
-	
 	switch (type) {
 	case POINT:
 		break;
 	case LINE:
 		break;
 	case RECT:
-		partGeom = std::make_unique<Geom3>(new ProtoRectangle(position, size.w, size.h, Col4(0), icon));
+		partGeom = std::move(std::unique_ptr<ProtoRectangle>(new ProtoRectangle(Vec3(0), 1, 1, Col4(1, 1, 1, 1), icon)));
+		//partGeom->setColor({ .1, 0, 0, 1 });
+		//partGeom->setDiffuseMaterial(1);
+		partGeom->setAmbientMaterial(0.05f);
+		partGeom->setBumpMap("STG_Flesh/Normal_Maps/STG_Flesh_27-normal.jpg", .1f);
+		partGeom->setSpecularMaterial(1);
+		partGeom->setShininess(125);
 		break;
 	case ELLIPSE:
 		break;
@@ -67,7 +72,11 @@ void ProtoParticle::init() {
 }
 
 void ProtoParticle::display() {
+	/*ctx->push();
+	ctx->translate(position);
+	ctx->scale(size);*/
 	partGeom->display();
+	//ctx->pop();
 }
 
 

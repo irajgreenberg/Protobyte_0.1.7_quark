@@ -13,34 +13,34 @@ void ProtoController::init() {
 	//float theta2{ 0 };
 
 
-	plane = GroundPlane(Vec{ 0 }, Vec{ 0 }, Dim2f{}, Col4{ 1, 1, 1, 1 }, 10, 10);
+	plane = GroundPlane(Vec( 0, -400, -1000 ), Vec{ 0 }, Dim2f( 50,  50 ), Col4{ 1, 1, 1, 1 }, 10, 10);
 	plane.setDiffuseMaterial(1);
 	plane.setSpecularMaterial(1);
 	plane.setShininess(15);
 	for (int i = 0; i < blockCount; i++) {
 		float h{};
 		if (i % 27 == 0) {
-			h = random(625, 1295);
+			h = random(5, 22);
 		}
 		else if (i % 329 == 0) {
-			h = random(900, 2600);
+			h = random(23, 45);
 		}
 		else {
-			h = random(2, 490);
+			h = random(2, 60);
 		}
 
 		geoScape.push_back(
 			Block(
 				Vec(
-					random(-getWidth() * 1.5, getWidth() * 1.5),
-					0,
-					random(-2500)
+					random(-20, 20),
+					-300,
+					-1000
 				),
 				{},
 				Dim3(
-					random(30, 260),
+					random(3, 130),
 					h,
-					random(30, 260)
+					random(3, 130)
 				),
 				Col4(.2, .2, .2, 1)
 			)
@@ -65,9 +65,9 @@ void ProtoController::init() {
 			Particle(
 				Vec{ 0, 1500, random(-2000,-300) }, 
 				Vec{ 0,0,0 }, 
-				Dim3f(20, 20, 0),
+				Dim3f(50, 50, 0),
 				Particle::RECT, 
-				"corroded_red.jpg"
+				"iraWrapped_low.jpg"
 			));
 
 		parts.at(i).setSpeed(Vec( random(-14, 14), 0, random(-4, 4) ));
@@ -131,28 +131,28 @@ void ProtoController::display() {
 	background(0);
 	arcBallBegin();
 
-	translate(0, -500, 0);
+	//translate(0, -500, 0);
 
 	// ground plane
-	push();
-	scale(5000, 1, 5000);
+	/*push();
+	scale(5000, 1, 5000);*/
 	//rotate(PI, { 1, 0, 0 });
 	plane.display();
-	pop();
+	//pop();
 
 	// geometric block
 
 	for (int i = 0; i < blockCount; i++) {
-		push();
+		//push();
 		//translate(pos.at(i));
 		//scale(sz.at(i));
 		geoScape.at(i).display();
-		pop();
+		//pop();
 	}
 
 	// particles
 	for (int i = 0; i < particleCount; i++) {
-		parts.at(i).display();
+		//parts.at(i).display();
 
 		/*gravity.push_back(-.03);
 		damping.push_back(.925);

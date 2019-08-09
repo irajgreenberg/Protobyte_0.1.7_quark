@@ -109,7 +109,7 @@ namespace ijg {
 
 		/*bool isIconified{ 0 };*/
 
-		std::unique_ptr<Geom3>  partGeom;
+		std::unique_ptr<Geom3> partGeom;
 	};
 
 	//inline
