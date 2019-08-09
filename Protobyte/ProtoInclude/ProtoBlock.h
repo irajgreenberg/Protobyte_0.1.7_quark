@@ -38,6 +38,17 @@ namespace ijg {
     public:
         friend std::ostream& operator<<(std::ostream& out, const ProtoBlock& block);
 
+
+		enum Registration {
+			CENTER,
+			TOP,
+			BOTTOM,
+			RIGHT,
+			LEFT,
+			FRONT,
+			BACK
+		};
+
         /*!
          * Default Constructor */
         ProtoBlock();
@@ -59,7 +70,11 @@ namespace ijg {
 		ProtoBlock(const Vec3f& pos, const Vec3f& rot, const Dim3f& size,
 			const std::vector<Col4f>& cols4, const std::string& textureImageURL, const Vec2f& textureScale = Vec2f(1, 1));
 
+		void setRegistration(Registration reg);
 
+	private:
+
+		Registration reg{ CENTER };
 
         /*!
          * Declared pure virtual in GeomBase base class

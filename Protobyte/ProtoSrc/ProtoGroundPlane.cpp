@@ -60,10 +60,15 @@ ProtoGroundPlane::ProtoGroundPlane(const Vec3f& pos, const Vec3f& rot, const Dim
 	init();
 }
 void ProtoGroundPlane::calcVerts() {
-	verts.push_back(ProtoVertex3(Vec3f(-size.w / 2, 0, -size.d / 2), col4, Tup2f(0, 0))); // LB
-	verts.push_back(ProtoVertex3(Vec3f(-size.w / 2, 0, size.d / 2), col4, Tup2f(0, 1.0f / textureScale.y))); // LF
-	verts.push_back(ProtoVertex3(Vec3f(size.w / 2, 0, size.d / 2), col4, Tup2f(1.0f / textureScale.x, 1.0f / textureScale.y))); // RF
-	verts.push_back(ProtoVertex3(Vec3f(size.w / 2, 0, -size.d / 2), col4, Tup2f(1.0f / textureScale.x, 0))); // RB
+	//verts.push_back(ProtoVertex3(Vec3f(-size.w / 2, 0, -size.d / 2), col4, Tup2f(0, 0))); // LB
+	//verts.push_back(ProtoVertex3(Vec3f(-size.w / 2, 0, size.d / 2), col4, Tup2f(0, 1.0f / textureScale.y))); // LF
+	//verts.push_back(ProtoVertex3(Vec3f(size.w / 2, 0, size.d / 2), col4, Tup2f(1.0f / textureScale.x, 1.0f / textureScale.y))); // RF
+	//verts.push_back(ProtoVertex3(Vec3f(size.w / 2, 0, -size.d / 2), col4, Tup2f(1.0f / textureScale.x, 0))); // RB
+
+	verts.push_back(ProtoVertex3(Vec3f(-0.5f, 0, -0.5f), col4, Tup2f(0, 0))); // LB
+	verts.push_back(ProtoVertex3(Vec3f(-0.5f, 0, 0.5f), col4, Tup2f(0, 1.0f / textureScale.y))); // LF
+	verts.push_back(ProtoVertex3(Vec3f(0.5f, 0, 0.5f), col4, Tup2f(1.0f / textureScale.x, 1.0f / textureScale.y))); // RF
+	verts.push_back(ProtoVertex3(Vec3f(0.5f, 0, -0.5f), col4, Tup2f(1.0f / textureScale.x, 0))); // RB
 	
 }
 

@@ -58,8 +58,6 @@ void ProtoBaseApp::_init() {
 	ctx->setLight(7, { 0, 0, 1 }, { 0, 0, 0 });
 
 
-	
-
 
 	// initialize mouse vars
 	mouseX = mouseY = mouseLastFrameX = mouseLastFrameY = 0;
@@ -87,13 +85,13 @@ void ProtoBaseApp::_init() {
 	//
 	////trace(m.v1);
 
-	ctx->setView(glm::lookAt(glm::vec3(0.0, 0.0, defaultCameraDepth), glm::vec3(0.0, 0.0, 0.0), glm::vec3(0.0, 1.0, 0.0)));
+	ctx->setView(glm::lookAt(glm::vec3(0.0f, 0.0f, defaultCameraDepth), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f)));
 
-	viewAngle = 65.0f * PI / 180.0f;
+	viewAngle = 75.0f * PI / 180.0f;
 	//float aspect = float(width) / float(height);
 	aspectRatio = float(getWidth()) / float(getHeight());
 	nearDist = 0.1f;
-	farDist = 10000.0f;
+	farDist = 5000.0f;
 	// perspective
 	ctx->setProjection(glm::perspective(viewAngle, aspectRatio, nearDist, farDist));
 

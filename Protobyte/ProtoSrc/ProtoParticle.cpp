@@ -39,10 +39,6 @@ ProtoParticle::ProtoParticle(const Vec& position, const Vec& rotation, Dim3f siz
 	init();
 }
 
-void ProtoParticle::move() {
-	position += speed;
-}
-
 void ProtoParticle::init() {
 	ctx = ProtoContext::getContext();
 	switch (type) {
@@ -51,7 +47,7 @@ void ProtoParticle::init() {
 	case LINE:
 		break;
 	case RECT:
-		partGeom = std::move(std::unique_ptr<ProtoRectangle>(new ProtoRectangle(Vec3(0), 1, 1, Col4(1, 1, 1, 1), icon)));
+		partGeom = std::move(std::unique_ptr<ProtoRectangle>(new ProtoRectangle(position, size.w, size.h, Col4(.5, .5, .5, 1), icon)));
 		//partGeom->setColor({ .1, 0, 0, 1 });
 		//partGeom->setDiffuseMaterial(1);
 		partGeom->setAmbientMaterial(0.05f);
@@ -71,12 +67,19 @@ void ProtoParticle::init() {
 	}
 }
 
+void ProtoParticle::move() {
+	speed.y += gravity;
+	partGeom->getPosition() += speed;
+}
+
+
+
 void ProtoParticle::display() {
 	/*ctx->push();
 	ctx->translate(position);
 	ctx->scale(size);*/
 	partGeom->display();
-	//ctx->pop();
+	/*ctx->pop();*/
 }
 
 

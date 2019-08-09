@@ -100,6 +100,8 @@ namespace ijg {
 		Col4 col{ 0 };
 		std::string icon;
 		PartType type;
+		float gravity{ .03f };
+		float damping{ .789f };
 
 		void init();
 

@@ -116,9 +116,9 @@ namespace ijg {
 
 
 		// for relatively accurate pixel values in 2D
-		float defaultCameraDepth = 850.0f;
+		float defaultCameraDepth = 750.0f;
 
-		float viewAngle{ 65.0f * PI / 180.0f };
+		float viewAngle{ 85.0f * PI / 180.0f };
 		float nearDist{ 0.1f };
 		float farDist{ 3000.0f };
 		float aspectRatio{ 0.0f };

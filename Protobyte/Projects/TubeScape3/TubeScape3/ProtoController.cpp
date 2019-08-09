@@ -12,50 +12,56 @@ void ProtoController::init() {
 	float r{ 240.0f };
 	//float theta2{ 0 };
 
-
-	plane = GroundPlane(Vec( 0, -400, -1000 ), Vec{ 0 }, Dim2f( 50,  50 ), Col4{ 1, 1, 1, 1 }, 10, 10);
+	
+	plane = GroundPlane(Vec( 0, 0, -100 ), Vec{ 0 }, Dim2f( 5000, 3000 ), Col4{ .2, .2, .2, 1 }, 10, 10);
 	plane.setDiffuseMaterial(1);
 	plane.setSpecularMaterial(1);
 	plane.setShininess(15);
+	
 	for (int i = 0; i < blockCount; i++) {
 		float h{};
 		if (i % 27 == 0) {
-			h = random(5, 22);
+			h = random(5, 875);
 		}
 		else if (i % 329 == 0) {
-			h = random(23, 45);
+			h = random(560, 945);
 		}
 		else {
-			h = random(2, 60);
+			h = random(30, 295);
 		}
 
 		geoScape.push_back(
 			Block(
+				//pos
 				Vec(
-					random(-20, 20),
-					-300,
-					-1000
+					random(-1500, 1500),
+					0,
+					random(-1300, 500)
 				),
+				//rot
 				{},
+				//size
 				Dim3(
-					random(3, 130),
+					random(20, 230),
 					h,
-					random(3, 130)
+					random(20, 230)
 				),
-				Col4(.2, .2, .2, 1)
+				Col4(.5, .3, .25, 1)
 			)
 		);
 
 		//geoScape.at(i).setTransFuncObj(ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, Tup2f{ 10, 24 }, 4));
 		//geoScape.at(i).setPerturbation({ random(3.2), random(1.5), random(1.2) });
 		//geoScape.at(i).setColor({ .1, 0, 0, 1 });
-		geoScape.at(i).setDiffuseMaterial(1);
+		geoScape.at(i).setDiffuseMaterial({ .25, .25, .25, 1 });
 		geoScape.at(i).setAmbientMaterial(0.0f);
 		//geoScape.at(i).setBumpMap("STG_Flesh/Normal_Maps/STG_Flesh_27-normal.jpg", .1f);
 		//geoScape.at(i).loadBumpMapTexture("vascular3_normal2.jpg");
 		geoScape.at(i).setTextureScale({ 1.0f, 1.0f });
 		geoScape.at(i).setSpecularMaterial(1);
 		geoScape.at(i).setShininess(70);
+
+		geoScape.at(i).setRegistration(Block::BOTTOM);
 	}
 
 
@@ -63,7 +69,7 @@ void ProtoController::init() {
 	for (int i = 0; i < particleCount; i++) {
 		parts.push_back(
 			Particle(
-				Vec{ 0, 1500, random(-2000,-300) }, 
+				Vec{ random(-400, 400), 900, random(-1300, 200) },
 				Vec{ 0,0,0 }, 
 				Dim3f(50, 50, 0),
 				Particle::RECT, 
@@ -96,7 +102,7 @@ void ProtoController::run() {
 			parts.at(i).getSpeed().z *= friction.at(i);
 
 		}
-		//parts.at(i).move();
+		parts.at(i).move();
 	}
 	
 }
@@ -131,28 +137,19 @@ void ProtoController::display() {
 	background(0);
 	arcBallBegin();
 
-	//translate(0, -500, 0);
+	translate(0, -500, -400);
 
 	// ground plane
-	/*push();
-	scale(5000, 1, 5000);*/
-	//rotate(PI, { 1, 0, 0 });
 	plane.display();
-	//pop();
 
 	// geometric block
-
 	for (int i = 0; i < blockCount; i++) {
-		//push();
-		//translate(pos.at(i));
-		//scale(sz.at(i));
 		geoScape.at(i).display();
-		//pop();
 	}
 
 	// particles
 	for (int i = 0; i < particleCount; i++) {
-		//parts.at(i).display();
+		parts.at(i).display();
 
 		/*gravity.push_back(-.03);
 		damping.push_back(.925);
