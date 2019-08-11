@@ -52,7 +52,7 @@ namespace ijg {
 	typedef ProtoParticle Particle;
 	typedef ProtoParticle Part; // common usage
 	
-	class ProtoParticle  {
+	class ProtoParticle {
 
 	public:
 
@@ -83,15 +83,16 @@ namespace ijg {
 		Vec& getSpeed();
 		void setJitter(const Vec& jitter);
 		Vec& getJitter();
-		void setRadius(float radius);
-		float getRadius();
+		void setSize(const Dim3f& sz);
+		Dim3f& getSize();
 		void setColor(const Col4& col);
 		Col4& getColor();
 
+		Vec position{ 0 };
 		
 
 	private:
-		Vec position{ 0 };
+		
 		Vec rotation{ 0 };
 		Vec speed{ 0 };
 		Vec jitter{ 0 };
@@ -100,7 +101,7 @@ namespace ijg {
 		Col4 col{ 0 };
 		std::string icon;
 		PartType type;
-		float gravity{ .03f };
+		float gravity{ -.03f };
 		float damping{ .789f };
 
 		void init();
@@ -116,11 +117,11 @@ namespace ijg {
 
 	//inline
 	inline void ProtoParticle::setPosition(const Vec& position) {
-		this->position = position;
+		partGeom->setPosition(position);
 	}
 
 	inline Vec& ProtoParticle::getPosition() {
-		return position;
+		return partGeom->getPosition();
 	}
 
 	inline void ProtoParticle::setSpeed(const Vec& speed) {
@@ -139,12 +140,12 @@ namespace ijg {
 		return jitter;
 	}
 
-	inline void ProtoParticle::setRadius(float radius) {
-		this->radius = radius;
+	inline void ProtoParticle::setSize(const Dim3& sz) {
+		partGeom->setSize(sz);
 	}
 
-	inline float ProtoParticle::getRadius() {
-		return radius;
+	inline Dim3& ProtoParticle::getSize() {
+		return partGeom->getSize();
 	}
 
 	inline void ProtoParticle::setColor(const Col4& col) {

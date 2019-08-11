@@ -69,17 +69,17 @@ void ProtoController::init() {
 	for (int i = 0; i < particleCount; i++) {
 		parts.push_back(
 			Particle(
-				Vec{ random(-400, 400), 900, random(-1300, 200) },
+				Vec{ random(-400, 400), 900, random(-1000, 0) },
 				Vec{ 0,0,0 }, 
-				Dim3f(50, 50, 0),
+				Dim3f(20, 20, 0),
 				Particle::RECT, 
 				"iraWrapped_low.jpg"
 			));
 
-		parts.at(i).setSpeed(Vec( random(-14, 14), 0, random(-4, 4) ));
-		gravity.push_back(-.5);
-		damping.push_back(.525);
-		friction.push_back(.465);
+		parts.at(i).setSpeed(Vec( random(-2, 2), 0, random(-1, 1) ));
+		gravity.push_back(-.85);
+		damping.push_back(random(.55, .65));
+		friction.push_back(.565);
 
 
 		//particles.push_back({ 0, 1500, random(-2000,-300) });
@@ -93,43 +93,52 @@ void ProtoController::init() {
 
 void ProtoController::run() {
 	for (int i = 0; i < particleCount; i++) {
-		parts.at(i).getSpeed().y += gravity.at(i);
-		parts.at(i).getPosition() += parts.at(i).getSpeed();
-		if (collide(parts.at(i).getPosition())) {
+		parts.at(i).move();
+		/*parts.at(i).getSpeed().y += gravity.at(i);
+		parts.at(i).getPosition() += parts.at(i).getSpeed();*/
+		if (collide(parts.at(i))) {
 			parts.at(i).getSpeed().y *= -1;
 			parts.at(i).getSpeed().y *= damping.at(i);
 			parts.at(i).getSpeed().x *= friction.at(i);
 			parts.at(i).getSpeed().z *= friction.at(i);
 
 		}
-		parts.at(i).move();
+		
 	}
 	
 }
 
-bool ProtoController::collide(Vec& p) {
+bool ProtoController::collide(Particle& p) {
+	//trace("p = ", p);
 	for (int i = 0; i < blockCount; i++) {
-		if (p.y < geoScape.at(i).getPosition().y + geoScape.at(i).getSize().h / 2 + particleRadius &&
-			p.x > geoScape.at(i).getPosition().x - geoScape.at(i).getSize().w / 2 &&
-			p.x < geoScape.at(i).getPosition().x + geoScape.at(i).getSize().w / 2 &&
-			p.z > geoScape.at(i).getPosition().z - geoScape.at(i).getSize().d / 2 &&
-			p.z < geoScape.at(i).getPosition().z + geoScape.at(i).getSize().d / 2 &&
-			p.y > geoScape.at(i).getPosition().y + geoScape.at(i).getSize().h / 16) {
+		if (p.getPosition().y < geoScape.at(i).getPosition().y + geoScape.at(i).getSize().h + p.getSize().h / 2 &&
+			p.getPosition().x > geoScape.at(i).getPosition().x - geoScape.at(i).getSize().w / 2 &&
+			p.getPosition().x < geoScape.at(i).getPosition().x + geoScape.at(i).getSize().w / 2 &&
+			p.getPosition().z > geoScape.at(i).getPosition().z - geoScape.at(i).getSize().d / 2 &&
+			p.getPosition().z < geoScape.at(i).getPosition().z + geoScape.at(i).getSize().d / 2 &&
+			p.getPosition().y > geoScape.at(i).getPosition().y + geoScape.at(i).getSize().h / 16) {
 
-			p.y = geoScape.at(i).getPosition().y + geoScape.at(i).getSize().h / 2 + particleRadius;
-
-			return true;
-		}
-		else if (p.y < plane.getPosition().y + particleRadius) {
-			p.y = plane.getPosition().y + particleRadius;
+			p.getPosition().y = geoScape.at(i).getPosition().y + geoScape.at(i).getSize().h + p.getSize().h / 2;
 
 			return true;
 		}
+		else if (p.getPosition().y < plane.getPosition().y + p.getSize().h / 2) {
+			p.getPosition().y = plane.getPosition().y + p.getSize().h / 2;
+			return true;
+		}
 
-		/*if (geoScape.at(i).getPosition().dist(p) < 125) {
+		//	/*if (geoScape.at(i).getPosition().dist(p) < 125) {
+		//		return true;
+		//	}*/
+		//}
+		//return false;
+	}
+
+	//trace("p.getRadius()*2=", p.getRadius() * 2);
+		/*if (p.getPosition().y < plane.getPosition().y + p.getSize().h/2) {
+			p.getPosition().y = plane.getPosition().y + p.getSize().h/2;
 			return true;
 		}*/
-	}
 	return false;
 }
 

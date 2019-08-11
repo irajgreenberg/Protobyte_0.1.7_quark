@@ -109,9 +109,9 @@ namespace ijg {
         ProtoShape3& operator-=(const Vec3f v);
         ProtoShape3& operator+=(float s);
         ProtoShape3& operator-=(float s);
-
+		Vec3f pos, rot;
     protected:
-        Vec3f pos, rot;
+       // Vec3f pos, rot;
         Dim3f size;
         ProtoColor4f col4;
         std::vector< ProtoColor4f > col4s;

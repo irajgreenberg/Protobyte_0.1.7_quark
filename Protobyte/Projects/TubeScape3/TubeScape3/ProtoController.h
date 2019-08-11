@@ -43,14 +43,14 @@ public:
 	GroundPlane plane;
 
 	// particles and physics
-	int particleCount{ 75 };
+	int particleCount{ 100};
 	vect<Vec> particles;
-	float particleRadius{ 100 };
+	float particleRadius{ 200 };
 	vect<Vec> speed;
 	vect<float> damping;
 	vect<float> gravity;
 	vect<float> friction;
-	bool collide(Vec& p);
+	bool collide(Particle& p);
 	vect<Particle> parts;
 
 
