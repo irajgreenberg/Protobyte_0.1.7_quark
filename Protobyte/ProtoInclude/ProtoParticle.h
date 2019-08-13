@@ -72,6 +72,7 @@ namespace ijg {
 		//ProtoParticle(const Vec& position, const Col4& col);
 		//ProtoParticle(const Vec& position, float radius, const Col4& col);
 		ProtoParticle(const Vec& position, const Vec& rotation, Dim3f size, PartType type, const std::string& icon);
+		ProtoParticle(const Vec& position, const Vec& rotation, Dim3f size, PartType type, const Col4& col);
 		
 		void move();
 		void display();
@@ -88,7 +89,7 @@ namespace ijg {
 		void setColor(const Col4& col);
 		Col4& getColor();
 
-		Vec position{ 0 };
+		Vec position{ 0 }; // used by POINT
 		
 
 	private:
@@ -101,7 +102,7 @@ namespace ijg {
 		Col4 col{ 0 };
 		std::string icon;
 		PartType type;
-		float gravity{ -.03f };
+		float gravity{ -1.3f };
 		float damping{ .789f };
 
 		void init();
@@ -113,14 +114,29 @@ namespace ijg {
 		/*bool isIconified{ 0 };*/
 
 		std::unique_ptr<Geom3> partGeom;
+
+		// point buffer ids
+		float ptPrims[7];
+		GLuint vaoPtID, vboPtID;
+		int stride{ 7 };
+		int vertsDataSize{ sizeof(GLfloat) };
 	};
 
 	//inline
 	inline void ProtoParticle::setPosition(const Vec& position) {
-		partGeom->setPosition(position);
+		if (type == POINT) {
+			this->position = position;
+		}
+		else {
+			partGeom->setPosition(position);
+		}
 	}
 
 	inline Vec& ProtoParticle::getPosition() {
+		if (type == POINT) {
+			return position;
+		} 
+		// if not POINT or LINE type returns ProtoGeom3 type
 		return partGeom->getPosition();
 	}
 
@@ -141,10 +157,18 @@ namespace ijg {
 	}
 
 	inline void ProtoParticle::setSize(const Dim3& sz) {
-		partGeom->setSize(sz);
+		if (type == POINT) {
+			size = sz;
+		}
+		else {
+			partGeom->setSize(sz);
+		}
 	}
 
 	inline Dim3& ProtoParticle::getSize() {
+		if (type == POINT) {
+			return size;
+		}
 		return partGeom->getSize();
 	}
 

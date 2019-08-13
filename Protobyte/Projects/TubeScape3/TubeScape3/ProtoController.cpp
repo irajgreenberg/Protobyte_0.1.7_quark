@@ -68,16 +68,24 @@ void ProtoController::init() {
 	// particles
 	for (int i = 0; i < particleCount; i++) {
 		parts.push_back(
+			//Particle(
+			//	Vec{ random(-400, 400), 900, random(-1000, 0) },
+			//	Vec{ 0,0,0 }, 
+			//	Dim3f(20, 20, 0),
+			//	Particle::RECT, 
+			//	"iraWrapped_low.jpg"
+			//));
+
 			Particle(
 				Vec{ random(-400, 400), 900, random(-1000, 0) },
-				Vec{ 0,0,0 }, 
-				Dim3f(20, 20, 0),
-				Particle::RECT, 
-				"iraWrapped_low.jpg"
-			));
+				Vec{ 0,0,0 },
+				Dim3f(random(8)),
+				Particle::POINT,
+				Col4(.25, .4, 1, 1)
+		));
 
-		parts.at(i).setSpeed(Vec( random(-2, 2), 0, random(-1, 1) ));
-		gravity.push_back(-.85);
+		parts.at(i).setSpeed(Vec( random(-14, 14), 0, random(-12, 12) ));
+		gravity.push_back(-3.85);
 		damping.push_back(random(.55, .65));
 		friction.push_back(.565);
 

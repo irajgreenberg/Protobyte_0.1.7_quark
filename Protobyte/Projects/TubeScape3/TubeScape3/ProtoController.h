@@ -43,7 +43,7 @@ public:
 	GroundPlane plane;
 
 	// particles and physics
-	int particleCount{ 100};
+	int particleCount{500};
 	vect<Vec> particles;
 	float particleRadius{ 200 };
 	vect<Vec> speed;
