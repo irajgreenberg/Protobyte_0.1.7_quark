@@ -37,6 +37,7 @@ This class is part of the group common (update)
 #include <stack>
 #include <memory>
 
+#include "ProtoDimension3.h"
 #include "ProtoVector3.h"
 #include "ProtoVector4.h"
 #include "ProtoShader.h"
@@ -100,7 +101,9 @@ namespace ijg {
 
 
 	public:
-		static const std::shared_ptr<ProtoContext> getContext(float width = 1024.0f, float height = 768.0f);
+		static const std::shared_ptr<ProtoContext> getContext(); 
+		static const std::shared_ptr<ProtoContext> getContext(float width, float height);
+
 		void init();
 
 		/*** Geometry Matrices ***/
@@ -272,7 +275,8 @@ namespace ijg {
 		void rotate(float angle, const Vec3f& rXYZ);
 		void scale(float s);
 		void scale(float sx, float sy, float sz);
-		void scale(const Vec3f& sXYZ);
+		void scale(const Vec3f& xyz);
+		void scale(const Dim3& whd);
 		
 		//implements transform matrix stack
 		void concat();

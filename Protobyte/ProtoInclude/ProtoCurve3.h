@@ -25,12 +25,13 @@
 #ifndef ProtoCurve3_h
 #define ProtoCurve3_h
 
-//#include <SFML/OpenGL.hpp>
+ //#include <SFML/OpenGL.hpp>
 #include "ProtoDimension3.h"
 #include "ProtoVector4.h"
 #include "ProtoShader.h"
 #include <vector>
 #include "ProtoFrenetFrame.h"
+#include "ProtoColor4.h"
 
 // for offset into the FBO interleaved buffer
 #define BUFFER_OFFSET(i) ((void*)(i))
@@ -44,13 +45,13 @@ namespace ijg {
 
 	class ProtoCurve3 {
 	private:
-	
+
 		/**
 		* initialize shader handles and uniforms for rendering
 		*/
 		void initBuffers();
-	
-	
+
+
 	protected:
 
 		/**
@@ -59,14 +60,20 @@ namespace ijg {
 		std::vector<Vec3f> controlPts;
 
 		/**
-		 * The number of interpolated points along the curve.
+		 * copy of original std::vector of control points.
+		 * for resetting spline state
 		 */
-		int interpDetail;
+		std::vector<Vec3f> originalControlPts;
+
+		/**
+		 * The number of interpolated points to add along the curve.
+		 */
+		int interpolatedPtsCount;
 
 		/**
 		 * std::vector of interpolated points along curve.
 		 */
-		std::vector<Vec3f> interpPts;
+		std::vector<Vec3f> interpolatedPts;
 
 		/**
 		 * std::vector of all curve vertices.
@@ -77,7 +84,12 @@ namespace ijg {
 		* stride to move through interleaved primitives(x, y, z, r, g, b, a)
 		*/
 		int stride = 7;
-		
+
+		/**
+		* std::vector of curve control point primitives (x, y, z, r, g, b, a).
+		*/
+		std::vector<float> controlPtPrims;
+
 		/**
 		* std::vector of interleaved curve primitives (x, y, z, r, g, b, a).
 		*/
@@ -149,15 +161,31 @@ namespace ijg {
 		*/
 		GLuint lightRenderingFactors_U;
 
+		/**
+		* Tangent vectors: Used for Parallel Transport
+		* frame calculation.
+		* Equation for local curve tangents:
+		*    (v' + 1) - (v'- 1)
+		* -----------------------------
+		* || (v' + 1) - (v'- 1) ||
+		*/
+		std::vector<Vec3f> pathTangents;
+
+		/**
+		* Calculate local path tangents for parallel
+		* transport frames.
+		*/
+		void initPathTangents();
+
 
 	public:
+
+
 		// constructors
 
 		ProtoCurve3();
 
-		ProtoCurve3(const std::vector<Vec3f>& controlPts, int interpDetail, bool isCurveClosed);
-
-
+		ProtoCurve3(const std::vector<Vec3f>& controlPts, int interpolatedPtCount, bool isCurveClosed = 0);
 
 		// copy Constructor - Use default: no explicit heap allocation
 		//ProtoCurve3(ProtoCurve3& curve3d_src);
@@ -177,22 +205,34 @@ namespace ijg {
 		/**
 		 * Draw the curve.
 		 */
-		virtual void display(float strokeWeight = 1) = 0;
+		virtual void display(float strokeWeight = 1,
+			Col4 strokeCol = { 0.0f, 0.0f, 0.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayControlPts() = 0;
+		virtual void displayControlPts(float pointSize = 5,
+			Col4 strokeCol = { 1.0f, 0.0f, 1.0f, 1.0f }) = 0;
 
 		/**
 		 * Draw the curve points.
 		 */
-		virtual void displayInterpPts(float pointSize = 2) = 0;
+		virtual void displayInterpolatedPts(float pointSize = 4, Col4
+			strokeCol = { 0.0f, 0.5f, .5f, 1.0f }) = 0;
+
+		/**
+		 * Create Frenet Frames using v-1, v, v+1.
+		*/
+		virtual void initFrenetFrames() = 0;
 
 		/**
 		 * Draw the Frenet Frame.
 		 */
-		virtual void displayFrenetFrames(float len = 20) = 0;
+		virtual  void displayFrenetFrames(float length = 15,
+			float strokeWeight = 2,
+			Col4f TCol = { 1.0f, 0.0f, 0.0f, 1.0f },
+			Col4f NCol = { 0.0f, 0.0f, 1.0f, 1.0f },
+			Col4f BCol = { 0.0f, 1.0f, 0.0f, 1.0f }) = 0;
 
 		//virtual void createProtoFrenetFrame();
 
@@ -204,8 +244,12 @@ namespace ijg {
 		/**
 		 * Returns length of the points std::vector (pts between control points).
 		 */
-		int getInterpDetail();
+		int getInterpolatedPtsCount();
 
+		/**
+		 * get reference to the interpolated points along curve.
+		 */
+		const std::vector<Vec3f>& getInterpolatedPts() const;
 
 
 		/**
@@ -214,7 +258,7 @@ namespace ijg {
 		void setControlPts(std::vector<Vec3f>& controlPts);
 
 		/**
-		 * get a pointer to the  control points array, with side effects
+		 * get reference to the  control points array, with side effects
 		 */
 		std::vector<Vec3f>& getControlPts();
 
@@ -305,9 +349,29 @@ namespace ijg {
 		 */
 		const std::vector<ProtoFrenetFrame>& getFrenetFrames() const;
 
-
-
 	};
+
+	/**
+	* Inline getter/setter implementations
+	*/
+
+	inline void ProtoCurve3::setIsCurveClosed(bool isCurveClosed) {
+		this->isCurveClosed = isCurveClosed;
+	}
+
+	inline bool ProtoCurve3::getIsCurveClosed() const {
+		return isCurveClosed;
+	}
+
+	inline const std::vector<ProtoFrenetFrame>& ProtoCurve3::getFrenetFrames() const
+	{
+		return frenetFrames;
+	}
+
+	inline  const std::vector<Vec3f>& ProtoCurve3::getInterpolatedPts() const {
+		return interpolatedPts;
+	}
+
 
 }
 

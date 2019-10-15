@@ -49,6 +49,8 @@ namespace ijg {
 		template <class U>
         friend std::ostream& operator<<(std::ostream& output, const ProtoColor4<U>& col4);
 
+		float & operator[] (int index);
+
         ProtoColor4();
 		ProtoColor4(T c);
 		ProtoColor4(T c, T a);
@@ -147,6 +149,31 @@ namespace ijg {
         return output;
     }
 
+	// must return reference so col[] can be a lvalue.
+	template <class T>
+	inline float & ProtoColor4<T>::operator[] (int index) {
+		switch (index) {
+		case 0:
+			return r;
+			break;
+		case 1:
+			return g;
+			break;
+		case 2:
+			return b;
+			break;
+		case 3:
+			return a;
+			break;
+		default:
+			// don't give back anything useful if out of bounds
+			// really should throw an exception
+			return r;
+
+		}
+		// won't be reached
+		return r;
+	}
 
     // most common usages
 #define ProtoColor4f ProtoColor4<float>

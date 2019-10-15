@@ -35,7 +35,12 @@ namespace ijg {
 			glfwSetWindowShouldClose(window, GL_TRUE);
 
 		ProtoBaseApp* ba = (ProtoBaseApp*)glfwGetWindowUserPointer(window);
-		ba->setKeyEvent(key, scancode, action, mods);
+	
+
+		// detect press 1x
+		if (action == GLFW_PRESS) {
+			ba->setKeyEvent(key, scancode, action, mods);
+		}
 	}
 
 	void window_size_callback(GLFWwindow* window, int width, int height) {
@@ -54,8 +59,23 @@ baseApp(baseApp), appWidth(1920), appHeight(1080), appTitle("Protobyte App")
 	runGLFW();
 }
 
+ProtoPlasm::ProtoPlasm(std::string appTitle, ProtoBaseApp* baseApp) :
+	appWidth(1920), appHeight(1080), appTitle(appTitle), baseApp(baseApp) {
+	// this->baseApp = baseApp;
+	baseApp->setWidth(appWidth);
+	baseApp->setHeight(appHeight);
+	baseApp->setSize(Dim2i(appWidth, appHeight));
+
+	// Create GL context and call init() and run() to activate functions in user defined BaseApp derived class
+	initGLFW();
+	runGLFW();
+}
+
 ProtoPlasm::ProtoPlasm(int appWidth, int appHeight, std::string appTitle, ProtoBaseApp* baseApp) :
 appWidth(appWidth), appHeight(appHeight), appTitle(appTitle), baseApp(baseApp){
+
+	
+
 	// this->baseApp = baseApp;
 	baseApp->setWidth(appWidth);
 	baseApp->setHeight(appHeight);
@@ -89,9 +109,13 @@ void ProtoPlasm::initGLFW(){
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #endif
 
-	// set anti-aliasing
-	// not sure if this works in Windows
-	glfwWindowHint(GLFW_SAMPLES, 2);
+	// set number of multi-samples for anti-aliasing
+	// the more samples,the worse performance
+	// PRotobyte has a bias toward high quality over
+	// performance, which may be overrided with
+	// setMultiSamples(int samples) - still needs to be implemented
+	glfwWindowHint(GLFW_SAMPLES, 8);
+
 
 	// genereate sized GLFW window with title
 	window = glfwCreateWindow(appWidth, appHeight, appTitle.c_str(), nullptr, nullptr);
@@ -112,6 +136,10 @@ void ProtoPlasm::initGLFW(){
 	switch (monitors){
 	case 1:
 		glfwSetWindowPos(window, (mode->width - appWidth) / 2, (mode->height - appHeight) / 2);
+//#if defined(_WIN32) || defined(_WIN64)
+//		HWND hWnd = GetConsoleWindow();
+//		MoveWindow(hWnd, 100, 100, 300, 400, TRUE);
+//#endif
 		break;
 	case 2:
 		glfwSetWindowPos(window, (mode->width - appWidth) / 2, (mode->height - appHeight) / 2);
@@ -168,12 +196,12 @@ void ProtoPlasm::initGLFW(){
 	// end GLFW/window setup
 
 	// Set gl states
-	glClearColor(.46f, .485f, .575f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glFrontFace(GL_CCW); // default
-	//glFrontFace(GL_CW);
-	glEnable(GL_CULL_FACE);
-	glCullFace(GL_BACK);
+	//glClearColor(.46f, .485f, .575f, 1.0f);
+	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	//glFrontFace(GL_CCW); // default
+	////glFrontFace(GL_CW);
+	//glEnable(GL_CULL_FACE);
+	//glCullFace(GL_BACK);
 	//glDisable(GL_CULL_FACE);
 	//glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 	//glEnable(GL_COLOR_MATERIAL); // incorporates per vertex color with lights
@@ -181,9 +209,9 @@ void ProtoPlasm::initGLFW(){
 	//glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
 
 	//
-	glEnable(GL_BLEND);
-	//glBlendFunc(GL_DST_COLOR,GL_ZERO);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	//glEnable(GL_BLEND);
+	////glBlendFunc(GL_DST_COLOR,GL_ZERO);
+	//glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	//glBlendFunc(GL_DST_COLOR,GL_ZERO);
 	//glBlendFunc (GL_ONE, GL_ONE);
 
@@ -192,20 +220,28 @@ void ProtoPlasm::initGLFW(){
 
 	// for best antialiasing
 	// http://bankslab.berkeley.edu/members/chris/AntiAliasing/AntiAliasingInOpenGL.html
-	glEnable(GL_LINE_SMOOTH);
-	glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	//glEnable(GL_LINE_SMOOTH);
+	//glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+	//glEnable(GL_POLYGON_SMOOTH);
 	//glEnable(GL_POINT_SMOOTH);
 	//glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+	
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	glEnable(GL_DEPTH_TEST);
+	
 	glClearStencil(0); // clear stencil buffer
 	glClearDepth(1.0f); // 0 is near, 1 is far
 	
 	glDepthMask(GL_TRUE); 
 	glDepthFunc(GL_LEQUAL);
+
+
 	//glDepthFunc(GL_LESS);
 	//glDepthRange(0.0f, 1.0f);
+
+	// For MSAA (anti-aliasing)
+	glEnable(GL_MULTISAMPLE);
 
 	int w = 0, h = 0;
 	glfwGetFramebufferSize(window, &w, &h);
@@ -237,8 +273,11 @@ void ProtoPlasm::runGLFW(){
 	//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	int mouseBtn = 0;
+	
 	while (!glfwWindowShouldClose(window))
 	{
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		//glClearColor(1,1,0,1);
 		/*
 		 TO DO – fix timing issues with control for users:
 		 From: http://stackoverflow.com/questions/2182675/how-do-you-make-sure-the-speed-of-opengl-animation-is-consistent-on-different-ma
@@ -260,6 +299,10 @@ void ProtoPlasm::runGLFW(){
 		baseApp->setFrameCount(frameCount);
 		//baseApp->runWorld();
 
+		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
+		glClear(GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+
 		baseApp->_run(Vec2f(float(mouseX), float(mouseY)/*, mouseBtn, key*/)); // called in base class
 		//baseApp->run(); // called in derived class
 
@@ -267,7 +310,8 @@ void ProtoPlasm::runGLFW(){
 		// handle GLFW events
 
 		// clear the buffers
-		//glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		/*glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);*/
+		
 
 
 		// end the current frame (internally swaps the front and back buffers)

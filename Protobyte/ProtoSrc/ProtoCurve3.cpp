@@ -30,8 +30,12 @@ using namespace ijg;
 
 ProtoCurve3::ProtoCurve3() {}
 
-ProtoCurve3::ProtoCurve3(const std::vector<Vec3f>& controlPts, int interpDetail, bool isCurveClosed) :
-controlPts(controlPts), interpDetail(interpDetail), isCurveClosed(isCurveClosed){
+ProtoCurve3::ProtoCurve3(const std::vector<Vec3f>& controlPts, int interpolatedPtsCount, bool isCurveClosed) :
+controlPts(controlPts), interpolatedPtsCount(interpolatedPtsCount), isCurveClosed(isCurveClosed){
+	//for resetting curve state
+	originalControlPts = controlPts;
+	
+	// for renderig with shaders
 	initBuffers();
 }
 
@@ -89,12 +93,12 @@ int ProtoCurve3::getControlPtsLength() {
 /**
  * Gets point count between control points.
  */
-int ProtoCurve3::getInterpDetail(){
-	return interpDetail;
+int ProtoCurve3::getInterpolatedPtsCount(){
+	return interpolatedPtsCount;
 }
 
 /**
- * Get a pointer to the control points array.
+ * Get reference to the control points array.
  * with side effects
  */
 std::vector<Vec3f>& ProtoCurve3::getControlPts() {
@@ -142,6 +146,20 @@ std::vector<Vec3f>& ProtoCurve3::getVertices(){
 	return tempVecs;
 	//return verts;
 
+}
+
+/**
+ * Used for parallel tranport
+ */
+void  ProtoCurve3::initPathTangents() {
+	trace("initPathTangents call");
+	for (int i = 1; i < verts.size() - 1; i++) {
+		pathTangents.push_back(verts.at(i + 1) - verts.at(i - 1));
+	}
+
+	for (int i = 0; i < pathTangents.size(); i++) {
+		pathTangents.at(i).normalize();
+	}
 }
 
 /**
@@ -211,24 +229,24 @@ void ProtoCurve3::setVertRad(double vertRad) {
 }
 
 
-/**
- * Get flag value telling if curve is closed
- *
- * @return bool value
- */
-bool ProtoCurve3::getIsCurveClosed() const  {
-	return isCurveClosed;
-}
-
-/**
- * Set flag for Curve to be closed
- *
- * @param isCurveClosed
- *            bool value
- */
-void ProtoCurve3::setIsCurveClosed(bool isCurveClosed) {
-	this->isCurveClosed = isCurveClosed;
-}
+///**
+// * Get flag value telling if curve is closed
+// *
+// * @return bool value
+// */
+//bool ProtoCurve3::getIsCurveClosed() const  {
+//	return isCurveClosed;
+//}
+//
+///**
+// * Set flag for Curve to be closed
+// *
+// * @param isCurveClosed
+// *            bool value
+// */
+//void ProtoCurve3::setIsCurveClosed(bool isCurveClosed) {
+//	this->isCurveClosed = isCurveClosed;
+//}
 
 /**
  * Get flag value telling if curve at Terminals is continuous
@@ -249,13 +267,5 @@ void ProtoCurve3::setIsTerminalSmooth(bool isTerminalSmooth) {
 	this->isTerminalSmooth = isTerminalSmooth;
 }
 
-/**
- * get Frenet Frames
- *
- * @return Frenet Frame
- */
-const std::vector<ProtoFrenetFrame>& ProtoCurve3::getFrenetFrames() const
-{
-	return frenetFrames;
-}
+
 

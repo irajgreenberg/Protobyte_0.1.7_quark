@@ -25,6 +25,7 @@
 #define Protobyte_dev_ProtoCore_h
 
 #include <iostream>
+#include <vector>
 
 
 namespace ijg {
@@ -123,5 +124,7 @@ namespace ijg {
 
 // homage to Macromedia
 #define trace println
+
+//#define vect std::vector
 
 #endif // Protobyte_dev_ProtoCore_h

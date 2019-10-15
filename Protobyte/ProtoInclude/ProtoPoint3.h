@@ -1,5 +1,6 @@
 /*!  \brief  ProtoPoint3.h: Templated 3d point class
  ProtoPoint3.h
+ header ONLY class
  Protobyte Library v02
  
  Created by Ira on 8/12/13.
@@ -27,6 +28,7 @@
 #include <iostream>
 #include <cassert>
 
+
 namespace ijg {
     
     // forward declaration for non-member ops
@@ -48,7 +50,8 @@ namespace ijg {
         /*****************************************************/
         /*                    Constructors                  */
         /*****************************************************/
-        ProtoPoint3(T x=0, T y=0, T z=0);
+		ProtoPoint3(T x = 0, T y = 0, T z = 0);
+		/*ProtoPoint3(const Vec3& v);*/
         
         /*****************************************************/
         /*              Member Overloaded Ops                */
@@ -63,12 +66,18 @@ namespace ijg {
     }; // END ProtoPoint3 class declaration
     
     
-    // cstr
+   // all inline
+   
+   // cstr
     template <class T>
     inline ProtoPoint3<T>::ProtoPoint3(T x, T y, T z):
     x(x), y(y), z(z){
     }
     
+	/*template <class T>
+	inline ProtoPoint3<T>::ProtoPoint3(const Vec3& v) :
+		x(v.x), y(v.y), z(v.z) {
+	}*/
     
     // member overloaded ops
     template <class T>

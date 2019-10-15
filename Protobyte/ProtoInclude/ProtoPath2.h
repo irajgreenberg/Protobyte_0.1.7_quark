@@ -44,10 +44,12 @@ namespace ijg {
 	// for offset into the FBO interleaved buffer (ugly I know!)
 #define BUFFER_OFFSET(i) ((void*)(i))
 
-	namespace {
-		static const int OPEN = 0; 
-		static const int CLOSE = 1;
-	}
+	// Note: should this be converted to new enum class type? 
+	enum PathEnd {
+		OPEN,
+		CLOSE,
+		CLOSE_SMOOTH
+	};
 	
 	
 	

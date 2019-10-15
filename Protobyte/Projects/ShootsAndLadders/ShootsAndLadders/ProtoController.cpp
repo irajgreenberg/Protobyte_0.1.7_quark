@@ -14,12 +14,12 @@ void ProtoController::init() {
 	setShadowSharpness(512, 512);
 
 	// shoots
-	int ptCount{ 190 };
+	int ptCount{ 30 };
 	std::vector<Vec3> pts;
 	float theta{ 0 }, phi{ 0 };
 	for (int i = 0; i < ptCount; i++) {
 		float r = random(14, 30);
-		r = 100;
+		r = 500;
 		float x = sin(theta) * (r - i);
 		float y = 0;
 		float z = cos(theta) * (r - i);
@@ -30,11 +30,12 @@ void ProtoController::init() {
 		phi += TWO_PI / (ptCount * random(.15, 1));
 		theta += TWO_PI / ptCount * random(12, 18);
 	}
-	Spline3 path(pts, 5, true, 1.0);
+	//s = Spline3(vecs, 5, 0, ProtoSpline3::UNIFORM);
+	Spline3 path(pts, 6, true, ProtoSpline3::UNIFORM);
 
 
-	tube = Tube(path, 4, 9, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, 
-		Tup2(1.25, 3.5), 6), false, "humanSkin02.jpg");
+	tube = Tube(path, 4, 18, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL, 
+		Tup2(.75, 90.5), 30), false, "humanSkin02.jpg");
 	tube.setDiffuseMaterial({ 1.0f, 1, 1 });
 	tube.setAmbientMaterial(0.15f);
 	tube.setBumpMap("humanSkin02.jpg", 1.0f);
@@ -65,7 +66,7 @@ void ProtoController::run() {
 void ProtoController::display() {
 	setLight(0, Vec3(sin(radians(getFrameCount()*.25f)) * 2, 0, 600), { 1, 1, 1 });
 	beginArcBall();
-	scale(.75f);
+	scale(.35f);
 	int i = 0;
 	/*for (ProtoBlock b : blocks) {
 		push();

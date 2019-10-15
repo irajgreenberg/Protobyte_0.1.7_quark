@@ -22,7 +22,7 @@ This class is part of the group common (update)
 
 
 #ifndef PROTO_VERLETBALL_H
-#define        PROTO_VERLETBALL_H
+#define PROTO_VERLETBALL_H
 
 #include "ProtoVector3.h"
 #include "ProtoMath.h"
