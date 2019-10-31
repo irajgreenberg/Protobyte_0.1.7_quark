@@ -95,12 +95,12 @@ void ProtoController::display() {
 	}*/
 
 	push();
-	tube.display();
+	//tube.display();
 	pop();
 
 	push();
 	//translate(-350, 300, -400);
-	yellowTendril.display();
+	//yellowTendril.display();
 	pop();
 
 	endArcBall();

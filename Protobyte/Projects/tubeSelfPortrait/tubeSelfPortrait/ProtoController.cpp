@@ -27,16 +27,16 @@ void ProtoController::init() {
 	s1 = Spline(vs, 8, false);
 
 	tube = Tube(s1, 5, 12, ProtoTransformFunction(ProtoTransformFunction::SINUSOIDAL,
-		Tup2(.15, 8.5), 460), false, "gold01.jpg");
+		Tup2(40.15, 128.5), 3), false, "gold01.jpg");
 	//tube.setPerturbation({ random(3.2), random(1.5), random(1.2) });
 	tube.setColor({ .2, .2, .05, 1 });
 	//tube.setDiffuseMaterial(1);
 	////tube.setAmbientMaterial(0.05f);
-	tube.setBumpMap("STG_Flesh/Normal_Maps/STG_Flesh_27-normal.jpg", 1.5f);
+	tube.setBumpMap("STG_Flesh/Normal_Maps/STG_Flesh_27-normal.jpg", .1f);
 	////tube.loadBumpMapTexture("vascular3_normal2.jpg");
-	tube.setTextureScale({ .9f, 0.003f });
+	tube.setTextureScale({ .9f, .05f });
 	tube.setSpecularMaterial(1);
-	tube.setShininess(125);
+	tube.setShininess(40);
 }
 
 void ProtoController::run() {
@@ -44,7 +44,7 @@ void ProtoController::run() {
 
 void ProtoController::display() {
 	//background("iraWrapped_low.jpg");
-	background(.35, .35, .385);
+	background(.6, .5, .1);
 	arcBallBegin();
 	//tube.display(WIREFRAME);
 	//scale(10);
